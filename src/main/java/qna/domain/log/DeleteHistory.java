@@ -1,4 +1,6 @@
-package qna.domain;
+package qna.domain.log;
+
+import qna.domain.content.ContentType;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
