@@ -9,10 +9,10 @@ import java.util.Objects;
 
 public class Answer {
     private Long id;
-    private Long writerId;
-    private Long questionId;
+    private User writer;
+    private Question question;
     private String contents;
-    private boolean deleted = false;
+    private boolean deleted;
 
     public Answer(User writer, Question question, String contents) {
         this(null, writer, question, contents);
@@ -29,65 +29,49 @@ public class Answer {
             throw new NotFoundException();
         }
 
-        this.writerId = writer.getId();
-        this.questionId = question.getId();
+        this.writer = writer;
+        this.question = question;
         this.contents = contents;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
-    }
-
-    public void toQuestion(Question question) {
-        this.questionId = question.getId();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getWriterId() {
-        return writerId;
-    }
-
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
-    }
-
-    public Long getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
+        return this.writer.equals(writer);
     }
 
     public boolean isDeleted() {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void toQuestion(Question question) {
+        this.question = question;
+    }
+
+    public void toDeleted() {
+        this.deleted = true;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getWriterId() {
+        return writer.getId();
+    }
+
+    public Long getQuestionId() {
+        return question.getId();
+    }
+
+    public String getContents() {
+        return contents;
     }
 
     @Override
     public String toString() {
         return "Answer{" +
                 "id=" + id +
-                ", writerId=" + writerId +
-                ", questionId=" + questionId +
+                ", writer=" + writer +
+                ", question=" + question +
                 ", contents='" + contents + '\'' +
                 ", deleted=" + deleted +
                 '}';

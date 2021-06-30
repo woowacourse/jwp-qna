@@ -1,6 +1,7 @@
 package qna.domain.log;
 
 import qna.domain.content.ContentType;
+import qna.domain.user.User;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -9,13 +10,13 @@ public class DeleteHistory {
     private Long id;
     private ContentType contentType;
     private Long contentId;
-    private Long deletedById;
-    private LocalDateTime createDate = LocalDateTime.now();
+    private User deleteUser;
+    private LocalDateTime createDate;
 
-    public DeleteHistory(ContentType contentType, Long contentId, Long deletedById, LocalDateTime createDate) {
+    public DeleteHistory(ContentType contentType, Long contentId, User deleteUser, LocalDateTime createDate) {
         this.contentType = contentType;
         this.contentId = contentId;
-        this.deletedById = deletedById;
+        this.deleteUser = deleteUser;
         this.createDate = createDate;
     }
 
@@ -24,25 +25,12 @@ public class DeleteHistory {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DeleteHistory that = (DeleteHistory) o;
-        return Objects.equals(id, that.id) &&
-                contentType == that.contentType &&
-                Objects.equals(contentId, that.contentId) &&
-                Objects.equals(deletedById, that.deletedById);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, contentType, contentId, deletedById);
+        return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "DeleteHistory{" +
-                "id=" + id +
-                ", contentType=" + contentType +
-                ", contentId=" + contentId +
-                ", deletedById=" + deletedById +
-                ", createDate=" + createDate +
-                '}';
-    }
 }

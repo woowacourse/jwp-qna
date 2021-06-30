@@ -14,6 +14,7 @@ import qna.domain.content.answer.AnswerRepository;
 import qna.domain.content.question.Question;
 import qna.domain.content.question.QuestionRepository;
 import qna.domain.log.DeleteHistory;
+import qna.domain.user.User;
 import qna.exception.CannotDeleteException;
 
 import java.time.LocalDateTime;
@@ -101,8 +102,8 @@ class QnaServiceTest {
 
     private void verifyDeleteHistories() {
         List<DeleteHistory> deleteHistories = Arrays.asList(
-                new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriterId(), LocalDateTime.now()),
-                new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriterId(), LocalDateTime.now())
+                new DeleteHistory(ContentType.QUESTION, question.getId(), UserTest.JAVAJIGI, LocalDateTime.now()),
+                new DeleteHistory(ContentType.ANSWER, answer.getId(), UserTest.JAVAJIGI, LocalDateTime.now())
         );
         verify(deleteHistoryService).saveAll(deleteHistories);
     }
