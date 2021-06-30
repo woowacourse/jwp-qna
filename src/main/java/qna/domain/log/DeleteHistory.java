@@ -1,6 +1,8 @@
 package qna.domain.log;
 
 import qna.domain.content.ContentType;
+import qna.domain.content.answer.Answer;
+import qna.domain.content.question.Question;
 import qna.domain.user.User;
 
 import java.time.LocalDateTime;
@@ -12,6 +14,14 @@ public class DeleteHistory {
     private Long contentId;
     private User deleteUser;
     private LocalDateTime createDate;
+
+    public DeleteHistory(Question question, User deleteUser, LocalDateTime createDate) {
+        this(ContentType.QUESTION, question.getId(), deleteUser, createDate);
+    }
+
+    public DeleteHistory(Answer answer,User deleteUser, LocalDateTime createDate) {
+        this(ContentType.ANSWER, answer.getId(), deleteUser, createDate);
+    }
 
     public DeleteHistory(ContentType contentType, Long contentId, User deleteUser, LocalDateTime createDate) {
         this.contentType = contentType;
