@@ -7,7 +7,9 @@ public class UnAuthorizedException extends RuntimeException {
         super();
     }
 
-    public UnAuthorizedException(String message, Throwable cause, boolean enableSuppression,
+    public UnAuthorizedException(String message,
+                                 Throwable cause,
+                                 boolean enableSuppression,
                                  boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }

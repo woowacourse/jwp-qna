@@ -1,13 +1,15 @@
 package qna.exception;
 
-public class UnAuthenticationException extends Exception {
+public class UnAuthenticationException extends QnAServiceException {
     private static final long serialVersionUID = 1L;
 
     public UnAuthenticationException() {
         super();
     }
 
-    public UnAuthenticationException(String message, Throwable cause, boolean enableSuppression,
+    public UnAuthenticationException(String message,
+                                     Throwable cause,
+                                     boolean enableSuppression,
                                      boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
