@@ -16,14 +16,15 @@ public class DeleteHistory {
     private LocalDateTime createDate;
 
     public DeleteHistory(Question question, User deleteUser, LocalDateTime createDate) {
-        this(ContentType.QUESTION, question.getId(), deleteUser, createDate);
+        this(null, ContentType.QUESTION, question.getId(), deleteUser, createDate);
     }
 
     public DeleteHistory(Answer answer,User deleteUser, LocalDateTime createDate) {
-        this(ContentType.ANSWER, answer.getId(), deleteUser, createDate);
+        this(null, ContentType.ANSWER, answer.getId(), deleteUser, createDate);
     }
 
-    public DeleteHistory(ContentType contentType, Long contentId, User deleteUser, LocalDateTime createDate) {
+    public DeleteHistory(Long id, ContentType contentType, Long contentId, User deleteUser, LocalDateTime createDate) {
+        this.id = id;
         this.contentType = contentType;
         this.contentId = contentId;
         this.deleteUser = deleteUser;

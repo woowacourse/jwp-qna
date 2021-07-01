@@ -5,8 +5,6 @@ import qna.exception.UnAuthorizedException;
 import java.util.Objects;
 
 public class User {
-    public static final GuestUser GUEST_USER = new GuestUser();
-
     private Long id;
     private String userId;
     private String password;
@@ -45,61 +43,32 @@ public class User {
         return this.userId.equals(userId);
     }
 
-    public boolean matchPassword(String targetPassword) {
+    private boolean matchPassword(String targetPassword) {
         return this.password.equals(targetPassword);
-    }
-
-    public boolean equalsNameAndEmail(User target) {
-        if (Objects.isNull(target)) {
-            return false;
-        }
-
-        return name.equals(target.name) &&
-                email.equals(target.email);
-    }
-
-    public boolean isGuestUser() {
-        return false;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getUserId() {
         return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public boolean isGuestUser() {
+        return false;
     }
 
     @Override
@@ -111,12 +80,5 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
-    }
-
-    private static class GuestUser extends User {
-        @Override
-        public boolean isGuestUser() {
-            return true;
-        }
     }
 }

@@ -20,11 +20,11 @@ public class Question {
     private List<Answer> answers;
     private boolean deleted;
 
-    public Question(String title, String contents, List<Answer> answers, User writer) {
-        this(null, title, contents, answers, writer);
+    public Question(User writer, String title, String contents, List<Answer> answers) {
+        this(null, writer, title, contents, answers);
     }
 
-    public Question(Long id, String title, String contents, List<Answer> answers, User writer) {
+    public Question(Long id, User writer, String title, String contents, List<Answer> answers) {
         this.id = id;
         this.title = title;
         this.contents = contents;
@@ -36,23 +36,14 @@ public class Question {
         this.answers.add(answer);
     }
 
-    public List<DeleteHistory> deleteBy(User user) {
+    public List<DeleteHistory> deleteBy(User user, LocalDateTime timestamp) {
         validateOwner(user);
         validateContainsOtherUserAnswer(user);
 
         answers.forEach(Answer::toDeleted);
         this.deleted = true;
 
-        return Collections.unmodifiableList(createDeleteHistories(user));
-    }
-
-    private List<DeleteHistory> createDeleteHistories(User user) {
-        List<DeleteHistory> deleteHistories = answers.stream()
-                .map(content -> new DeleteHistory(content, user, LocalDateTime.now()))
-                .collect(toList());
-        deleteHistories.add(new DeleteHistory(this, user, LocalDateTime.now()));
-
-        return deleteHistories;
+        return Collections.unmodifiableList(createDeleteHistories(user, timestamp));
     }
 
     private void validateOwner(User user) {
@@ -63,12 +54,20 @@ public class Question {
 
     private void validateContainsOtherUserAnswer(User user) {
         boolean isContainsOtherUserAnswer = this.answers.stream()
-                .map(Answer::getWriterId)
-                .anyMatch(writerId -> !writerId.equals(user.getId()));
+                .anyMatch(answer -> !answer.isOwner(user));
 
         if (isContainsOtherUserAnswer) {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
+    }
+
+    private List<DeleteHistory> createDeleteHistories(User user, LocalDateTime timestamp) {
+        List<DeleteHistory> deleteHistories = answers.stream()
+                .map(content -> new DeleteHistory(content, user, timestamp))
+                .collect(toList());
+        deleteHistories.add(new DeleteHistory(this, user, timestamp));
+
+        return deleteHistories;
     }
 
     public Long getId() {
