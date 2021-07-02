@@ -40,7 +40,7 @@ class AnswerRepositoryTest {
     @Test
     void findByQuestionIdAndDeletedFalse_inTrueCase() {
         Answer answer = answerRepository.findByIdAndDeletedFalse(this.answer.getId())
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(AssertionError::new);
 
         assertThat(answer.getId()).isEqualTo(this.answer.getId());
     }
@@ -48,15 +48,12 @@ class AnswerRepositoryTest {
     @DisplayName("삭제된 질문은 검색되지 않는다.")
     @Test
     void findByQuestionIdAndDeletedFalse_inFalseCase() {
-        //given
         Answer answer = answerRepository.findById(this.answer.getId())
                 .orElseThrow(AssertionError::new);
 
-        //when
         answer.toDeleted();
         flushAndClear();
 
-        //then
         boolean present = answerRepository.findByIdAndDeletedFalse(this.answer.getId())
                 .isPresent();
         assertThat(present).isFalse();

@@ -1,5 +1,6 @@
 package qna.domain.content.question;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,11 +13,10 @@ import qna.domain.content.answer.TestAnswer;
 import qna.domain.user.TestUser;
 import qna.domain.user.User;
 import qna.domain.user.UserRepository;
+import qna.exception.NotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,21 +35,20 @@ class QuestionRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        questionWriter = TestUser.create();
-        questionWriter = userRepository.save(questionWriter);
+        questionWriter = userRepository.save(TestUser.create());
     }
 
     @DisplayName("삭제가 안된 모든 질문을 가지고 온다.")
     @Test
     void findByDeletedFalse() {
-        Question question = TestQuestion.create(questionWriter);
-        question = questionRepository.save(question);
+        Question question = createQuestion();
 
         List<Question> questions = questionRepository.findByDeletedFalse();
         assertThat(questions).containsExactly(question);
 
         question.deleteBy(questionWriter, LocalDateTime.now());
         questions = questionRepository.findByDeletedFalse();
+
         assertThat(questions).isEmpty();
     }
 
@@ -59,42 +58,31 @@ class QuestionRepositoryTest {
         Question question = createQuestion();
         flushAndClear();
 
-        Question questionFromRepo = questionRepository
-                .findByIdAndDeletedFalse(question.getId())
-                .orElseThrow(AssertionError::new);
+        Question questionFromRepo = findQuestionById(question.getId());
         assertThat(questionFromRepo).isEqualTo(question);
 
         questionFromRepo.deleteBy(questionWriter, LocalDateTime.now());
         flushAndClear();
 
-        Optional<Question> nullQuestion = questionRepository
-                .findByIdAndDeletedFalse(questionFromRepo.getId());
-
-        assertThat(nullQuestion.isPresent()).isFalse();
+        Assertions.assertThatThrownBy(
+                () -> findQuestionById(questionFromRepo.getId())
+        ).isInstanceOf(NotFoundException.class);
     }
 
     @DisplayName("답변을 삭제한다.")
     @Test
     void removeAnswer() {
-        Question question = createQuestion();
         Answer answer = createAnswer();
-        answer = answerRepository.save(answer);
-
+        Question question = createQuestion();
         question.addAnswer(answer);
-        question = questionRepository.save(question);
         flushAndClear();
 
-        Question savedQuestion = questionRepository.findByIdAndDeletedFalse(question.getId())
-                .orElseThrow(AssertionError::new);
-        answer = answerRepository.findByIdAndDeletedFalse(answer.getId())
-                .orElseThrow(AssertionError::new);
-
-        savedQuestion.removeAnswer(answer);
+        question = findQuestionById(question.getId());
+        answer = findAnswerById(answer.getId());
+        question.removeAnswer(answer);
         flushAndClear();
 
-        question = questionRepository.findByIdAndDeletedFalse(question.getId())
-                .orElseThrow(AssertionError::new);
-
+        question = findQuestionById(question.getId());
         assertThat(question.getAnswers()).isEmpty();
     }
 
@@ -107,23 +95,33 @@ class QuestionRepositoryTest {
         question.addAnswer(answer);
         flushAndClear();
 
-        Question updatedQuestion = questionRepository
-                .findByIdAndDeletedFalse(question.getId())
-                .orElseThrow(AssertionError::new);
+        Question updatedQuestion = findQuestionById(question.getId());
 
         assertThat(updatedQuestion.getAnswers()).isNotEmpty();
     }
 
+    private Answer findAnswerById(Long id) {
+        return answerRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(NotFoundException::new);
+    }
+
+    private Question findQuestionById(Long id) {
+        return questionRepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(NotFoundException::new);
+    }
+
     private Question createQuestion() {
-        Question question = TestQuestion.create(questionWriter);
-        question = questionRepository.save(question);
-        return question;
+        return questionRepository.save(
+                TestQuestion.create(questionWriter)
+        );
     }
 
     private Answer createAnswer() {
-        User answerWriter = TestUser.create();
         return answerRepository.save(
-                TestAnswer.create(userRepository.save(answerWriter))
+                TestAnswer.create(
+                        userRepository.save(questionWriter)
+                )
         );
     }
 

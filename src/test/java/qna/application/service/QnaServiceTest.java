@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import qna.domain.content.answer.TestAnswer;
+import qna.domain.content.question.TestQuestion;
 import qna.domain.user.TestUser;
 import qna.domain.content.answer.Answer;
 import qna.domain.content.question.Question;
@@ -48,14 +50,16 @@ class QnaServiceTest {
         javajigi = TestUser.createWithId();
         sanjigi = TestUser.createWithId();
 
-        question = new Question(1L, javajigi, "title1", "contents1", Collections.emptyList());
-        answer = new Answer(1L, javajigi, "Answers Contents1");
+        question = TestQuestion.createWithId(javajigi, Collections.emptyList());
+        answer = TestAnswer.create(javajigi);
+
         question.addAnswer(answer);
     }
 
     @Test
     public void delete_성공() {
-        when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
+        when(questionRepository.findByIdAndDeletedFalse(question.getId()))
+                .thenReturn(Optional.of(question));
 
         assertThat(question.isDeleted()).isFalse();
         qnaService.deleteQuestion(javajigi, question.getId());
