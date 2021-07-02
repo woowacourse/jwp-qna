@@ -100,24 +100,4 @@ class QuestionTest {
     void getId() {
         assertThat(question.getId()).isNotNull();
     }
-
-    @Test
-    void getTitle() {
-        assertThat(question.getTitle()).isEqualTo(TestQuestion.TITLE);
-    }
-
-    @Test
-    void getContents() {
-        assertThat(question.getContents()).isEqualTo(TestQuestion.CONTENTS);
-    }
-
-    @Test
-    void getWriterId() {
-        assertThat(question.getWriterId()).isEqualTo(questionWriter.getId());
-    }
-
-    @Test
-    void getAnswers() {
-        assertThat(question.getAnswers()).containsExactly(answer);
-    }
 }

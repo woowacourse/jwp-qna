@@ -17,5 +17,5 @@ public abstract class Content {
     private LocalDateTime createAt;
 
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;;
 }

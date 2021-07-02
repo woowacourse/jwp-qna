@@ -45,11 +45,11 @@ public class User {
     }
 
     public void update(User loginUser, User target) {
-        if (!matchUserId(loginUser.userId)) {
+        if (noneMatchedUserId(loginUser.userId)) {
             throw new UnAuthorizedException();
         }
 
-        if (!matchPassword(target.password)) {
+        if (noneMatchedPassword(target.password)) {
             throw new UnAuthorizedException();
         }
 
@@ -57,32 +57,16 @@ public class User {
         this.email = target.email;
     }
 
-    private boolean matchUserId(String userId) {
-        return this.userId.equals(userId);
+    private boolean noneMatchedUserId(String userId) {
+        return !this.userId.equals(userId);
     }
 
-    private boolean matchPassword(String targetPassword) {
-        return this.password.equals(targetPassword);
+    private boolean noneMatchedPassword(String targetPassword) {
+        return !this.password.equals(targetPassword);
     }
 
     public Long getId() {
         return id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public boolean isGuestUser() {

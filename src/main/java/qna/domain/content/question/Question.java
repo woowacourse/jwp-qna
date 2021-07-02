@@ -96,24 +96,12 @@ public class Question extends Content {
         return id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public Long getWriterId() {
-        return writer.getId();
+    public boolean isDeleted() {
+        return deleted;
     }
 
     public List<Answer> getAnswers() {
         return Collections.unmodifiableList(answers);
-    }
-
-    public boolean isDeleted() {
-        return deleted;
     }
 
     @Override

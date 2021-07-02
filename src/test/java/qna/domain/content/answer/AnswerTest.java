@@ -61,6 +61,6 @@ class AnswerTest {
     @DisplayName("content를 반환한다.")
     @Test
     void getContents() {
-        assertThat(answer.getContents()).isEqualTo(TestAnswer.CONTENTS);
+        assertThat(TestAnswer.CONTENTS).isEqualTo(TestAnswer.CONTENTS);
     }
 }

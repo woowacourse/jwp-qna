@@ -25,18 +25,17 @@ class UserTest {
         String UPDATE_EMAIL = "neozal@test.com";
         User updateUser = new User(
                 user.getId(),
-                user.getUserId(),
-                user.getPassword(),
+                TestUser.USER_ID + user.getId(),
+                TestUser.PASSWORD + user.getId(),
                 UPDATE_NAME,
                 UPDATE_EMAIL
         );
 
         user.update(user, updateUser);
 
-        assertAll(
-                () -> assertThat(user.getName()).isEqualTo(UPDATE_NAME),
-                () -> assertThat(user.getEmail()).isEqualTo(UPDATE_EMAIL)
-        );
+        assertThat(user)
+                .usingRecursiveComparison()
+                .isEqualTo(updateUser);
     }
 
     @DisplayName("다른 유저의 정보는 변경할 수 없다.")
@@ -53,8 +52,8 @@ class UserTest {
 
         User updateUser = new User(
                 user.getId(),
-                user.getUserId(),
-                user.getPassword(),
+                TestUser.USER_ID,
+                TestUser.PASSWORD,
                 UPDATE_NAME,
                 UPDATE_EMAIL
         );
@@ -73,7 +72,7 @@ class UserTest {
 
         User updateUser = new User(
                 user.getId(),
-                user.getUserId(),
+                TestUser.USER_ID,
                 OTHER_PASSWORD,
                 UPDATE_NAME,
                 UPDATE_EMAIL
@@ -87,26 +86,6 @@ class UserTest {
     @Test
     void getId() {
         assertThat(user.getId()).isNotNull();
-    }
-
-    @Test
-    void getUserId() {
-        assertThat(user.getUserId()).isNotNull();
-    }
-
-    @Test
-    void getName() {
-        assertThat(user.getName()).isNotNull();
-    }
-
-    @Test
-    void getPassword() {
-        assertThat(user.getPassword()).isNotNull();
-    }
-
-    @Test
-    void getEmail() {
-        assertThat(user.getEmail()).isNotNull();
     }
 
     @Test

@@ -67,10 +67,6 @@ public class Answer extends Content {
         return id;
     }
 
-    public String getContents() {
-        return contents;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
