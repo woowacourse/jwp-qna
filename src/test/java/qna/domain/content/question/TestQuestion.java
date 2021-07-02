@@ -3,6 +3,7 @@ package qna.domain.content.question;
 import qna.domain.content.answer.Answer;
 import qna.domain.user.User;
 
+import java.util.Collections;
 import java.util.List;
 
 public class TestQuestion {
@@ -11,12 +12,12 @@ public class TestQuestion {
 
     private static Long INCREASE_ID = 0L;
 
-    public static Question create(User writer, List<Answer> answers) {
+    public static Question create(User writer) {
         return new Question(
                 writer,
                 TITLE,
                 CONTENTS,
-                answers
+                Collections.emptyList()
         );
     }
 

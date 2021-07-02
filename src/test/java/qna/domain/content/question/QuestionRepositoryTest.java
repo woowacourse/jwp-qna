@@ -42,7 +42,7 @@ class QuestionRepositoryTest {
     @DisplayName("삭제가 안된 모든 질문을 가지고 온다.")
     @Test
     void findByDeletedFalse() {
-        Question question = TestQuestion.create(questionWriter, Collections.emptyList());
+        Question question = TestQuestion.create(questionWriter);
         question = questionRepository.save(question);
 
         List<Question> questions = questionRepository.findByDeletedFalse();
@@ -115,7 +115,7 @@ class QuestionRepositoryTest {
     }
 
     private Question createQuestion() {
-        Question question = TestQuestion.create(questionWriter, Collections.emptyList());
+        Question question = TestQuestion.create(questionWriter);
         question = questionRepository.save(question);
         return question;
     }

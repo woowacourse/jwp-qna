@@ -60,7 +60,7 @@ class QuestionTest {
     void deleteBy_deleteQuestion() {
         final LocalDateTime NOW = LocalDateTime.of(2021, 7, 1, 0, 0, 0);
 
-        question = TestQuestion.create(questionWriter, Collections.emptyList());
+        question = TestQuestion.create(questionWriter);
         List<DeleteHistory> deleteHistories =
                 question.deleteBy(questionWriter, NOW);
 
