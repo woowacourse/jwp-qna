@@ -5,6 +5,7 @@ import qna.domain.content.answer.Answer;
 import qna.domain.log.DeleteHistory;
 import qna.domain.user.User;
 import qna.exception.CannotDeleteException;
+import qna.exception.ForbiddenException;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class Question extends Content {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length=100, nullable = false)
+    @Column(length = 100, nullable = false)
     private String title;
     @Lob
     private String contents;
@@ -53,7 +54,15 @@ public class Question extends Content {
     }
 
     public void removeAnswer(Answer answer) {
+        validateAnswerUserAndQuestionUsersAreSame(answer);
+        answer.toDeleted();
         answers.remove(answer);
+    }
+
+    private void validateAnswerUserAndQuestionUsersAreSame(Answer answer) {
+        if (answer.isOwner(this.writer)) {
+            throw new ForbiddenException("질문자와 답변자가 다른경우 삭제할 수 없습니다.");
+        }
     }
 
     public List<DeleteHistory> deleteBy(User user, LocalDateTime timestamp) {

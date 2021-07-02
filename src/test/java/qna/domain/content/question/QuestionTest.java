@@ -47,6 +47,14 @@ class QuestionTest {
         );
     }
 
+    @DisplayName("답변을 삭제한다.")
+    @Test
+    void removeAnswer() {
+        question.removeAnswer(answer);
+
+        assertThat(question.getAnswers()).isEmpty();
+    }
+
     @DisplayName("질문을 삭제한다.")
     @Test
     void deleteBy_deleteQuestion() {

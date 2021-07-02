@@ -73,6 +73,31 @@ class QuestionRepositoryTest {
         assertThat(nullQuestion.isPresent()).isFalse();
     }
 
+    @DisplayName("답변을 삭제한다.")
+    @Test
+    void removeAnswer() {
+        Question question = createQuestion();
+        Answer answer = createAnswer();
+        answer = answerRepository.save(answer);
+
+        question.addAnswer(answer);
+        question = questionRepository.save(question);
+        flushAndClear();
+
+        Question savedQuestion = questionRepository.findByIdAndDeletedFalse(question.getId())
+                .orElseThrow(AssertionError::new);
+        answer = answerRepository.findByIdAndDeletedFalse(answer.getId())
+                .orElseThrow(AssertionError::new);
+
+        savedQuestion.removeAnswer(answer);
+        flushAndClear();
+
+        question = questionRepository.findByIdAndDeletedFalse(question.getId())
+                .orElseThrow(AssertionError::new);
+
+        assertThat(question.getAnswers()).isEmpty();
+    }
+
     @DisplayName("question에 answer를 add하더라도 정상적으로 영속되는지 확인한다.")
     @Test
     public void questionAddAnswer() {
