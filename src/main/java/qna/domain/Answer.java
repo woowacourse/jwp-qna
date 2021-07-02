@@ -3,21 +3,55 @@ package qna.domain;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
 public class Answer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long writerId;
-    private Long questionId;
+
+    @Lob
     private String contents;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private Date createdAt;
+
+    @Column(nullable = false)
     private boolean deleted = false;
 
-    public Answer(User writer, Question question, String contents) {
-        this(null, writer, question, contents);
+    private Long questionId;
+
+    private Timestamp updatedAt;
+
+    private Long writerId;
+
+    protected Answer() {
+
     }
 
-    public Answer(Long id, User writer, Question question, String contents) {
+    public Answer(Date createdAt, User writer, Question question, String contents) {
+        this(null, createdAt, writer, question, contents);
+    }
+
+    public Answer(Long id, Date createdAt, User writer, Question question, String contents) {
         this.id = id;
+
+        if (Objects.isNull(createdAt)) {
+            throw new IllegalArgumentException("생성시간이 존재하지 않습니다");
+        }
 
         if (Objects.isNull(writer)) {
             throw new UnAuthorizedException();
@@ -27,6 +61,7 @@ public class Answer {
             throw new NotFoundException();
         }
 
+        this.createdAt = createdAt;
         this.writerId = writer.getId();
         this.questionId = question.getId();
         this.contents = contents;
@@ -78,6 +113,22 @@ public class Answer {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
