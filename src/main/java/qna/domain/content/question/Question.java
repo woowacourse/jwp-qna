@@ -54,15 +54,8 @@ public class Question extends Content {
     }
 
     public void removeAnswer(Answer answer) {
-        validateAnswerUserAndQuestionUsersAreSame(answer);
         answer.toDeleted();
         answers.remove(answer);
-    }
-
-    private void validateAnswerUserAndQuestionUsersAreSame(Answer answer) {
-        if (answer.isOwner(this.writer)) {
-            throw new ForbiddenException("질문자와 답변자가 다른경우 삭제할 수 없습니다.");
-        }
     }
 
     public List<DeleteHistory> deleteBy(User user, LocalDateTime timestamp) {
