@@ -44,7 +44,6 @@ class QuestionRepositoryTest {
     void findByDeletedFalse() {
         Question question = TestQuestion.create(questionWriter, Collections.emptyList());
         question = questionRepository.save(question);
-        flushAndClear();
 
         List<Question> questions = questionRepository.findByDeletedFalse();
         assertThat(questions).containsExactly(question);

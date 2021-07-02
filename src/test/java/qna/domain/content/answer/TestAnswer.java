@@ -12,4 +12,13 @@ public class TestAnswer {
                 CONTENTS
         );
     }
+
+    public static Answer createWithId(User writer) {
+        INCREASE_ID++;
+        return new Answer(
+                INCREASE_ID,
+                writer,
+                CONTENTS
+        );
+    }
 }

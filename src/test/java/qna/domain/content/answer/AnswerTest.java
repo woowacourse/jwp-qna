@@ -15,9 +15,9 @@ class AnswerTest {
 
     @BeforeEach
     void setUp() {
-        questionWriter = TestUser.create();
-        answerWriter = TestUser.create();
-        answer = TestAnswer.create(answerWriter);
+        questionWriter = TestUser.createWithId();
+        answerWriter = TestUser.createWithId();
+        answer = TestAnswer.createWithId(answerWriter);
     }
 
     @DisplayName("답변 작성자가 맞으면 true")

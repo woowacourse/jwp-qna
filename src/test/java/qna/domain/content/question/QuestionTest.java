@@ -27,11 +27,11 @@ class QuestionTest {
 
     @BeforeEach
     void setUp() {
-        answerWriter = TestUser.create();
-        questionWriter = TestUser.create();
-        answer = TestAnswer.create(answerWriter);
+        answerWriter = TestUser.createWithId();
+        questionWriter = TestUser.createWithId();
+        answer = TestAnswer.createWithId(answerWriter);
         answers = Collections.singletonList(answer);
-        question = TestQuestion.create(questionWriter, answers);
+        question = TestQuestion.createWithId(questionWriter, answers);
     }
 
     @DisplayName("새로운 답변을 추가한다.")

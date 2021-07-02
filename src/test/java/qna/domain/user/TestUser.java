@@ -10,8 +10,18 @@ public class TestUser {
     private static Long INCREASE_ID = 0L;
 
     public static User create() {
-        //INCREASE_ID++;
         return new User(
+                USER_ID + INCREASE_ID,
+                PASSWORD + INCREASE_ID,
+                NAME + INCREASE_ID,
+                EMAIL + INCREASE_ID
+        );
+    }
+
+    public static User createWithId() {
+        INCREASE_ID++;
+        return new User(
+                INCREASE_ID,
                 USER_ID + INCREASE_ID,
                 PASSWORD + INCREASE_ID,
                 NAME + INCREASE_ID,

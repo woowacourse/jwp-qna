@@ -15,7 +15,7 @@ class UserTest {
 
     @BeforeEach
     void setUp() {
-        user = TestUser.create();
+        user = TestUser.createWithId();
     }
 
     @DisplayName("유저 정보를 변경한다.")

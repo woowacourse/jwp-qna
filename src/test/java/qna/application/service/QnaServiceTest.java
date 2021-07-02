@@ -45,8 +45,8 @@ class QnaServiceTest {
 
     @BeforeEach
     public void setUp() {
-        javajigi = TestUser.create();
-        sanjigi = TestUser.create();
+        javajigi = TestUser.createWithId();
+        sanjigi = TestUser.createWithId();
 
         question = new Question(1L, javajigi, "title1", "contents1", Collections.emptyList());
         answer = new Answer(1L, javajigi, "Answers Contents1");
