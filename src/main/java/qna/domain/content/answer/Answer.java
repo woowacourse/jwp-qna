@@ -1,5 +1,6 @@
 package qna.domain.content.answer;
 
+import qna.domain.content.Content;
 import qna.domain.content.question.Question;
 import qna.domain.user.User;
 import qna.exception.UnAuthorizedException;
@@ -8,17 +9,19 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class Answer {
+public class Answer extends Content {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "WRITER_ID")
     private User writer;
+    @Lob
     private String contents;
     @ManyToOne
     @JoinColumn(name = "QUESTION_ID")
     private Question question;
+    @Column(nullable = false)
     private boolean deleted;
 
     protected Answer() {

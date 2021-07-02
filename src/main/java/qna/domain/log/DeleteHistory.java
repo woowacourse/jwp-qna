@@ -1,5 +1,6 @@
 package qna.domain.log;
 
+import org.springframework.data.annotation.CreatedDate;
 import qna.domain.content.ContentType;
 import qna.domain.content.answer.Answer;
 import qna.domain.content.question.Question;
@@ -14,11 +15,13 @@ public class DeleteHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Enumerated(EnumType.STRING)
     private ContentType contentType;
     private Long contentId;
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "DELETED_BY_ID")
     private User deleteUser;
+    @CreatedDate
     private LocalDateTime createDate;
 
     protected DeleteHistory() {

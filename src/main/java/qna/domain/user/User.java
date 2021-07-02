@@ -1,21 +1,33 @@
 package qna.domain.user;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.exception.UnAuthorizedException;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_ID")
     private Long id;
-    @Column(name = "USER_USER_ID")
+    @Column(length=20, nullable = false)
     private String userId;
+    @Column(length=20, nullable = false)
     private String password;
+    @Column(length=20, nullable = false)
     private String name;
+    @Column(length=50)
     private String email;
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     protected User() {
     }

@@ -1,5 +1,6 @@
 package qna.domain.content.question;
 
+import qna.domain.content.Content;
 import qna.domain.content.answer.Answer;
 import qna.domain.log.DeleteHistory;
 import qna.domain.user.User;
@@ -15,17 +16,20 @@ import java.util.Objects;
 import static java.util.stream.Collectors.toList;
 
 @Entity
-public class Question {
+public class Question extends Content {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length=100, nullable = false)
     private String title;
+    @Lob
     private String contents;
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "WRITER_ID")
     private User writer;
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
+    @Column(nullable = false)
     private boolean deleted;
 
     protected Question() {
