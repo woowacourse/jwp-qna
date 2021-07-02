@@ -5,15 +5,24 @@ import qna.domain.content.answer.Answer;
 import qna.domain.content.question.Question;
 import qna.domain.user.User;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Entity
 public class DeleteHistory {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private ContentType contentType;
     private Long contentId;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
     private User deleteUser;
     private LocalDateTime createDate;
+
+    protected DeleteHistory() {
+    }
 
     public DeleteHistory(Question question, User deleteUser, LocalDateTime createDate) {
         this(null, ContentType.QUESTION, question.getId(), deleteUser, createDate);
@@ -43,5 +52,4 @@ public class DeleteHistory {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 }

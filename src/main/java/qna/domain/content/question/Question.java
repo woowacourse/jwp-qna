@@ -5,20 +5,31 @@ import qna.domain.log.DeleteHistory;
 import qna.domain.user.User;
 import qna.exception.CannotDeleteException;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
+@Entity
 public class Question {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String contents;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
     private User writer;
+    @OneToMany(mappedBy = "question")
     private List<Answer> answers;
     private boolean deleted;
+
+    protected Question() {
+    }
 
     public Question(User writer, String title, String contents, List<Answer> answers) {
         this(null, writer, title, contents, answers);
@@ -33,7 +44,12 @@ public class Question {
     }
 
     public void addAnswer(Answer answer) {
+        answer.setQuestion(this);
         this.answers.add(answer);
+    }
+
+    public void removeAnswer(Answer answer) {
+        answers.remove(answer);
     }
 
     public List<DeleteHistory> deleteBy(User user, LocalDateTime timestamp) {
@@ -92,6 +108,19 @@ public class Question {
 
     public boolean isDeleted() {
         return deleted;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question = (Question) o;
+        return Objects.equals(id, question.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override
