@@ -1,10 +1,7 @@
 package qna.domain;
 
-import qna.NotFoundException;
-import qna.UnAuthorizedException;
-
 import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -13,8 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import org.springframework.data.annotation.CreatedDate;
+
+import qna.NotFoundException;
+import qna.UnAuthorizedException;
 
 @Entity
 public class Answer {
@@ -25,9 +25,8 @@ public class Answer {
     @Lob
     private String contents;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
-    private Date createdAt;
+    @CreatedDate
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(nullable = false)
     private boolean deleted = false;
@@ -42,16 +41,12 @@ public class Answer {
 
     }
 
-    public Answer(Date createdAt, User writer, Question question, String contents) {
-        this(null, createdAt, writer, question, contents);
+    public Answer(User writer, Question question, String contents) {
+        this(null, writer, question, contents);
     }
 
-    public Answer(Long id, Date createdAt, User writer, Question question, String contents) {
+    public Answer(Long id, User writer, Question question, String contents) {
         this.id = id;
-
-        if (Objects.isNull(createdAt)) {
-            throw new IllegalArgumentException("생성시간이 존재하지 않습니다");
-        }
 
         if (Objects.isNull(writer)) {
             throw new UnAuthorizedException();
@@ -115,11 +110,11 @@ public class Answer {
         this.deleted = deleted;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -134,11 +129,11 @@ public class Answer {
     @Override
     public String toString() {
         return "Answer{" +
-                "id=" + id +
-                ", writerId=" + writerId +
-                ", questionId=" + questionId +
-                ", contents='" + contents + '\'' +
-                ", deleted=" + deleted +
-                '}';
+            "id=" + id +
+            ", writerId=" + writerId +
+            ", questionId=" + questionId +
+            ", contents='" + contents + '\'' +
+            ", deleted=" + deleted +
+            '}';
     }
 }
