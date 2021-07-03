@@ -3,12 +3,35 @@ package qna.domain;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.data.annotation.CreatedDate;
+
+@Entity
 public class DeleteHistory {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private ContentType contentType;
+
     private Long contentId;
+
+    @Enumerated(EnumType.STRING)
+    private ContentType contentType;
+
+    @CreatedDate
+    private LocalDateTime createDate;
+
     private Long deletedById;
-    private LocalDateTime createDate = LocalDateTime.now();
+
+    protected DeleteHistory(){}
 
     public DeleteHistory(ContentType contentType, Long contentId, Long deletedById, LocalDateTime createDate) {
         this.contentType = contentType;
@@ -26,6 +49,46 @@ public class DeleteHistory {
                 contentType == that.contentType &&
                 Objects.equals(contentId, that.contentId) &&
                 Objects.equals(deletedById, that.deletedById);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getContentId() {
+        return contentId;
+    }
+
+    public void setContentId(Long contentId) {
+        this.contentId = contentId;
+    }
+
+    public ContentType getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(ContentType contentType) {
+        this.contentType = contentType;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public Long getDeletedById() {
+        return deletedById;
+    }
+
+    public void setDeletedById(Long deletedById) {
+        this.deletedById = deletedById;
     }
 
     @Override
