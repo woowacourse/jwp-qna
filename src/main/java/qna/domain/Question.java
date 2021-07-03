@@ -1,9 +1,16 @@
 package qna.domain;
 
+import java.time.LocalDate;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 public class Question {
@@ -11,9 +18,21 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    @Lob
     private String contents;
+
+    @CreatedDate
+    @Column(nullable = false)
+    private LocalDate createdAt = LocalDate.now();
+
+    @Column(nullable = false, length = 100)
+    private String title;
+
+    @LastModifiedDate
+    private LocalDate updatedAt;
+
     private Long writerId;
+
     private boolean deleted = false;
 
     public Question() {}
