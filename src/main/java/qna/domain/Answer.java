@@ -6,10 +6,13 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 
 import org.springframework.data.annotation.CreatedDate;
 
@@ -31,11 +34,15 @@ public class Answer {
     @Column(nullable = false)
     private boolean deleted = false;
 
-    private Long questionId;
+    @ManyToOne
+    @JoinColumn(name = "question_id",foreignKey = @ForeignKey(name="fk_answer_to_question"))
+    private Question question;
 
     private Timestamp updatedAt;
 
-    private Long writerId;
+    @ManyToOne
+    @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name="fk_answer_writer"))
+    private User writer;
 
     protected Answer() {
 
@@ -56,50 +63,30 @@ public class Answer {
             throw new NotFoundException();
         }
 
-        this.createdAt = createdAt;
-        this.writerId = writer.getId();
-        this.questionId = question.getId();
+        this.writer = writer;
+        this.question = question;
         this.contents = contents;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
-    }
-
-    public void toQuestion(Question question) {
-        this.questionId = question.getId();
+        return this.writer.equals(writer);
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public User getWriter() {
+        return writer;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public Question getQuestion() {
+        return question;
     }
 
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
-    }
-
-    public Long getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
+    public void setQuestion(Question question) {
+        this.question = question;
+        question.addAnswer(this);
     }
 
     public boolean isDeleted() {
@@ -110,28 +97,12 @@ public class Answer {
         this.deleted = deleted;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     @Override
     public String toString() {
         return "Answer{" +
             "id=" + id +
-            ", writerId=" + writerId +
-            ", questionId=" + questionId +
+            ", writerId=" + writer +
+            ", question=" + question +
             ", contents='" + contents + '\'' +
             ", deleted=" + deleted +
             '}';
