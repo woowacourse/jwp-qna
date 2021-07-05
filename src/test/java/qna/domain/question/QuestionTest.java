@@ -1,4 +1,4 @@
-package qna.domain;
+package qna.domain.question;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -9,7 +9,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import qna.CannotDeleteException;
+import qna.domain.ContentType;
+import qna.exception.CannotDeleteException;
+import qna.domain.answer.Answer;
+import qna.domain.deletehistory.DeleteHistory;
+import qna.domain.question.Question;
+import qna.domain.user.User;
 
 public class QuestionTest {
 

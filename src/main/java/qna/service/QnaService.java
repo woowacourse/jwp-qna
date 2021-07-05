@@ -7,29 +7,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import qna.CannotDeleteException;
-import qna.NotFoundException;
-import qna.domain.DeleteHistory;
-import qna.domain.Question;
-import qna.domain.QuestionRepository;
-import qna.domain.User;
+import qna.exception.CannotDeleteException;
+import qna.exception.NotFoundException;
+import qna.domain.deletehistory.DeleteHistory;
+import qna.domain.question.Question;
+import qna.domain.question.QuestionRepository;
+import qna.domain.user.User;
 
 @Service
 public class QnaService {
     private static final Logger log = LoggerFactory.getLogger(QnaService.class);
 
-    private final QuestionRepository questionRepository;
+    private final QuestionRepository questions;
     private final DeleteHistoryService deleteHistoryService;
 
-    public QnaService(QuestionRepository questionRepository, DeleteHistoryService deleteHistoryService) {
-        this.questionRepository = questionRepository;
+    public QnaService(QuestionRepository questions, DeleteHistoryService deleteHistoryService) {
+        this.questions = questions;
         this.deleteHistoryService = deleteHistoryService;
-    }
-
-    @Transactional(readOnly = true)
-    public Question findQuestionById(Long id) {
-        return questionRepository.findByIdAndDeletedFalse(id)
-            .orElseThrow(NotFoundException::new);
     }
 
     @Transactional
@@ -39,5 +33,11 @@ public class QnaService {
 
         List<DeleteHistory> deleteHistories = question.delete(loginUser);
         deleteHistoryService.saveAll(deleteHistories);
+    }
+
+    @Transactional(readOnly = true)
+    public Question findQuestionById(Long id) {
+        return questions.findByIdAndDeletedFalse(id)
+            .orElseThrow(NotFoundException::new);
     }
 }

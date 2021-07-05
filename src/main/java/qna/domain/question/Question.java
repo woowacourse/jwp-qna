@@ -1,4 +1,4 @@
-package qna.domain;
+package qna.domain.question;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,7 +22,11 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import qna.CannotDeleteException;
+import qna.exception.CannotDeleteException;
+import qna.domain.ContentType;
+import qna.domain.answer.Answer;
+import qna.domain.deletehistory.DeleteHistory;
+import qna.domain.user.User;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity

@@ -1,4 +1,4 @@
-package qna.domain;
+package qna.domain.deletehistory;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -16,6 +16,9 @@ import javax.persistence.ManyToOne;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import qna.domain.ContentType;
+import qna.domain.user.User;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity

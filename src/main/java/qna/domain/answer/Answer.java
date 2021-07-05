@@ -1,7 +1,5 @@
-package qna.domain;
+package qna.domain.answer;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -20,9 +18,13 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import qna.CannotDeleteException;
-import qna.NotFoundException;
-import qna.UnAuthorizedException;
+import qna.exception.CannotDeleteException;
+import qna.exception.NotFoundException;
+import qna.exception.UnAuthorizedException;
+import qna.domain.ContentType;
+import qna.domain.deletehistory.DeleteHistory;
+import qna.domain.question.Question;
+import qna.domain.user.User;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity

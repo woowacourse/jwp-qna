@@ -1,4 +1,4 @@
-package qna.domain;
+package qna.domain.answer;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -7,6 +7,12 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import qna.domain.ContentType;
+import qna.domain.answer.Answer;
+import qna.domain.deletehistory.DeleteHistory;
+import qna.domain.question.Question;
+import qna.domain.user.User;
 
 public class AnswerTest {
 

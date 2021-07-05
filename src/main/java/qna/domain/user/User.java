@@ -1,4 +1,4 @@
-package qna.domain;
+package qna.domain.user;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -19,7 +18,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import qna.UnAuthorizedException;
+import qna.domain.question.Question;
+import qna.domain.answer.Answer;
+import qna.domain.deletehistory.DeleteHistory;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
