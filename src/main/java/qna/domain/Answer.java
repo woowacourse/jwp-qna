@@ -1,11 +1,13 @@
 package qna.domain;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,11 +17,14 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import qna.CannotDeleteException;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Answer {
     @Id
@@ -30,7 +35,7 @@ public class Answer {
     private String contents;
 
     @CreatedDate
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private boolean deleted = false;
@@ -39,7 +44,8 @@ public class Answer {
     @JoinColumn(name = "question_id",foreignKey = @ForeignKey(name="fk_answer_to_question"))
     private Question question;
 
-    private Timestamp updatedAt;
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name="fk_answer_writer"))

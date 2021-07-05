@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,9 +20,11 @@ import javax.persistence.OneToMany;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import qna.CannotDeleteException;
 
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Question {
     @Id
@@ -33,7 +36,7 @@ public class Question {
 
     @CreatedDate
     @Column(nullable = false)
-    private LocalDate createdAt = LocalDate.now();
+    private LocalDate createdAt;
 
     @Column(nullable = false, length = 100)
     private String title;
