@@ -1,8 +1,10 @@
 package qna.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +19,8 @@ import javax.persistence.OneToMany;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+
+import qna.CannotDeleteException;
 
 @Entity
 public class Question {
@@ -70,6 +74,40 @@ public class Question {
 
     public void addAnswer(Answer answer) {
         this.answers.add(answer);
+    }
+
+    public void checkOwner(User loginUser) throws CannotDeleteException {
+        if(!this.isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+
+        for (Answer answer : getNotDeletedAnswers()) {
+            answer.checkOwner(loginUser);
+        }
+    }
+
+    public List<DeleteHistory> delete(User loginUser) throws CannotDeleteException {
+        checkOwner(loginUser);
+        setDeleted(true);
+
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, this.id, this.writer, LocalDateTime.now()));
+
+        for (Answer answer : getNotDeletedAnswers()) {
+            deleteHistories.add(answer.delete());
+        }
+
+        return deleteHistories;
+    }
+
+    private List<Answer> getNotDeletedAnswers() {
+        return this.answers.stream()
+            .filter(answer -> !answer.isDeleted())
+            .collect(Collectors.toList());
+    }
+
+    public void deleteAllAnswer() {
+        this.answers = new ArrayList<>();
     }
 
     public Long getId() {
