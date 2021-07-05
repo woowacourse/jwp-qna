@@ -21,6 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.domain.question.Question;
 import qna.domain.answer.Answer;
 import qna.domain.deletehistory.DeleteHistory;
+import qna.exception.UnAuthorizedException;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
@@ -71,6 +72,39 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public void update(User loginUser, User target) {
+        if (!matchUserId(loginUser.userId)) {
+            throw new UnAuthorizedException();
+        }
+
+        if (!matchPassword(target.password)) {
+            throw new UnAuthorizedException();
+        }
+
+        this.name = target.name;
+        this.email = target.email;
+    }
+
+    private boolean matchUserId(String userId) {
+        return this.userId.equals(userId);
+    }
+
+    public boolean matchPassword(String targetPassword) {
+        return this.password.equals(targetPassword);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     @Override

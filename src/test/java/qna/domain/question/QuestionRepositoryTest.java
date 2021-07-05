@@ -2,13 +2,13 @@ package qna.domain.question;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import qna.domain.question.Question;
-import qna.domain.question.QuestionRepository;
 import qna.domain.user.User;
 import qna.domain.user.UserRepository;
 
@@ -31,6 +31,6 @@ class QuestionRepositoryTest {
         question.writeBy(user);
         questions.save(question);
 
-        assertThat(questions.findById(question.getId()).get()).isEqualTo(question);
+        assertThat(questions.findById(question.getId())).isEqualTo(Optional.of(question));
     }
 }
