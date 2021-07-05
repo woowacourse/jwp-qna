@@ -31,11 +31,14 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
-    private String contents;
-
     @CreatedDate
     private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    @Lob
+    private String contents;
 
     @Column(nullable = false)
     private boolean deleted = false;
@@ -43,9 +46,6 @@ public class Answer {
     @ManyToOne
     @JoinColumn(name = "question_id",foreignKey = @ForeignKey(name="fk_answer_to_question"))
     private Question question;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name="fk_answer_writer"))

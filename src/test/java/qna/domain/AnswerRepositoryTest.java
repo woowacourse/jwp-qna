@@ -30,6 +30,6 @@ class AnswerRepositoryTest {
         questions.save(question);
         answers.save(answer);
 
-        assertThat(answers.findAll()).contains(answer);
+        assertThat(answers.findAll()).containsExactly(answer);
     }
 }

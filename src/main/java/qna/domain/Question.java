@@ -31,18 +31,18 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
-    private String contents;
-
     @CreatedDate
     @Column(nullable = false)
     private LocalDate createdAt;
 
-    @Column(nullable = false, length = 100)
-    private String title;
-
     @LastModifiedDate
     private LocalDate updatedAt;
+
+    @Lob
+    private String contents;
+
+    @Column(nullable = false, length = 100)
+    private String title;
 
     @ManyToOne
     @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name = "fk_question_writer"))

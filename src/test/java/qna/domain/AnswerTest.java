@@ -39,6 +39,7 @@ public class AnswerTest {
     @DisplayName("답변을 삭제하고 삭제 이력을 반환한다.")
     void delete() {
         DeleteHistory deleteHistory = answer.delete();
+
         assertThat(deleteHistory).isEqualTo(
             new DeleteHistory(
                 ContentType.ANSWER,

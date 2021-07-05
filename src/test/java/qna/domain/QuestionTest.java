@@ -98,7 +98,7 @@ public class QuestionTest {
 
     @Test
     @DisplayName("질문에 작성자가 다른 답변이 존재해 삭제할 수 없다.")
-    void deleteContainsAnswerException() throws CannotDeleteException {
+    void deleteContainsAnswerException() {
         User another = new User("asdf", "asdf", "asdf", "asdf@asdf.com");
         Answer answer1 = new Answer(1L, user, question, "content");
         question.addAnswer(answer1);

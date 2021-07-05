@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,14 +22,19 @@ class DeleteHistoryRepositoryTest {
     private UserRepository users;
 
     @Test
-    @DisplayName("deleteHistory를 저장한다.")
-    void save() {
+    @DisplayName("모든 deleteHistory를 저장한다.")
+    void saveAll() {
         User user = new User("javajigi", "password", "name", "javajigi@slipp.net");
         users.save(user);
 
         DeleteHistory deleteHistory = new DeleteHistory(ContentType.ANSWER, 1L, user, LocalDateTime.now());
-        deleteHistories.save(deleteHistory);
+        DeleteHistory deleteHistory1 = new DeleteHistory(ContentType.QUESTION, 1L, user, LocalDateTime.now());
 
-        assertThat(deleteHistories.findById(deleteHistory.getId()).get()).isEqualTo(deleteHistory);
+        List<DeleteHistory> deleteHistoryList = new ArrayList<>();
+        deleteHistoryList.add(deleteHistory);
+        deleteHistoryList.add(deleteHistory1);
+        deleteHistories.saveAll(deleteHistoryList);
+
+        assertThat(deleteHistories.findAll()).isEqualTo(deleteHistoryList);
     }
 }

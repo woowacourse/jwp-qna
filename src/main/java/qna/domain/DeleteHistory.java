@@ -25,13 +25,13 @@ public class DeleteHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @CreatedDate
+    private LocalDateTime createDate;
+
     private Long contentId;
 
     @Enumerated(EnumType.STRING)
     private ContentType contentType;
-
-    @CreatedDate
-    private LocalDateTime createDate;
 
     @ManyToOne
     @JoinColumn(name="deleted_by_id", foreignKey = @ForeignKey(name="fk_delete_history_to_user"))
