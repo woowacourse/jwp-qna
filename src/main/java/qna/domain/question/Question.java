@@ -1,5 +1,7 @@
 package qna.domain.question;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,8 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import qna.domain.DateHistory;
+import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.user.User;
 import qna.domain.answer.Answer;
 
@@ -30,7 +34,11 @@ public class Question extends DateHistory {
     @Column(nullable = false, length = 100)
     private String title;
 
-    @JoinColumn(name = "writerId")
+    @JoinColumn(name = "answer_id")
+    @OneToMany
+    private List<Answer> answers = new ArrayList<>();
+
+    @JoinColumn(name = "writer_id")
     @ManyToOne
     private User writer;
 
@@ -53,7 +61,7 @@ public class Question extends DateHistory {
     }
 
     public void addAnswer(Answer answer) {
-        answer.toQuestion(this);
+        this.answers.add(answer);
     }
 
     public Long getId() {
