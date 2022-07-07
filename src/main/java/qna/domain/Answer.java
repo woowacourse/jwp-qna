@@ -1,16 +1,52 @@
 package qna.domain;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
-import java.util.Objects;
-
+@Entity
 public class Answer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long writerId;
-    private Long questionId;
-    private String contents;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
     private boolean deleted = false;
+
+    private Long questionId;
+    private LocalDateTime updatedAt;
+    private Long writerId;
+
+    @Lob
+    private String contents;
+
+
+    public Answer(Long id, LocalDateTime createdAt, boolean deleted, Long questionId, LocalDateTime updatedAt,
+                  Long writerId, String contents) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.deleted = deleted;
+        this.questionId = questionId;
+        this.updatedAt = updatedAt;
+        this.writerId = writerId;
+        this.contents = contents;
+    }
+
+    public Answer(LocalDateTime createdAt, boolean deleted, Long questionId, LocalDateTime updatedAt,
+                  Long writerId, String contents) {
+        this(null, createdAt, deleted, questionId, updatedAt, writerId, contents);
+    }
 
     public Answer(User writer, Question question, String contents) {
         this(null, writer, question, contents);
@@ -30,6 +66,9 @@ public class Answer {
         this.writerId = writer.getId();
         this.questionId = question.getId();
         this.contents = contents;
+    }
+
+    public Answer() {
     }
 
     public boolean isOwner(User writer) {
@@ -78,6 +117,22 @@ public class Answer {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     @Override
