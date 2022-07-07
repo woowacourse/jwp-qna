@@ -1,5 +1,6 @@
 package qna.service;
 
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -7,12 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import qna.exception.CannotDeleteException;
 import qna.exception.NotFoundException;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import qna.domain.answer.Answer;
 import qna.domain.answer.AnswerRepository;
-import qna.domain.deletehistory.ContentType;
 import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.question.Question;
 import qna.domain.question.QuestionRepository;
@@ -47,14 +45,8 @@ public class QnaService {
         List<Answer> answers = answerRepository.findByQuestionIdAndDeletedFalse(questionId);
         validateQuestionContainsOnlyMyAnswers(loginUser, answers);
 
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-        question.setDeleted(true);
-        deleteHistories.add(DeleteHistory.of(question));
-        for (Answer answer : answers) {
-            answer.setDeleted(true);
-            deleteHistories.add(DeleteHistory.of(answer));
-        }
-        deleteHistoryService.saveAll(deleteHistories);
+        question.toDeleted();
+        saveDeleteHistories(question);
         log.info("해당 질문이 삭제되었습니다.");
     }
 
@@ -70,5 +62,14 @@ public class QnaService {
                 throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
             }
         }
+    }
+
+    private void saveDeleteHistories(Question question) {
+        List<DeleteHistory> deleteHistories = question.getAnswers()
+                .stream()
+                .map(DeleteHistory::of)
+                .collect(Collectors.toList());
+        deleteHistories.add(DeleteHistory.of(question));
+        deleteHistoryService.saveAll(deleteHistories);
     }
 }

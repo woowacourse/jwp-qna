@@ -84,7 +84,14 @@ public class Question extends DateHistory {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void toDeleted() {
+        this.deleted = true;
+        for (Answer answer : this.answers) {
+            answer.setDeleted(true);
+        }
     }
 }

@@ -10,11 +10,9 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import qna.domain.DateHistory;
-import qna.exception.NotFoundException;
 import qna.exception.UnAuthorizedException;
 
 import java.util.Objects;
-import qna.domain.question.Question;
 import qna.domain.user.User;
 
 @Table(name = "answer")
