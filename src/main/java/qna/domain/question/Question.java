@@ -68,14 +68,6 @@ public class Question extends DateHistory {
         return id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
     public User getWriter() {
         return writer;
     }

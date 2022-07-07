@@ -1,6 +1,5 @@
 package qna.service;
 
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -8,10 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import qna.exception.CannotDeleteException;
 import qna.exception.NotFoundException;
 
-import java.util.List;
 import qna.domain.answer.Answer;
-import qna.domain.answer.AnswerRepository;
-import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.question.Question;
 import qna.domain.question.QuestionRepository;
 import qna.domain.user.User;

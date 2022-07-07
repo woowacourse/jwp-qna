@@ -52,26 +52,6 @@ public class DeleteHistory {
         return new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter());
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Long getContentId() {
-        return contentId;
-    }
-
-    public ContentType getContentType() {
-        return contentType;
-    }
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public Long getDeletedById() {
-        return deleter.getId();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {

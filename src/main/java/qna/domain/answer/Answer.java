@@ -1,6 +1,5 @@
 package qna.domain.answer;
 
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -57,10 +56,6 @@ public class Answer extends DateHistory {
 
     public Long getId() {
         return id;
-    }
-
-    public String getContents() {
-        return contents;
     }
 
     public User getWriter() {

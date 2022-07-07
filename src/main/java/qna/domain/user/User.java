@@ -16,8 +16,6 @@ import java.util.Objects;
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {"userId"}))
 public class User extends DateHistory {
 
-    public static final GuestUser GUEST_USER = new GuestUser();
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -53,11 +51,9 @@ public class User extends DateHistory {
         if (!matchUserId(loginUser.userId)) {
             throw new UnAuthorizedException();
         }
-
         if (!matchPassword(target.password)) {
             throw new UnAuthorizedException();
         }
-
         this.name = target.name;
         this.email = target.email;
     }
@@ -70,37 +66,12 @@ public class User extends DateHistory {
         return this.password.equals(targetPassword);
     }
 
-    public boolean equalsNameAndEmail(User target) {
-        if (Objects.isNull(target)) {
-            return false;
-        }
-
-        return name.equals(target.name) &&
-                email.equals(target.email);
-    }
-
-    public boolean isGuestUser() {
-        return false;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     @Override
@@ -112,12 +83,5 @@ public class User extends DateHistory {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
-    }
-
-    private static class GuestUser extends User {
-        @Override
-        public boolean isGuestUser() {
-            return true;
-        }
     }
 }
