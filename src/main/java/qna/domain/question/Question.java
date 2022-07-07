@@ -88,10 +88,13 @@ public class Question extends DateHistory {
         return answers;
     }
 
-    public void toDeleted() {
+    public List<DeleteHistory> delete() {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
         this.deleted = true;
+        deleteHistories.add(DeleteHistory.of(this));
         for (Answer answer : this.answers) {
-            answer.setDeleted(true);
+            deleteHistories.add(answer.delete());
         }
+        return deleteHistories;
     }
 }

@@ -1,5 +1,6 @@
 package qna.domain.answer;
 
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import qna.domain.DateHistory;
+import qna.domain.deletehistory.DeleteHistory;
 import qna.exception.UnAuthorizedException;
 
 import java.util.Objects;
@@ -69,7 +71,8 @@ public class Answer extends DateHistory {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public DeleteHistory delete() {
+        this.deleted = true;
+        return DeleteHistory.of(this);
     }
 }
