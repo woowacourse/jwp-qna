@@ -23,7 +23,7 @@ class QuestionRepositoryTest {
         questions.save(expectIncluded);
 
         Question expectNotIncluded = new Question("질문의 제목입니다.", "질문의 내용입니다.");
-        expectNotIncluded.setDeleted(true);
+        expectNotIncluded.delete();
         questions.save(expectNotIncluded);
 
         List<Question> actual = questions.findByDeletedFalse();
@@ -52,7 +52,7 @@ class QuestionRepositoryTest {
     @Test
     void findByIdAndDeletedFalse_resultDoesNotExist() {
         Question expect = new Question("질문의 제목입니다.", "질문의 내용입니다.");
-        expect.setDeleted(true);
+        expect.delete();
         Question saved = questions.save(expect);
 
         Optional<Question> actual = questions.findByIdAndDeletedFalse(saved.getId());

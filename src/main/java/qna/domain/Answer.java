@@ -67,44 +67,36 @@ public class Answer {
         this.questionId = question.getId();
     }
 
-    public Long getId() {
-        return id;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void delete() {
+        this.deleted = true;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Long getWriterId() {
         return writerId;
     }
 
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
-    }
-
     public Long getQuestionId() {
         return questionId;
-    }
-
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
     }
 
     public String getContents() {
         return contents;
     }
 
-    public void setContents(String contents) {
-        this.contents = contents;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     @Override

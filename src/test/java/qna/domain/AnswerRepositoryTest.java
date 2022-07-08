@@ -36,7 +36,7 @@ class AnswerRepositoryTest {
         answers.save(expectedIncluded);
 
         Answer expectedNotIncluded = new Answer(testUser, testQuestion, "질문에 대한 답변입니다.");
-        expectedNotIncluded.setDeleted(true);
+        expectedNotIncluded.delete();
         answers.save(expectedNotIncluded);
 
         List<Answer> actual = answers.findByQuestionIdAndDeletedFalse(testQuestion.getId());
@@ -65,7 +65,7 @@ class AnswerRepositoryTest {
     @Test
     void findByIdAndDeletedFalse_resultDoesNotExist() {
         Answer expectNotFound = new Answer(testUser, testQuestion, "질문에 대한 답변입니다.");
-        expectNotFound.setDeleted(true);
+        expectNotFound.delete();
         Answer savedAnswer = answers.save(expectNotFound);
 
         Optional<Answer> actual = answers.findByIdAndDeletedFalse(savedAnswer.getId());
