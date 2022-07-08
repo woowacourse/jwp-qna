@@ -8,7 +8,7 @@ import javax.persistence.MappedSuperclass;
 public class EntityHistory {
 
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    protected LocalDateTime createdAt = LocalDateTime.now();
 
-    private LocalDateTime updatedAt;
+    protected LocalDateTime updatedAt;
 }
