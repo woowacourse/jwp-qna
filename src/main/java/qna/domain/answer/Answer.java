@@ -80,4 +80,17 @@ public class Answer extends EntityHistory {
     public Long getWriterId() {
         return writerId;
     }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id=" + id +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", contents='" + contents + '\'' +
+                ", deleted=" + deleted +
+                ", questionId=" + questionId +
+                ", writerId=" + writerId +
+                '}';
+    }
 }
