@@ -1,6 +1,5 @@
 package qna.domain.user;
 
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,22 +7,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import qna.domain.EntityHistory;
 import qna.exception.UnAuthorizedException;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {"userId"}))
-public class User {
+public class User extends EntityHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    private LocalDateTime updatedAt;
 
     @Column(length = 50)
     private String email;

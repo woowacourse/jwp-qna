@@ -1,6 +1,5 @@
 package qna.domain.answer;
 
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import qna.domain.EntityHistory;
 import qna.domain.question.Question;
 import qna.domain.user.User;
 import qna.exception.NotFoundException;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @Table(name = "answer")
 @Entity
-public class Answer {
+public class Answer extends EntityHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +25,6 @@ public class Answer {
 
     @Lob
     private String contents;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    private LocalDateTime updatedAt;
 
     @Column(nullable = false)
     private boolean deleted = false;
