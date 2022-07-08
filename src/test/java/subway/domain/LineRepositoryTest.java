@@ -2,9 +2,11 @@ package subway.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 @DataJpaTest
 class LineRepositoryTest {
@@ -15,7 +17,17 @@ class LineRepositoryTest {
     @Autowired
     private StationRepository stations;
 
-    @Test // 핵심: flush 전에 모든 연관관계를 전부 영속 상태로 만들어줘야 함!
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @BeforeEach
+    void setUp() {
+        jdbcTemplate.update("INSERT INTO line (id, name) VALUES (1, '3호선')");
+        jdbcTemplate.update("INSERT INTO station (id, line_id, name) VALUES (1, 1, '교대역')");
+    }
+
+    // 핵심: flush 전에 모든 연관관계를 전부 영속 상태로 만들어줘야 함!
+    @Test
     void saveWithLine() {
         Station expected = new Station("잠실역");
         Line line = new Line("2호선");
@@ -27,7 +39,8 @@ class LineRepositoryTest {
         stations.flush(); // transaction commit
     }
 
-    @Test // @ManyToOne(optional = false) : eager loading. 필요하든지 말든지 일단 SELECT
+    @Test
+        // @ManyToOne(optional = false) : eager loading. 필요하든지 말든지 일단 SELECT
     void findByNameWithLine() {
         Station actual = stations.findByName("교대역");
         assertThat(actual).isNotNull();
@@ -44,7 +57,8 @@ class LineRepositoryTest {
         stations.flush(); // transaction commit
     }
 
-    @Test // line에 대한 연관관계만 제거
+    // line에 대한 연관관계만 제거
+    @Test
     void removeLineInStation() {
         final Station actual = stations.findByName("교대역");
         actual.setLine(null);
@@ -52,10 +66,13 @@ class LineRepositoryTest {
         stations.flush(); // transaction commit
     }
 
-    @Test // line을 직접적으로 제거하려면 연관관계들 전부 해결해야 함.
+    @Test
     void removeLine() {
         Line line = lines.findByName("3호선");
         lines.delete(line);
+
+        // line을 직접적으로 제거하려면 연관관계들 전부 해결해야 함.
+        stations.deleteAll(line.getStations());
         stations.flush(); // transaction commit
     }
 

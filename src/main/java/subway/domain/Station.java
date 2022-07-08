@@ -7,8 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import org.springframework.data.domain.Persistable;
-import qna.domain.user.User;
 
 /**
  * create table station (
@@ -60,7 +58,7 @@ public class Station  {
     public void setLine(Line line) {
         this.line = line;
         // 무한 루프 방어 로직
-        if (!line.getStations().contains(this)) {
+        if (line != null && !line.getStations().contains(this)) {
             line.addStation(this);
         }
     }

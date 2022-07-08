@@ -43,7 +43,6 @@ class StationRepositoryTest {
         assertThat(stations1 == stations2).isTrue();
     }
 
-   //
     @Test
     void write() {
         stations.save(new Station("잠실역"));
