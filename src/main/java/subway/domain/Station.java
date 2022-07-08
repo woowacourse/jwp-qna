@@ -5,7 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import org.springframework.data.domain.Persistable;
+import qna.domain.user.User;
 
 /**
  * create table station (
@@ -26,6 +29,10 @@ public class Station  {
 
     @Column(nullable = false)
     private String name;
+
+    @ManyToOne // optional = false : 필요 없어도 일단 eager load
+    @JoinColumn(name = "line_id") // 디폴트가 `필드_PK`이므로 불필요함
+    private Line line;
 
     protected Station(){}
 
@@ -48,6 +55,18 @@ public class Station  {
 
     public void changeName(String name) {
         this.name = name;
+    }
+
+    public void setLine(Line line) {
+        this.line = line;
+        // 무한 루프 방어 로직
+        if (!line.getStations().contains(this)) {
+            line.addStation(this);
+        }
+    }
+
+    public Line getLine() {
+        return line;
     }
 }
 
