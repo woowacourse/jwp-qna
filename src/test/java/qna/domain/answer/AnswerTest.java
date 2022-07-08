@@ -28,6 +28,8 @@ public class AnswerTest {
         DeleteHistory actual = answer.delete();
         DeleteHistory expected = new DeleteHistory(ContentType.ANSWER, 1L, UserTest.JAVAJIGI);
 
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison()
+                .ignoringFields("createDate")
+                .isEqualTo(expected);
     }
 }

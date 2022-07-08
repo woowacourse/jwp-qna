@@ -38,6 +38,8 @@ public class QuestionTest {
                 DeleteHistory.of(AnswerTest.A1),
                 DeleteHistory.of(AnswerTest.A2));
 
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison()
+                .ignoringFields("createDate")
+                .isEqualTo(expected);
     }
 }
