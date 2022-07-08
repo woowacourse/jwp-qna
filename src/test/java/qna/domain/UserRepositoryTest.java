@@ -26,7 +26,10 @@ class UserRepositoryTest {
 
         final User saved = userRepository.save(user);
 
-        assertThat(saved).extracting("userId", "password", "name", "email")
-                .containsExactly(userId, password, name, email);
+        assertAll(
+                () -> assertThat(saved).extracting("userId", "password", "name", "email")
+                        .containsExactly(userId, password, name, email),
+                () -> assertThat(saved).isSameAs(user)
+        );
     }
 }

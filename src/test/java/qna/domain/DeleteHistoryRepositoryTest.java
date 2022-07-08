@@ -28,7 +28,10 @@ class DeleteHistoryRepositoryTest {
 
         final DeleteHistory saved = deleteHistoryRepository.save(deleteHistory);
 
-        assertThat(saved).extracting("contentType", "contentId", "deletedById", "createDate")
-                .containsExactly(contentType, deleteContentId, deleteUserId, deleteTime);
+        assertAll(
+                () -> assertThat(saved).extracting("contentType", "contentId", "deletedById", "createDate")
+                        .containsExactly(contentType, deleteContentId, deleteUserId, deleteTime),
+                () -> assertThat(saved).isSameAs(deleteHistory)
+        );
     }
 }

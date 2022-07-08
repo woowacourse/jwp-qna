@@ -38,5 +38,11 @@ class QuestionRepositoryTest {
 
         assertThat(saved).extracting("title", "contents", "writerId", "deleted")
                 .containsExactly(questionTitle, questionContents, user.getId(), false);
+
+        assertAll(
+                () -> assertThat(saved).extracting("title", "contents", "writerId", "deleted")
+                        .containsExactly(questionTitle, questionContents, user.getId(), false),
+                () -> assertThat(saved).isSameAs(question)
+        );
     }
 }

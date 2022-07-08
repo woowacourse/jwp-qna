@@ -40,7 +40,10 @@ class AnswerRepositoryTest {
 
         final Answer saved = answerRepository.save(answer);
 
-        assertThat(saved).extracting("writerId", "questionId", "contents")
-                .containsExactly(user.getId(), question.getId(), answer.getContents());
+        assertAll(
+                () -> assertThat(saved).extracting("writerId", "questionId", "contents")
+                        .containsExactly(user.getId(), question.getId(), answer.getContents()),
+                () -> assertThat(saved).isSameAs(answer)
+        );
     }
 }
