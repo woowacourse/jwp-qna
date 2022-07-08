@@ -1,4 +1,4 @@
-package qna.domain;
+package qna.domain.question;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -8,64 +8,61 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
-import qna.exception.NotFoundException;
-import qna.exception.UnAuthorizedException;
+import qna.domain.answer.Answer;
+import qna.domain.user.User;
 
-import java.util.Objects;
-
-@Table(name = "answer")
+@Table(name = "question")
 @Entity
-public class Answer {
+public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Lob
-    private String contents;
 
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     private LocalDateTime updatedAt;
 
+    @Lob
+    private String contents;
+
     @Column(nullable = false)
     private boolean deleted = false;
 
-    private Long questionId;
+    @Column(nullable = false, length = 100)
+    private String title;
 
     private Long writerId;
 
-    public Answer() {
+    protected Question() {
     }
 
-    public Answer(User writer, Question question, String contents) {
-        this(null, writer, question, contents);
+    public Question(String title, String contents, User writer) {
+        this(null, title, contents, writer);
     }
 
-    public Answer(Long id, User writer, Question question, String contents) {
-        if (Objects.isNull(writer)) {
-            throw new UnAuthorizedException();
-        }
-        if (Objects.isNull(question)) {
-            throw new NotFoundException();
-        }
+    public Question(Long id, String contents, String title, User writer) {
         this.id = id;
-        this.writerId = writer.getId();
-        this.questionId = question.getId();
         this.contents = contents;
+        this.title = title;
+        this.writerId = writer.getId();
     }
 
-    public boolean isOwner(User loginUser) {
-        return writerId.equals(loginUser.getId());
+    public boolean isOwner(User writer) {
+        return this.writerId.equals(writer.getId());
     }
 
-    public void toQuestion(Question question) {
-        this.questionId = question.getId();
+    public void addAnswer(Answer answer) {
+        answer.toQuestion(this);
     }
 
     public Long getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getContents() {

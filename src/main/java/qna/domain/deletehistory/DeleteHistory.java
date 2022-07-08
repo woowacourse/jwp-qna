@@ -1,4 +1,4 @@
-package qna.domain;
+package qna.domain.deletehistory;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
