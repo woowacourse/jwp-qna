@@ -1,4 +1,4 @@
-package subway.domain;
+package study.subway.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

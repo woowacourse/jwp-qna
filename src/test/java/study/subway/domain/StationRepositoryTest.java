@@ -1,4 +1,4 @@
-package subway.domain;
+package study.subway.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

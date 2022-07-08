@@ -1,4 +1,4 @@
-package favorite.domain;
+package study.favorite.domain;
 
 import java.util.ArrayList;
 import java.util.List;

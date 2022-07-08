@@ -1,6 +1,5 @@
-package favorite.domain;
+package study.favorite.domain;
 
-import favorite.domain.Favorite;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
