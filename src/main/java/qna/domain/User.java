@@ -1,19 +1,43 @@
 package qna.domain;
 
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import qna.exception.UnAuthorizedException;
 
 import java.util.Objects;
 
+@Entity
+@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {"userId"}))
 public class User {
-    public static final GuestUser GUEST_USER = new GuestUser();
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String userId;
-    private String password;
-    private String name;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    private LocalDateTime updatedAt;
+
+    @Column(length = 50)
     private String email;
 
-    private User() {
+    @Column(nullable = false, length = 20)
+    private String name;
+
+    @Column(nullable = false, length = 20)
+    private String password;
+
+    @Column(nullable = false, length = 20)
+    private String userId;
+
+    protected User() {
     }
 
     public User(String userId, String password, String name, String email) {
@@ -56,10 +80,6 @@ public class User {
 
         return name.equals(target.name) &&
                 email.equals(target.email);
-    }
-
-    public boolean isGuestUser() {
-        return false;
     }
 
     public Long getId() {
@@ -111,12 +131,5 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
-    }
-
-    private static class GuestUser extends User {
-        @Override
-        public boolean isGuestUser() {
-            return true;
-        }
     }
 }
