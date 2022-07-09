@@ -1,6 +1,7 @@
 package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,9 @@ class QuestionRepositoryTest {
 
         List<Question> byDeletedFalse = questionRepository.findByDeletedFalse();
 
-        assertThat(byDeletedFalse.size()).isEqualTo(1);
+        assertAll(
+                () -> assertThat(byDeletedFalse.size()).isEqualTo(1),
+                () -> assertThat(byDeletedFalse.get(0)).isEqualTo(question1));
     }
 
     @Test
