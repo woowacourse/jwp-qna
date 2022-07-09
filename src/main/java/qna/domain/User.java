@@ -1,14 +1,13 @@
 package qna.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import qna.UnAuthorizedException;
-
-import java.util.Objects;
 
 @Entity
 public class User {
@@ -31,12 +30,16 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column
     private LocalDateTime updatedAt;
 
     public User() {
+    }
+
+    public User(String userId, String password, String name, String email) {
+        this(null, userId, password, name, email);
     }
 
     public User(Long id, String userId, String password, String name, String email) {
@@ -45,10 +48,6 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
-    }
-
-    public User(String userId, String password, String name, String email) {
-        this(null, userId, password, name, email);
     }
 
     public void update(User loginUser, User target) {

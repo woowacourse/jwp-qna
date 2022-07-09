@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import qna.utils.fixture.UserFixture;
 
 @DataJpaTest
 class UserRepositoryTest {
@@ -18,12 +19,11 @@ class UserRepositoryTest {
     @Test
     @DisplayName("사용자를 저장한다.")
     void save() {
-        User expect = new User("userId", "password", "thor", "thor@gmail.com");
+        User expect = UserFixture.JAVAJIGI;
         User actual = users.save(expect);
 
         assertAll(
-                () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getId()).isEqualTo(expect.getId())
+                () -> assertThat(actual.getId()).isNotNull()
         );
     }
 
@@ -31,7 +31,7 @@ class UserRepositoryTest {
     @DisplayName("사용자의 식별자로 사용자를 조회한다.")
     void findById() {
         // given
-        User testUser = new User("userId", "password", "thor", "thor@gmail.com");
+        User testUser = UserFixture.JAVAJIGI;
         User savedUser = users.save(testUser);
 
         // when
