@@ -29,6 +29,8 @@ public class Question {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    private LocalDateTime updatedAt;
+
     protected Question() {
     }
 
