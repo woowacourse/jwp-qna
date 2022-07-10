@@ -27,7 +27,7 @@ public class DeleteHistory {
     private Long deletedById;
 
     @CreationTimestamp
-    private LocalDateTime createDate = LocalDateTime.now();
+    private LocalDateTime createDate;
 
     public DeleteHistory(ContentType contentType, Long contentId, Long deletedById, LocalDateTime createDate) {
         this.contentType = contentType;
