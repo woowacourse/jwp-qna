@@ -29,19 +29,15 @@ public class Question extends BaseEntity {
     protected Question() {
     }
 
-    public Question(String title, String contents) {
-        this(null, title, contents);
+    public Question(String title, String contents, Long writerId) {
+        this(null, title, contents, writerId);
     }
 
-    public Question(Long id, String title, String contents) {
+    public Question(Long id, String title, String contents, Long writerId) {
         this.id = id;
         this.title = title;
         this.contents = contents;
-    }
-
-    public Question writeBy(User writer) {
-        this.writerId = writer.getId();
-        return this;
+        this.writerId = writerId;
     }
 
     public boolean isOwner(User writer) {
