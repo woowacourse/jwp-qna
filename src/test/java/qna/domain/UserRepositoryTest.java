@@ -9,20 +9,18 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 class UserRepositoryTest {
-    public static final User KLAY = new User(1L, "klay", "password", "name", "klay@slipp.net");
-
     @Autowired
     private UserRepository userRepository;
 
     @Test
     void 저장하려는_객체_ID가_유효하고_영속성_컨텍스트에_없는_값이면_해당_ID로_DB를_조회하고_없다면_새로운_ID를_할당한_새_객체_반환() {
         // given
-        final User actual = userRepository.save(KLAY);
+        final User klay = new User(1L, "klay", "password", "name", "klay@slipp.net");
+        final User actual = userRepository.save(klay);
 
         // when, then
         assertAll(
-                () -> assertThat(actual).isNotEqualTo(KLAY),
-                () -> assertThat(actual.getId()).isEqualTo(KLAY.getId())
+                () -> assertThat(actual).isNotEqualTo(klay)
         );
     }
 
@@ -33,12 +31,13 @@ class UserRepositoryTest {
         userRepository.save(user);
 
         // when
-        final User actual = userRepository.save(KLAY);
+        final User klay = new User(user.getId(), "klay", "password", "name", "klay@slipp.net");
+        final User actual = userRepository.save(klay);
         userRepository.flush(); // update
 
         // then
         assertAll(
-                () -> assertThat(actual).isNotEqualTo(KLAY),
+                () -> assertThat(actual).isNotEqualTo(klay),
                 () -> assertThat(actual).isEqualTo(user)
         );
     }
