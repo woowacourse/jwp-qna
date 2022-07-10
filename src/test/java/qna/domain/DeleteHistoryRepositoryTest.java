@@ -20,6 +20,6 @@ class DeleteHistoryRepositoryTest {
         DeleteHistory deleteHistory = new DeleteHistory(ContentType.ANSWER, 1L, 2L, LocalDateTime.now());
         DeleteHistory saved = deleteHistoryRepository.save(deleteHistory);
 
-        assertThat(deleteHistory).isEqualTo(saved);
+        assertThat(deleteHistory).isSameAs(saved);
     }
 }

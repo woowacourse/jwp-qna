@@ -31,6 +31,6 @@ class UserRepositoryTest {
 
         Optional<User> byUserId = userRepository.findByUserId(savedUser.getUserId());
 
-        assertThat(byUserId.get()).isEqualTo(savedUser);
+        assertThat(byUserId.get()).isSameAs(savedUser);
     }
 }

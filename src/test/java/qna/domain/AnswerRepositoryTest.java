@@ -46,7 +46,7 @@ class AnswerRepositoryTest {
 
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual).isEqualTo(expected)
+                () -> assertThat(actual).isSameAs(expected)
         );
     }
 
@@ -77,6 +77,6 @@ class AnswerRepositoryTest {
 
         Optional<Answer> foundAnswer = answerRepository.findByIdAndDeletedFalse(answer.getId());
 
-        assertThat(foundAnswer.get()).isEqualTo(answer);
+        assertThat(foundAnswer.get()).isSameAs(answer);
     }
 }
