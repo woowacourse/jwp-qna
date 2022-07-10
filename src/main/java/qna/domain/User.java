@@ -63,6 +63,7 @@ public class User {
 
         this.name = target.name;
         this.email = target.email;
+        this.updateDate = LocalDateTime.now();
     }
 
     private boolean matchUserId(String userId) {
