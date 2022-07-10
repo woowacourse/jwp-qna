@@ -10,8 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
@@ -19,7 +17,7 @@ import qna.UnAuthorizedException;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "answer")
-public class Answer {
+public class Answer extends BaseDateTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,14 +34,6 @@ public class Answer {
 
     @Column(name = "question_id")
     private Long questionId;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
     protected Answer() {
     }
@@ -89,11 +79,11 @@ public class Answer {
     }
 
     public LocalDateTime getCreatedAt() {
-        return createdAt;
+        return super.getCreatedAt();
     }
 
     public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+        return super.getUpdatedAt();
     }
 
     public void setWriterId(Long writerId) {

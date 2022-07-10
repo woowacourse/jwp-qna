@@ -9,14 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "question")
-public class Question {
+public class Question extends BaseDateTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,14 +31,6 @@ public class Question {
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted = false;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
     protected Question() {
     }
@@ -109,11 +99,11 @@ public class Question {
     }
 
     public LocalDateTime getCreatedAt() {
-        return createdAt;
+        return super.getCreatedAt();
     }
 
     public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+        return super.getUpdatedAt();
     }
 
     @Override
