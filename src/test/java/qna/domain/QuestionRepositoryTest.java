@@ -4,18 +4,36 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static qna.domain.QuestionTest.Q1;
 import static qna.domain.QuestionTest.Q2;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import qna.config.JpaConfig;
 
 @DataJpaTest
+@Import(JpaConfig.class)
 class QuestionRepositoryTest {
 
     @Autowired
     private QuestionRepository questionRepository;
+
+    @DisplayName("수정이 일어났을 때 updatedAt이 잘 생성되는지 확인한다.")
+    @Test
+    void saveUpdatedAt() {
+        Question savedQ1 = questionRepository.save(Q1);
+
+        LocalDateTime updatedAt = savedQ1.getUpdatedAt();
+        savedQ1.setDeleted(true);
+        questionRepository.flush();
+
+        Question updatedQ1 = questionRepository.findById(savedQ1.getId()).get();
+
+        assertThat(updatedQ1.getUpdatedAt()).isAfter(updatedAt);
+    }
 
     @DisplayName("객체를 찾아올 때는 한 영속성 컨텍스트안에서 id 값으로 매핑되어있기 때문에 같은 객체가 나오게 된다.")
     @Test
