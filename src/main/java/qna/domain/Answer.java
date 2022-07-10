@@ -9,14 +9,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.Table;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "answer")
 public class Answer extends BaseDateTimeEntity {
 
     @Id
