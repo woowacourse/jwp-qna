@@ -1,25 +1,43 @@
 package qna.domain;
 
-public class Question {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+
+@Entity
+public class Question extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 100)
     private String title;
+
+    @Lob
     private String contents;
+
+    @Column(name = "writer_id")
     private Long writerId;
+
+    @Column(nullable = false)
     private boolean deleted = false;
 
-    public Question(String title, String contents) {
-        this(null, title, contents);
+    protected Question() {
     }
 
-    public Question(Long id, String title, String contents) {
+    public Question(String title, String contents, Long writerId) {
+        this(null, title, contents, writerId);
+    }
+
+    public Question(Long id, String title, String contents, Long writerId) {
         this.id = id;
         this.title = title;
         this.contents = contents;
-    }
-
-    public Question writeBy(User writer) {
-        this.writerId = writer.getId();
-        return this;
+        this.writerId = writerId;
     }
 
     public boolean isOwner(User writer) {
@@ -34,33 +52,18 @@ public class Question {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getContents() {
         return contents;
     }
 
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
     public Long getWriterId() {
         return writerId;
     }
 
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
-    }
 
     public boolean isDeleted() {
         return deleted;
