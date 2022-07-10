@@ -10,7 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 public abstract class BaseEntity {
 
     @CreatedDate
-    @Column(nullable = false)
+    @Column(updatable = false)
     private LocalDateTime createAt = LocalDateTime.now();
 
     @LastModifiedDate
