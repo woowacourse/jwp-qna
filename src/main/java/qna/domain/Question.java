@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 @Entity
-public class Question {
+public class Question extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +20,6 @@ public class Question {
 
     @Lob
     private String contents;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    private LocalDateTime updatedAt;
 
     private Long writerId;
 

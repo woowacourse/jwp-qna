@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import qna.UnAuthorizedException;
 
 @Entity
-public class User {
+public class User extends BaseEntity {
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @Id
@@ -28,12 +28,6 @@ public class User {
 
     @Column(length = 50)
     private String email;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column
-    private LocalDateTime updatedAt;
 
     public User() {
     }
@@ -61,7 +55,7 @@ public class User {
 
         this.name = target.name;
         this.email = target.email;
-        this.updatedAt = LocalDateTime.now();
+        super.updatedAt = LocalDateTime.now();
     }
 
     private boolean matchUserId(String userId) {

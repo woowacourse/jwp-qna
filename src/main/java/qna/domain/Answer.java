@@ -12,7 +12,7 @@ import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
 @Entity
-public class Answer {
+public class Answer extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,16 +22,13 @@ public class Answer {
     private String contents;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column(nullable = false)
     private boolean deleted = false;
 
     private Long questionId;
-    private LocalDateTime updatedAt = LocalDateTime.now();
     private Long writerId;
 
     public Answer() {
+        super();
     }
 
     public Answer(User writer, Question question, String contents) {
@@ -52,7 +49,6 @@ public class Answer {
         this.writerId = writer.getId();
         this.questionId = question.getId();
         this.contents = contents;
-        this.createdAt = LocalDateTime.now();
     }
 
     public boolean isOwner(User writer) {
