@@ -4,18 +4,23 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestConstructor;
 
 @DataJpaTest
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 class AnswerRepositoryTest {
 
-	@Autowired
-	private AnswerRepository answerRepository;
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private QuestionRepository questionRepository;
+	private final AnswerRepository answerRepository;
+	private final UserRepository userRepository;
+	private final QuestionRepository questionRepository;
+
+	AnswerRepositoryTest(AnswerRepository answerRepository, UserRepository userRepository,
+		QuestionRepository questionRepository) {
+		this.answerRepository = answerRepository;
+		this.userRepository = userRepository;
+		this.questionRepository = questionRepository;
+	}
 
 	@DisplayName("Answer를 저장한다.")
 	@Test
