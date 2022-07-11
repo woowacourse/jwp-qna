@@ -1,12 +1,9 @@
 package qna.domain;
 
-import jdk.jfr.Timestamp;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -44,6 +41,9 @@ public class Answer extends TimeEntity {
         this.writerId = writer.getId();
         this.questionId = question.getId();
         this.contents = contents;
+    }
+
+    protected Answer() {
     }
 
     public boolean isOwner(User writer) {
@@ -103,8 +103,5 @@ public class Answer extends TimeEntity {
                 ", contents='" + contents + '\'' +
                 ", deleted=" + deleted +
                 '}';
-    }
-
-    protected Answer() {
     }
 }
