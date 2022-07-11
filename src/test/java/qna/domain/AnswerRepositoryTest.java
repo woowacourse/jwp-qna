@@ -2,6 +2,8 @@ package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static qna.domain.QuestionFixtures.*;
+import static qna.domain.UserFixtures.*;
 
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -27,11 +29,9 @@ class AnswerRepositoryTest {
     @DisplayName("질문id로 삭제되지 않은 응답들을 가져온다.")
     @Test
     void findByQuestionIdAndDeletedFalse() {
-        final User user = new User("seungpang", "12345678aA!", "김승래", "email@email.com");
+        final User user = seungpang();
         userRepository.save(user);
-
-        final Question question = new Question("제목", "내용")
-                .writeBy(user);
+        final Question question = createQuestion("제목", "내용", user);
         questionRepository.save(question);
 
         answerRepository.save(new Answer(user, question, "내용"));
@@ -44,11 +44,9 @@ class AnswerRepositoryTest {
     @DisplayName("응답id로 삭제되지 않은 응답 단건을 가져온다.")
     @Test
     void findByIdAndDeletedFalse() {
-        final User user = new User("seungpang", "12345678aA!", "김승래", "email@email.com");
+        final User user = seungpang();
         userRepository.save(user);
-
-        final Question question = new Question("제목", "내용")
-                .writeBy(user);
+        final Question question = createQuestion("제목", "내용", user);
         questionRepository.save(question);
 
         final Answer answer = answerRepository.save(new Answer(user, question, "내용"));

@@ -20,7 +20,7 @@ class UserRepositoryTest {
     @DisplayName("userId로 해당 유저를 찾는다.")
     @Test
     void findByUserId() {
-        final User user = new User("seungpang", "12345678aA!", "김승래", "email@email.com");
+        final User user = UserFixtures.seungpang();
         userRepository.save(user);
         final User findUser = userRepository.findByUserId(user.getUserId())
                 .orElseThrow();
