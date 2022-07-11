@@ -1,7 +1,5 @@
 package qna.domain;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,11 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
-
 @Entity
-public class Question {
+public class Question extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,14 +24,8 @@ public class Question {
 
     private boolean deleted;
 
-    @CreationTimestamp
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @DateTimeFormat
-    private LocalDateTime updatedAt;
-
-    protected Question() {}
+    protected Question() {
+    }
 
     public Question(String title, String contents) {
         this(null, title, contents);
