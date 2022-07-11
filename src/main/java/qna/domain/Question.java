@@ -1,7 +1,5 @@
 package qna.domain;
 
-import com.sun.tools.javac.jvm.Gen;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,6 +28,9 @@ public class Question {
     @Column(name = "updated_at")
     private LocalDateTime updateData;
 
+    private Question() {
+    }
+
     public Question(String title, String contents) {
         this(null, title, contents);
     }
@@ -51,6 +52,20 @@ public class Question {
 
     public void addAnswer(Answer answer) {
         answer.toQuestion(this);
+    }
+
+    public void update(Question updatedQuestion) {
+        if (this.deleted) {
+            throw new IllegalArgumentException("이미 삭제된 질문입니다.");
+        }
+        this.title = updatedQuestion.title;
+        this.contents = updatedQuestion.contents;
+        this.updateData = LocalDateTime.now();
+    }
+
+    public void delete() {
+        this.deleted = true;
+        updateData = LocalDateTime.now();
     }
 
     public Long getId() {
