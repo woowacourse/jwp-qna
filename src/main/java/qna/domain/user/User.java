@@ -6,14 +6,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import qna.domain.EntityHistory;
 import qna.exception.UnAuthorizedException;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {"userId"}))
+@Table(name = "user")
 public class User extends EntityHistory {
 
     @Id
@@ -29,7 +28,7 @@ public class User extends EntityHistory {
     @Column(nullable = false, length = 20)
     private String password;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, unique = true, length = 20)
     private String userId;
 
     protected User() {

@@ -33,7 +33,7 @@ public class Answer extends EntityHistory {
 
     private Long writerId;
 
-    public Answer() {
+    protected Answer() {
     }
 
     public Answer(User writer, Question question, String contents) {

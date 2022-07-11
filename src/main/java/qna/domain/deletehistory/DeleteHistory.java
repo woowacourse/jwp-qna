@@ -27,7 +27,7 @@ public class DeleteHistory {
 
     private Long deletedById;
 
-    public DeleteHistory() {
+    protected DeleteHistory() {
     }
 
     public DeleteHistory(ContentType contentType, Long contentId, Long deletedById, LocalDateTime createDate) {
