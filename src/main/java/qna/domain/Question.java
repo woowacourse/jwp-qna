@@ -1,20 +1,24 @@
 package qna.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class Question {
+public class Question extends TimeEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 100)
     private String title;
+
+    @Lob
     private String contents;
+
     private Long writerId;
+
     private boolean deleted = false;
+
     public Question(String title, String contents) {
         this(null, title, contents);
     }
