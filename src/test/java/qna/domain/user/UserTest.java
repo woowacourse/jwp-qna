@@ -88,7 +88,7 @@ public class UserTest {
     class AuditingTest {
 
         @Test
-        void save_호출되면_createdAt와_updatedAt에는_해당_시점이_값으로_담김() {
+        void save_호출_시점에_createdAt와_updatedAt에_자동생성된_해당_시점_정보가_값으로_담김() {
             final User entity = new User("javajigi", "password", "name", "javajigi@slipp.net");
             assertThat(entity.getCreatedAt()).isNull();
             assertThat(entity.getUpdatedAt()).isNull();
@@ -126,6 +126,18 @@ public class UserTest {
             assertThat(updatedEntity.getCreatedAt()).isNull();
             assertThat(updatedEntity.getUpdatedAt()).isNull();
             assertThat(savedEntity).isEqualTo(updatedEntity);
+        }
+
+        @Test
+        void 식별자를_지닌_엔티티에_대해_save_호출시_merge가_호출되지만_DB에_저장되지_않은_데이터인_경우_새로운_엔티티를_생성하며_그_시점에_createdAt와_updatedAt_값에_대해_auditing_발생() {
+            final User entity = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
+            assertThat(entity.getCreatedAt()).isNull();
+            assertThat(entity.getUpdatedAt()).isNull();
+
+            final User savedEntity = users.save(entity);
+            assertThat(savedEntity.getCreatedAt()).isNotNull();
+            assertThat(savedEntity.getUpdatedAt()).isNotNull();
+            assertThat(entity != savedEntity).isTrue();
         }
     }
 }
