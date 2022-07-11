@@ -7,17 +7,24 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
 import qna.utils.fixture.QuestionFixture;
 import qna.utils.fixture.UserFixture;
 
+@TestConstructor(autowireMode = AutowireMode.ALL)
 @DataJpaTest
 class DeleteHistoryRepositoryTest {
 
-    @Autowired
     private DeleteHistoryRepository deleteHistories;
-
-    @Autowired
     private QuestionRepository questions;
+
+    public DeleteHistoryRepositoryTest(DeleteHistoryRepository deleteHistories, QuestionRepository questions,
+                                       UserRepository users) {
+        this.deleteHistories = deleteHistories;
+        this.questions = questions;
+        this.users = users;
+    }
 
     @Autowired
     private UserRepository users;

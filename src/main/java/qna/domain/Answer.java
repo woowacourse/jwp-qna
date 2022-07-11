@@ -27,8 +27,7 @@ public class Answer extends BaseEntity{
     private Long questionId;
     private Long writerId;
 
-    public Answer() {
-        super();
+    protected Answer() {
     }
 
     public Answer(User writer, Question question, String contents) {
@@ -99,14 +98,4 @@ public class Answer extends BaseEntity{
         this.deleted = deleted;
     }
 
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "id=" + id +
-                ", writerId=" + writerId +
-                ", questionId=" + questionId +
-                ", contents='" + contents + '\'' +
-                ", deleted=" + deleted +
-                '}';
-    }
 }

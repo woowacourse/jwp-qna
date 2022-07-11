@@ -8,13 +8,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
 import qna.utils.fixture.UserFixture;
 
+@TestConstructor(autowireMode = AutowireMode.ALL)
 @DataJpaTest
 class UserRepositoryTest {
 
-    @Autowired
     private UserRepository users;
+
+    public UserRepositoryTest(UserRepository users) {
+        this.users = users;
+    }
 
     @Test
     @DisplayName("사용자를 저장한다.")
