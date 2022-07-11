@@ -15,7 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 @Entity
-public class Answer {
+public class Answer extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +23,8 @@ public class Answer {
     @Lob
     private String contents;
     @Column(nullable = false)
-    private LocalDateTime createdAt;
-    @Column(nullable = false)
     private boolean deleted;
     private Long questionId;
-    private LocalDateTime updatedAt;
     private Long writerId;
 
     protected Answer() {
@@ -51,7 +48,6 @@ public class Answer {
         this.writerId = writer.getId();
         this.questionId = question.getId();
         this.contents = contents;
-        this.createdAt = LocalDateTime.now();
     }
 
     public boolean isOwner(User writer) {

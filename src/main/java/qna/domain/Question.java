@@ -10,19 +10,16 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 @Entity
-public class Question {
+public class Question extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Lob
     private String contents;
     @Column(nullable = false)
-    private LocalDateTime createAt;
-    @Column(nullable = false)
     private boolean deleted;
     @Column(length = 100, nullable = false)
     private String title;
-    private LocalDateTime updatedAt;
     private Long writerId;
 
     protected Question() {
@@ -36,7 +33,6 @@ public class Question {
         this.id = id;
         this.title = title;
         this.contents = contents;
-        this.createAt = LocalDateTime.now();
     }
 
     public Question writeBy(User writer) {

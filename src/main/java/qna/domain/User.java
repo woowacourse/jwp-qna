@@ -17,21 +17,18 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-public class User {
+public class User extends BaseEntity {
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
     @Column(length = 50)
     private String email;
     @Column(nullable = false, length = 20)
     private String name;
     @Column(nullable = false, length = 20)
     private String password;
-    private LocalDateTime updatedAt;
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
 
@@ -48,7 +45,6 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
-        this.createdAt = LocalDateTime.now();
     }
 
     public void update(User loginUser, User target) {
