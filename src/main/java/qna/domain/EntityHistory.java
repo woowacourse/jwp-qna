@@ -5,7 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public class EntityHistory {
+public abstract class EntityHistory {
 
     @Column(nullable = false)
     protected LocalDateTime createdAt = LocalDateTime.now();
