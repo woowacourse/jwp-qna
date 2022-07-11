@@ -70,7 +70,7 @@ class StationRepositoryTest {
             final Station station2 = stations.save(station1);
 
             assertThat(station1.getId()).isEqualTo(100L);
-            assertThat(station2.getId()).isEqualTo(1L);
+            assertThat(station2.getId()).isNotEqualTo(100L);
             assertThat(station1).isNotEqualTo(station2);
         }
     }
