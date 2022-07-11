@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class Answer extends BaseTimeEntity{
+public class Answer extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,7 +19,7 @@ public class Answer extends BaseTimeEntity{
     private String contents;
 
     @Column(nullable = false)
-    private boolean deleted;
+    private boolean deleted = false;
 
     protected Answer() {
     }
