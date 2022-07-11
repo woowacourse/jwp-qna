@@ -16,7 +16,7 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository users;
 
-    public static final User JAVAJIGI = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
+    private static final User JAVAJIGI = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
 
     @DisplayName("사용자 정보 저장")
     @Test

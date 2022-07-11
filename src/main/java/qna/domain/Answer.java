@@ -35,6 +35,9 @@ public class Answer {
     @Column(name = "updated_at")
     private LocalDateTime updateDate;
 
+    private Answer() {
+    }
+
     public Answer(User writer, Question question, String contents) {
         this(null, writer, question, contents);
     }
@@ -57,6 +60,13 @@ public class Answer {
 
     public boolean isOwner(User writer) {
         return this.writerId.equals(writer.getId());
+    }
+
+    public void update(Answer updatedAnswer) {
+        if (!this.writerId.equals(updatedAnswer.writerId)) {
+            throw new IllegalArgumentException("작성자가 달라 답변을 수정할 수 없습니다.");
+        }
+        this.contents = updatedAnswer.contents;
     }
 
     public void toQuestion(Question question) {
