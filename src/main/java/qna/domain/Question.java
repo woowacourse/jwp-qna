@@ -1,12 +1,20 @@
 package qna.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Question {
+
+    @Id
+    @GeneratedValue
     private Long id;
+
     private String title;
     private String contents;
     private Long writerId;
     private boolean deleted = false;
-
     public Question(String title, String contents) {
         this(null, title, contents);
     }
@@ -15,6 +23,9 @@ public class Question {
         this.id = id;
         this.title = title;
         this.contents = contents;
+    }
+
+    protected Question() {
     }
 
     public Question writeBy(User writer) {
