@@ -1,16 +1,47 @@
 package qna.domain;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
-import java.util.Objects;
-
+@Entity
 public class Answer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long writerId;
     private Long questionId;
+
+    @CreationTimestamp
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @DateTimeFormat
+    private LocalDateTime updatedAt;
+
+    @Lob
     private String contents;
-    private boolean deleted = false;
+
+    private boolean deleted;
+
+    protected Answer() {
+    }
 
     public Answer(User writer, Question question, String contents) {
         this(null, writer, question, contents);
@@ -56,12 +87,12 @@ public class Answer {
         this.writerId = writerId;
     }
 
-    public Long getQuestionId() {
+    public Long getQuestion() {
         return questionId;
     }
 
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
+    public void setQuestionId(Question question) {
+        this.questionId = question.getId();
     }
 
     public String getContents() {
@@ -70,6 +101,14 @@ public class Answer {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     public boolean isDeleted() {
