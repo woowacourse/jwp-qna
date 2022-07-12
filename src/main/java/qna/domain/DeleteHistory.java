@@ -24,7 +24,7 @@ public class DeleteHistory extends BaseEntity {
 
     private Long deletedById;
 
-    private LocalDateTime createDate = LocalDateTime.now();
+    private LocalDateTime createDate;
 
     protected DeleteHistory() {
     }
