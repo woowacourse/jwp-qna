@@ -1,16 +1,48 @@
 package qna.domain;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
-import java.util.Objects;
-
+@EntityListeners(AuditingEntityListener.class)
+@Entity
 public class Answer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
-    private Long writerId;
-    private Long questionId;
+
+    @Lob
     private String contents;
+
+    @Column(nullable = false)
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
     private boolean deleted = false;
+
+    private Long questionId;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    private Long writerId;
+
+    protected Answer() {
+    }
 
     public Answer(User writer, Question question, String contents) {
         this(null, writer, question, contents);
@@ -48,12 +80,20 @@ public class Answer {
         this.id = id;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public String getContents() {
+        return contents;
     }
 
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
+    public void setContents(String contents) {
+        this.contents = contents;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Long getQuestionId() {
@@ -64,12 +104,20 @@ public class Answer {
         this.questionId = questionId;
     }
 
-    public String getContents() {
-        return contents;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setContents(String contents) {
-        this.contents = contents;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Long getWriterId() {
+        return writerId;
+    }
+
+    public void setWriterId(Long writerId) {
+        this.writerId = writerId;
     }
 
     public boolean isDeleted() {
