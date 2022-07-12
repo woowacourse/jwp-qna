@@ -52,11 +52,9 @@ class AnswerRepositoryTest {
     @DisplayName("deleted가 false인 답변들을 답변 id로 조회 - 존재 X")
     @Test
     void findByIdAndDeletedFalseIsNotExist() {
-        userRepository.save(UserTest.JAVAJIGI);
-        questionRepository.save(QuestionTest.Q1);
-
         final Answer answer = answerRepository.save(AnswerTest.A1);
+        answer.setDeleted(true);
 
-        assertThat(answerRepository.findByIdAndDeletedFalse(answer.getId() - 1)).isEmpty();
+        assertThat(answerRepository.findByIdAndDeletedFalse(answer.getId())).isEmpty();
     }
 }
