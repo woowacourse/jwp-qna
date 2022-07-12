@@ -1,6 +1,5 @@
 package qna.domain;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -55,7 +54,6 @@ public class User extends BaseEntity {
 
         this.name = target.name;
         this.email = target.email;
-        super.updatedAt = LocalDateTime.now();
     }
 
     private boolean matchUserId(String userId) {

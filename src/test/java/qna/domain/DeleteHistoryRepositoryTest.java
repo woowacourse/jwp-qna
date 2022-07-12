@@ -5,11 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
-import qna.utils.fixture.QuestionFixture;
 import qna.utils.fixture.UserFixture;
 
 @TestConstructor(autowireMode = AutowireMode.ALL)
@@ -18,6 +16,7 @@ class DeleteHistoryRepositoryTest {
 
     private DeleteHistoryRepository deleteHistories;
     private QuestionRepository questions;
+    private UserRepository users;
 
     public DeleteHistoryRepositoryTest(DeleteHistoryRepository deleteHistories, QuestionRepository questions,
                                        UserRepository users) {
@@ -26,22 +25,18 @@ class DeleteHistoryRepositoryTest {
         this.users = users;
     }
 
-    @Autowired
-    private UserRepository users;
-
-
     @Test
     @DisplayName("삭제 내역을 저장한다")
     void test() {
         // given
-        Question expect = QuestionFixture.Q1;
-        Question savedQuestion = questions.save(expect);
-        savedQuestion.setDeleted(true);
-
         User user = UserFixture.JAVAJIGI;
         User savedUser = users.save(user);
 
-        DeleteHistory deleteHistory = new DeleteHistory(ContentType.QUESTION, savedQuestion.getId(), savedUser.getId(),
+        Question expect = new Question("title1", "contents1").writeBy(savedUser);
+        Question savedQuestion = questions.save(expect);
+        savedQuestion.setDeleted(true);
+
+        DeleteHistory deleteHistory = new DeleteHistory(ContentType.QUESTION, savedQuestion.getId(), savedUser,
                 LocalDateTime.now());
 
         DeleteHistory save = deleteHistories.save(deleteHistory);
