@@ -46,7 +46,7 @@ class AnswerRepositoryTest {
 
         final Answer answer = answerRepository.save(AnswerTest.A1);
 
-        assertThat(answerRepository.findByIdAndDeletedFalse(answer.getId()).get()).isEqualTo(answer);
+        assertThat(answerRepository.findByIdAndDeletedFalse(answer.getId())).contains(answer);
     }
 
     @DisplayName("deleted가 false인 답변들을 답변 id로 조회 - 존재 X")

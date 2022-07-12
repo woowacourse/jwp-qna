@@ -20,7 +20,7 @@ class UserRepositoryTest {
     void findByUserId() {
         final User user = userRepository.save(UserTest.JAVAJIGI);
 
-        assertThat(userRepository.findByUserId(user.getUserId()).get()).isEqualTo(user);
+        assertThat(userRepository.findByUserId(user.getUserId())).contains(user);
     }
 
     @Test
