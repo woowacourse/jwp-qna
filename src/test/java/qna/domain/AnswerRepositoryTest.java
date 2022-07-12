@@ -40,7 +40,8 @@ class AnswerRepositoryTest {
     void save() {
         User tiki = new User("tiki", "password", "티키", "yh20studio@gmail.com");
         User savedUser = userRepository.save(tiki);
-        Question savedQuestion = questionRepository.save(Q1);
+        Question question = new Question("title1", "contents1").writeBy(savedUser);
+        Question savedQuestion = questionRepository.save(question);
         Answer expected = new Answer(savedUser, savedQuestion, "Answers Contents1");
         Answer actual = answerRepository.save(expected);
 
@@ -55,7 +56,8 @@ class AnswerRepositoryTest {
     void findByQuestionIdAndDeletedFalse() {
         User tiki = new User("tiki", "password", "티키", "yh20studio@gmail.com");
         User savedUser = userRepository.save(tiki);
-        Question savedQuestion = questionRepository.save(Q1);
+        Question question = new Question("title1", "contents1").writeBy(savedUser);
+        Question savedQuestion = questionRepository.save(question);
         Answer answer1 = answerRepository.save(new Answer(savedUser, savedQuestion, "Answers Contents1"));
         Answer answer2 = answerRepository.save(new Answer(savedUser, savedQuestion, "Answers Contents2"));
         Answer answer3 = answerRepository.save(new Answer(savedUser, savedQuestion, "Answers Contents3"));
@@ -72,7 +74,8 @@ class AnswerRepositoryTest {
     void findByIdAndDeletedFalse() {
         User tiki = new User("tiki", "password", "티키", "yh20studio@gmail.com");
         User savedUser = userRepository.save(tiki);
-        Question savedQuestion = questionRepository.save(Q1);
+        Question question = new Question("title1", "contents1").writeBy(savedUser);
+        Question savedQuestion = questionRepository.save(question);
         Answer answer = answerRepository.save(new Answer(savedUser, savedQuestion, "Answers Contents1"));
 
         Optional<Answer> foundAnswer = answerRepository.findByIdAndDeletedFalse(answer.getId());
