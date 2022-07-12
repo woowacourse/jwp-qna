@@ -27,10 +27,13 @@ class AnswerRepositoryTest {
     @Test
     void findByQuestionIdAndDeletedFalse() {
         //given
-        final Question question = questionRepository.save(QuestionTest.Q1);
+        final User javajigi = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        userRepository.save(javajigi);
+
+        final Question question = questionRepository.save(new Question("title1", "contents1", javajigi));
+
         final List<Answer> answers = answerRepository.saveAll(
-                Arrays.asList(new Answer(UserTest.JAVAJIGI, question, "Answers Contents1"),
-                new Answer(UserTest.SANJIGI, question, "Answers Contents2"))
+                Arrays.asList(new Answer(javajigi, question, "Answers Contents1"))
         );
 
         //when
@@ -58,7 +61,12 @@ class AnswerRepositoryTest {
     @Test
     void findByIdAndDeletedFalseIsNotExist() {
         //given
-        final Answer answer = answerRepository.save(AnswerTest.A1);
+        final User javajigi = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        userRepository.save(javajigi);
+
+        final Question question = questionRepository.save(new Question("title1", "contents1", javajigi));
+
+        final Answer answer = answerRepository.save(new Answer(javajigi, question, "content1"));
         answer.setDeleted(true);
 
         //when & then
