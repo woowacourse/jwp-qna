@@ -8,28 +8,21 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class Answer {
+public class Answer extends MappedEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
-    private Long writerId;
+    @ManyToOne
+    private User writer;
+    @ManyToOne
+    private Question question;
 
-    @Column(nullable = false)
-    private final LocalDateTime createAt = LocalDateTime.now();
-    @Column
-    private Long questionId;
-    @Column
     @Lob
     private String contents;
-
-    @Column()
-    private LocalDateTime updatedAt;
-
     @Column(nullable = false)
     private boolean deleted = false;
 
-    public Answer() {
+    protected Answer() {
     }
 
     public Answer(User writer, Question question, String contents) {
@@ -47,17 +40,26 @@ public class Answer {
             throw new NotFoundException();
         }
 
-        this.writerId = writer.getId();
-        this.questionId = question.getId();
+        this.toQuestion(question);
+        this.toWriter(writer);
         this.contents = contents;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.getId().equals(writer.getId());
     }
 
     public void toQuestion(Question question) {
-        this.questionId = question.getId();
+        if (this.question != null) {
+            this.question.deleteAnswer(this);
+        }
+        this.question = question;
+        question.addAnswer(this);
+    }
+
+    public void toWriter(User user) {
+        this.writer = user;
+        user.addAnswer(this);
     }
 
     public Long getId() {
@@ -65,11 +67,7 @@ public class Answer {
     }
 
     public Long getWriterId() {
-        return writerId;
-    }
-
-    public Long getQuestionId() {
-        return questionId;
+        return writer.getId();
     }
 
     public String getContents() {
@@ -78,7 +76,10 @@ public class Answer {
 
     public void setContents(String contents) {
         this.contents = contents;
-        this.updatedAt = LocalDateTime.now();
+    }
+
+    public Long getQuestionId() {
+        return this.question.getId();
     }
 
     public LocalDateTime getCreateAt() {
@@ -89,6 +90,10 @@ public class Answer {
         return deleted;
     }
 
+    public User getWriter() {
+        return writer;
+    }
+
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
@@ -97,8 +102,8 @@ public class Answer {
     public String toString() {
         return "Answer{" +
                 "id=" + id +
-                ", writerId=" + writerId +
-                ", questionId=" + questionId +
+                ", writerId=" + writer.getId() +
+                ", questionId=" + question.getId() +
                 ", contents='" + contents + '\'' +
                 ", deleted=" + deleted +
                 '}';
