@@ -72,7 +72,7 @@ public class DeleteHistory extends BaseEntity {
         return contentId;
     }
 
-    public User getUser() {
+public User getUser() {
         return user;
     }
 

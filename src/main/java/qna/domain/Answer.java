@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
@@ -55,6 +56,7 @@ public class Answer extends BaseEntity {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
+        this.createdAt = LocalDateTime.now();
     }
 
     public boolean isOwner(User writer) {
