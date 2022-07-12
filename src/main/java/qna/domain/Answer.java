@@ -3,14 +3,40 @@ package qna.domain;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Entity
 public class Answer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long writerId;
+
     private Long questionId;
+
+    @Lob
     private String contents;
+
+    @Column(nullable = false)
     private boolean deleted = false;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createDate = LocalDateTime.now();
+
+    @Column(name = "updated_at")
+    private LocalDateTime updateDate;
+
+    private Answer() {
+    }
 
     public Answer(User writer, Question question, String contents) {
         this(null, writer, question, contents);
@@ -34,6 +60,13 @@ public class Answer {
 
     public boolean isOwner(User writer) {
         return this.writerId.equals(writer.getId());
+    }
+
+    public void update(Answer updatedAnswer) {
+        if (!this.writerId.equals(updatedAnswer.writerId)) {
+            throw new IllegalArgumentException("작성자가 달라 답변을 수정할 수 없습니다.");
+        }
+        this.contents = updatedAnswer.contents;
     }
 
     public void toQuestion(Question question) {

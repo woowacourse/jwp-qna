@@ -1,11 +1,35 @@
 package qna.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import java.time.LocalDateTime;
+
+@Entity
 public class Question {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(length = 100, nullable = false)
     private String title;
+
+    @Lob
     private String contents;
+
     private Long writerId;
+
     private boolean deleted = false;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updateData;
+
+    private Question() {
+    }
 
     public Question(String title, String contents) {
         this(null, title, contents);
@@ -28,6 +52,20 @@ public class Question {
 
     public void addAnswer(Answer answer) {
         answer.toQuestion(this);
+    }
+
+    public void update(Question updatedQuestion) {
+        if (this.deleted) {
+            throw new IllegalArgumentException("이미 삭제된 질문입니다.");
+        }
+        this.title = updatedQuestion.title;
+        this.contents = updatedQuestion.contents;
+        this.updateData = LocalDateTime.now();
+    }
+
+    public void delete() {
+        this.deleted = true;
+        updateData = LocalDateTime.now();
     }
 
     public Long getId() {
