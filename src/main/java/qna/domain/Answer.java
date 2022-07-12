@@ -24,10 +24,8 @@ public class Answer extends BaseEntity {
     @Column(nullable = false)
     private boolean deleted = false;
 
-    @Column(name = "question_id")
     private Long questionId;
 
-    @Column(name = "write_id")
     private Long writerId;
 
     protected Answer() {

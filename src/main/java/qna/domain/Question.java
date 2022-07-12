@@ -20,7 +20,6 @@ public class Question extends BaseEntity {
     @Lob
     private String contents;
 
-    @Column(name = "writer_id")
     private Long writerId;
 
     @Column(nullable = false)
