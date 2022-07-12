@@ -12,7 +12,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Answer extends BaseEntity {
@@ -24,8 +26,14 @@ public class Answer extends BaseEntity {
     private String contents;
     @Column(nullable = false)
     private boolean deleted;
-    private Long questionId;
-    private Long writerId;
+
+    @ManyToOne
+    @JoinColumn
+    private User writer;
+
+    @ManyToOne
+    @JoinColumn
+    private Question question;
 
     protected Answer() {
     }
@@ -40,22 +48,20 @@ public class Answer extends BaseEntity {
         if (Objects.isNull(writer)) {
             throw new UnAuthorizedException();
         }
-
+        this.writer = writer;
         if (Objects.isNull(question)) {
             throw new NotFoundException();
         }
-
-        this.writerId = writer.getId();
-        this.questionId = question.getId();
+        this.question = question;
         this.contents = contents;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.equals(writer);
     }
 
     public void toQuestion(Question question) {
-        this.questionId = question.getId();
+        this.question = question;
     }
 
     public Long getId() {
@@ -67,19 +73,11 @@ public class Answer extends BaseEntity {
     }
 
     public Long getWriterId() {
-        return writerId;
-    }
-
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
+        return writer.getId();
     }
 
     public Long getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
+        return question.getId();
     }
 
     public String getContents() {
@@ -98,14 +96,22 @@ public class Answer extends BaseEntity {
         this.deleted = deleted;
     }
 
+    public User getWriter() {
+        return writer;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
     @Override
     public String toString() {
         return "Answer{" +
-                "id=" + id +
-                ", writerId=" + writerId +
-                ", questionId=" + questionId +
-                ", contents='" + contents + '\'' +
-                ", deleted=" + deleted +
-                '}';
+            "id=" + id +
+            ", contents='" + contents + '\'' +
+            ", deleted=" + deleted +
+            ", writer=" + writer +
+            ", question=" + question +
+            '}';
     }
 }
