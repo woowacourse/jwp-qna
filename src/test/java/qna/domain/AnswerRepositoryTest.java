@@ -26,35 +26,42 @@ class AnswerRepositoryTest {
     @DisplayName("deleted가 false인 답변들을 질문 id로 조회")
     @Test
     void findByQuestionIdAndDeletedFalse() {
+        //given
         final Question question = questionRepository.save(QuestionTest.Q1);
-
         final List<Answer> answers = answerRepository.saveAll(
                 Arrays.asList(new Answer(UserTest.JAVAJIGI, question, "Answers Contents1"),
                 new Answer(UserTest.SANJIGI, question, "Answers Contents2"))
         );
 
+        //when
         final List<Answer> getAnswers = answerRepository.findByQuestionIdAndDeletedFalse(question.getId());
 
+        //then
         assertThat(answers).containsExactlyInAnyOrderElementsOf(getAnswers);
     }
 
     @DisplayName("deleted가 false인 답변들을 답변 id로 조회 - 존재 O")
     @Test
     void findByIdAndDeletedFalse() {
+        //given
         userRepository.save(UserTest.JAVAJIGI);
         questionRepository.save(QuestionTest.Q1);
 
+        //when
         final Answer answer = answerRepository.save(AnswerTest.A1);
 
+        //then
         assertThat(answerRepository.findByIdAndDeletedFalse(answer.getId())).contains(answer);
     }
 
     @DisplayName("deleted가 false인 답변들을 답변 id로 조회 - 존재 X")
     @Test
     void findByIdAndDeletedFalseIsNotExist() {
+        //given
         final Answer answer = answerRepository.save(AnswerTest.A1);
         answer.setDeleted(true);
 
+        //when & then
         assertThat(answerRepository.findByIdAndDeletedFalse(answer.getId())).isEmpty();
     }
 }
