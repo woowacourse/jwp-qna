@@ -4,10 +4,11 @@ import qna.UnAuthorizedException;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 @Entity
-public class User {
-    public static final GuestUser GUEST_USER = new GuestUser();
+public class User extends MappedEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,13 +21,16 @@ public class User {
     @Column(length = 50)
     private String email;
 
-    @Column(nullable = false)
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    @OneToMany(mappedBy = "deletedBy")
+    private final List<DeleteHistory> deleteHistories = new ArrayList<>();
 
-    @Column
-    private LocalDateTime updatedAt;
+    @OneToMany(mappedBy = "writer")
+    private final List<Answer> answers = new ArrayList<>();
 
-    public User() {
+    @OneToMany(mappedBy = "writer")
+    private final List<Question> questions = new ArrayList<>();
+
+    protected User() {
     }
 
     public User(String userId, String password, String name, String email) {
@@ -72,6 +76,12 @@ public class User {
                 email.equals(target.email);
     }
 
+    public void addAnswer(Answer answer) {
+        if (!this.answers.contains(answer)) {
+            answers.add(answer);
+        }
+    }
+
     public boolean isGuestUser() {
         return false;
     }
@@ -96,6 +106,16 @@ public class User {
         return email;
     }
 
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void addDeleteHistory(DeleteHistory deleteHistory) {
+        if (!this.deleteHistories.contains(deleteHistory)) {
+            deleteHistories.add(deleteHistory);
+        }
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -107,10 +127,13 @@ public class User {
                 '}';
     }
 
-    private static class GuestUser extends User {
-        @Override
-        public boolean isGuestUser() {
-            return true;
+    public void addQuestion(Question question) {
+        if (!this.questions.contains(question)) {
+            this.questions.add(question);
         }
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
