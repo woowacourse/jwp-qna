@@ -18,16 +18,20 @@ class UserRepositoryTest {
     @Test
     @DisplayName("userId로 사용자 조회 - 존재 O")
     void findByUserId() {
+        //given
         final User user = userRepository.save(UserTest.JAVAJIGI);
 
-        assertThat(userRepository.findByUserId(user.getUserId()).get()).isEqualTo(user);
+        //when & then
+        assertThat(userRepository.findByUserId(user.getUserId())).contains(user);
     }
 
     @Test
     @DisplayName("userId로 사용자 조회 - 존재 X")
     void findByUserIdIsNotExist() {
+        //given
         userRepository.save(UserTest.JAVAJIGI);
 
+        //when & then
         assertThat(userRepository.findByUserId("dummy")).isEmpty();
     }
 }
