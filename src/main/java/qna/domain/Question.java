@@ -47,7 +47,11 @@ public class Question extends BaseDateTimeEntity {
     }
 
     public Question writeBy(User writer) {
+        if (this.writer != null) {
+            this.writer.getQuestions().remove(this);
+        }
         this.writer = writer;
+        writer.getQuestions().add(this);
         return this;
     }
 

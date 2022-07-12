@@ -1,6 +1,7 @@
 package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import qna.support.RepositoryTest;
 
 @RepositoryTest
@@ -34,6 +36,48 @@ class QuestionRepositoryTest {
         Question updatedQ1 = questionRepository.findById(savedQuestion.getId()).get();
 
         assertThat(updatedQ1.getUpdatedAt()).isAfter(updatedAt);
+    }
+
+    @DisplayName("저장할 때 연관관계인 User가 영속성 컨텍스트에 없다면, 예외가 발생한다.")
+    @Test
+    void saveWithUserNotInPersistence() {
+        User tiki = new User("tiki", "password", "티키", "yh20studio@gmail.com");
+        Question question = new Question("title1", "contents1").writeBy(tiki);
+        questionRepository.save(question);
+
+        assertThatThrownBy(() -> questionRepository.flush())
+                .isExactlyInstanceOf(InvalidDataAccessApiUsageException.class);
+    }
+
+    @DisplayName("연관관계 주인인 Question에서 Writer를 변경만하더라도, 더티체킹으로 update 쿼리를 날려 변경사항이 저장된다.")
+    @Test
+    void updateWriterInQuestion() {
+        User tiki = new User("tiki", "password", "티키", "yh20studio@gmail.com");
+        User tiki2 = new User("tiki2", "password", "티키2", "yh20studio@naver.com");
+        User savedUser1 = userRepository.save(tiki);
+        User savedUser2 = userRepository.save(tiki2);
+        Question question = new Question("title1", "contents1").writeBy(savedUser1);
+        Question savedQuestion = questionRepository.save(question);
+
+        savedQuestion.writeBy(savedUser2);
+        Question updatedQuestion = questionRepository.findById(savedQuestion.getId()).get();
+
+        assertThat(updatedQuestion.getWriter()).isEqualTo(savedUser2);
+    }
+
+    @DisplayName("연관관계 주인인 Question에서 Writer를 변경할때, 실제 순수 객체와의 상태를 맞추기 위해서 편의 메서드를 이용했다.")
+    @Test
+    void updateWriterInQuestionWithConvenienceMethod() {
+        User tiki = new User("tiki", "password", "티키", "yh20studio@gmail.com");
+        User tiki2 = new User("tiki2", "password", "티키2", "yh20studio@naver.com");
+        User savedUser1 = userRepository.save(tiki);
+        User savedUser2 = userRepository.save(tiki2);
+        Question question = new Question("title1", "contents1").writeBy(savedUser1);
+        Question savedQuestion = questionRepository.save(question);
+
+        savedQuestion.writeBy(savedUser2);
+
+        assertThat(savedUser2.getQuestions()).containsExactly(savedQuestion);
     }
 
     @DisplayName("객체를 찾아올 때는 한 영속성 컨텍스트안에서 id 값으로 매핑되어있기 때문에 같은 객체가 나오게 된다.")
