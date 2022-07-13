@@ -45,8 +45,6 @@ class AnswerRepositoryTest {
 
         Optional<Answer> byIdAndDeletedFalse = answerRepository.findByIdAndDeletedFalse(save.getId());
 
-        byIdAndDeletedFalse.ifPresent(
-                it -> assertThat(it).isEqualTo(answer)
-        );
+        assertThat(byIdAndDeletedFalse).hasValue(answer);
     }
 }

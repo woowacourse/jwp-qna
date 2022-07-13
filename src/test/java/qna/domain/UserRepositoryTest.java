@@ -2,6 +2,7 @@ package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -25,8 +26,7 @@ class UserRepositoryTest {
         User user = new User("jurl", "1234", "주디", "dbswnfl2@");
         userRepository.save(user);
 
-        userRepository.findByUserId(user.getUserId()).ifPresent(
-                it -> assertThat(it).isEqualTo(user)
-        );
+        Optional<User> byUserId = userRepository.findByUserId(user.getUserId());
+        assertThat(byUserId).hasValue(user);
     }
 }
