@@ -73,6 +73,7 @@ class AnswerRepositoryTest {
         saved.setDeleted(true);
 
         Optional<Answer> found = answers.findByIdAndDeletedFalse(expected.getId());
+
         assertThat(found).isEmpty();
     }
 }
