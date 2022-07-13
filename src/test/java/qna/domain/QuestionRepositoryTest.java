@@ -39,6 +39,4 @@ class QuestionRepositoryTest {
 
         assertThat(byDeletedFalse.size()).isEqualTo(0);
     }
-
-
 }
