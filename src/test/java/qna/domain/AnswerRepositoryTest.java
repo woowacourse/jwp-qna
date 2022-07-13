@@ -7,12 +7,15 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
+import qna.config.JPAConfig;
 import qna.utils.fixture.UserFixture;
 
 @TestConstructor(autowireMode = AutowireMode.ALL)
 @DataJpaTest
+@Import(JPAConfig.class)
 class AnswerRepositoryTest {
 
     private AnswerRepository answers;
