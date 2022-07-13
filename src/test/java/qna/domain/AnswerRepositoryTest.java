@@ -3,26 +3,24 @@ package qna.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static qna.domain.AnswerTest.A1;
 import static qna.domain.AnswerTest.A2;
-import static qna.domain.AnswerTest.A3;
 import static qna.domain.QuestionTest.Q1;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Answers;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestConstructor;
 
+@RequiredArgsConstructor
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @DataJpaTest
 class AnswerRepositoryTest {
 
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
-    @Autowired
-    private AnswerRepository answerRepository;
-
+    private final AnswerRepository answerRepository;
 
     @DisplayName("questionId와 일치하고 삭제가 안된 답들을 조회한다.")
     @Test
@@ -44,7 +42,6 @@ class AnswerRepositoryTest {
         Optional<Answer> answer = answerRepository.findByIdAndDeletedFalse(A1.getId());
         assertThat(answer).isPresent();
 
-        Answer actual = answer.get();
-        assertThat(actual).isEqualTo(A1);
+        assertThat(answer).hasValue(A1);
     }
 }
