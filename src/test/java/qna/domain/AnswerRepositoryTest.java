@@ -9,9 +9,9 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import qna.support.RepositoryTest;
 
-@DataJpaTest
+@RepositoryTest
 class AnswerRepositoryTest {
 
     @Autowired
@@ -23,18 +23,31 @@ class AnswerRepositoryTest {
     @Autowired
     private QuestionRepository questionRepository;
 
-    @DisplayName("저장하고 리턴된 객체는 저장하기전의 객체와 참조 값이 같은 객체이다.")
+    @DisplayName("저장할 때 createdAt이 잘 생성되는지 검증한다.")
     @Test
-    void save() {
+    void saveCreatedAt() {
         User tiki = new User("tiki", "password", "티키", "yh20studio@gmail.com");
         User savedUser = userRepository.save(tiki);
         Question savedQuestion = questionRepository.save(Q1);
         Answer expected = new Answer(savedUser, savedQuestion, "Answers Contents1");
         Answer actual = answerRepository.save(expected);
 
+        assertThat(actual.getCreatedAt()).isNotNull();
+    }
+
+    @DisplayName("저장하고 리턴된 객체는 저장하기전의 객체와 참조 값이 같은 객체이다.")
+    @Test
+    void save() {
+        User tiki = new User("tiki", "password", "티키", "yh20studio@gmail.com");
+        User savedUser = userRepository.save(tiki);
+        Question question = new Question("title1", "contents1").writeBy(savedUser);
+        Question savedQuestion = questionRepository.save(question);
+        Answer expected = new Answer(savedUser, savedQuestion, "Answers Contents1");
+        Answer actual = answerRepository.save(expected);
+
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual).isEqualTo(expected)
+                () -> assertThat(actual).isSameAs(expected)
         );
     }
 
@@ -43,7 +56,8 @@ class AnswerRepositoryTest {
     void findByQuestionIdAndDeletedFalse() {
         User tiki = new User("tiki", "password", "티키", "yh20studio@gmail.com");
         User savedUser = userRepository.save(tiki);
-        Question savedQuestion = questionRepository.save(Q1);
+        Question question = new Question("title1", "contents1").writeBy(savedUser);
+        Question savedQuestion = questionRepository.save(question);
         Answer answer1 = answerRepository.save(new Answer(savedUser, savedQuestion, "Answers Contents1"));
         Answer answer2 = answerRepository.save(new Answer(savedUser, savedQuestion, "Answers Contents2"));
         Answer answer3 = answerRepository.save(new Answer(savedUser, savedQuestion, "Answers Contents3"));
@@ -60,11 +74,12 @@ class AnswerRepositoryTest {
     void findByIdAndDeletedFalse() {
         User tiki = new User("tiki", "password", "티키", "yh20studio@gmail.com");
         User savedUser = userRepository.save(tiki);
-        Question savedQuestion = questionRepository.save(Q1);
+        Question question = new Question("title1", "contents1").writeBy(savedUser);
+        Question savedQuestion = questionRepository.save(question);
         Answer answer = answerRepository.save(new Answer(savedUser, savedQuestion, "Answers Contents1"));
 
         Optional<Answer> foundAnswer = answerRepository.findByIdAndDeletedFalse(answer.getId());
 
-        assertThat(foundAnswer.get()).isEqualTo(answer);
+        assertThat(foundAnswer.get()).isSameAs(answer);
     }
 }
