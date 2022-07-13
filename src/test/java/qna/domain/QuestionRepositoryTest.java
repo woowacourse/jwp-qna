@@ -5,14 +5,19 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
 
+@TestConstructor(autowireMode = AutowireMode.ALL)
 @DataJpaTest
 class QuestionRepositoryTest {
 
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
+
+    public QuestionRepositoryTest(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     @Test
     void findByDeletedFalse() {

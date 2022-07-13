@@ -1,25 +1,31 @@
 package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
 
+@TestConstructor(autowireMode = AutowireMode.ALL)
 @DataJpaTest
 class AnswerRepositoryTest {
 
-    @Autowired
-    private AnswerRepository answerRepository;
+    private final AnswerRepository answerRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
+
+    public AnswerRepositoryTest(AnswerRepository answerRepository, UserRepository userRepository,
+                                QuestionRepository questionRepository) {
+        this.answerRepository = answerRepository;
+        this.userRepository = userRepository;
+        this.questionRepository = questionRepository;
+    }
 
     @Test
     void findByQuestionIdAndDeletedFalse() {
