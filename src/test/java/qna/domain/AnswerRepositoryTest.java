@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static qna.domain.QuestionTest.Q1;
 import static qna.domain.UserTest.JAVAJIGI;
 
@@ -27,29 +26,30 @@ class AnswerRepositoryTest {
     @Autowired
     private QuestionRepository questionRepository;
 
+    private User user;
+
+    private Question question;
+
     @BeforeEach
     void setUp() {
-        questionRepository.save(Q1);
-        userRepository.save(JAVAJIGI);
+        user = userRepository.save(JAVAJIGI);
+        question = questionRepository.save(Q1.writeBy(user));
     }
 
     @DisplayName("deleted가 false이고 해당 question Id를 가진 answer를 찾는다.")
     @Test
     void findByQuestionIdAndDeletedFalse() {
-        Answer answer = new Answer(JAVAJIGI, Q1, "내용입니다.");
+        Answer answer = new Answer(user, question, "내용입니다.");
         answerRepository.save(answer);
-        List<Answer> answers = answerRepository.findByQuestionIdAndDeletedFalse(Q1.getId());
+        List<Answer> answers = answerRepository.findByQuestionIdAndDeletedFalse(question.getId());
 
-        assertAll(
-                () -> assertThat(answers).hasSize(1),
-                () -> assertThat(answers).containsExactly(answer)
-        );
+        assertThat(answers).containsExactly(answer);
     }
 
     @DisplayName("deleted가 false이고 해당 answer Id를 가진 answer를 찾는다.")
     @Test
     void findByIdAndDeletedFalse() {
-        Answer answer = new Answer(JAVAJIGI, Q1, "내용입니다.");
+        Answer answer = new Answer(user, question, "내용입니다.");
         answerRepository.save(answer);
         Answer findAnswer = answerRepository.findByIdAndDeletedFalse(answer.getId()).get();
 
