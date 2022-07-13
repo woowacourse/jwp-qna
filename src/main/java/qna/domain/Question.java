@@ -1,6 +1,6 @@
 package qna.domain;
 
-import java.time.LocalDateTime;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -8,13 +8,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@AttributeOverride(name = "createdAt", column = @Column(nullable = false))
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Question {
+public class Question extends DateTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,17 +22,10 @@ public class Question {
     @Lob
     private String contents;
 
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
     private Boolean deleted = false;
 
     @Column(length = 100, nullable = false)
     private String title;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     private Long writerId;
 

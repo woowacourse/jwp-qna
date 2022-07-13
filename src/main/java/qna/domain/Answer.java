@@ -1,24 +1,19 @@
 package qna.domain;
 
-import java.time.LocalDateTime;
-import javax.persistence.Column;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
-import java.util.Objects;
-
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Answer {
+public class Answer extends DateTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,21 +22,16 @@ public class Answer {
     @Lob
     private String contents;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
-
     private boolean deleted = false;
 
     private Long questionId;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     private Long writerId;
 
     protected Answer() {
 
     }
+
     public Answer(User writer, Question question, String contents) {
         this(null, writer, question, contents);
     }
