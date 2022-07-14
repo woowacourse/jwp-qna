@@ -22,7 +22,7 @@ class AnswerRepositoryTest {
     private final UserRepository userRepository;
 
     private final QuestionRepository questionRepository;
-
+    
     public AnswerRepositoryTest(AnswerRepository answerRepository, UserRepository userRepository,
                                 QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;

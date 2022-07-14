@@ -18,6 +18,7 @@ import qna.UnAuthorizedException;
 @Entity
 public class Answer extends DateTime {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

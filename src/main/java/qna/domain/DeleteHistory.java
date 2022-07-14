@@ -24,6 +24,20 @@ public class DeleteHistory {
     private Long id;
 
     private Long contentId;
+    
+    @Enumerated(value = EnumType.STRING)
+    private ContentType contentType;
+
+    @CreatedDate
+    private LocalDateTime createDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "deleted_by_id")
+    private User deletedBy;
+
+    protected DeleteHistory() {
+
+    }
 
     @Enumerated(value = EnumType.STRING)
     private ContentType contentType;
