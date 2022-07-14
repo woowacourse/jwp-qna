@@ -13,11 +13,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @MappedSuperclass
 public class BaseEntity {
 
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     @LastModifiedDate
     private LocalDateTime updatedAt;
 

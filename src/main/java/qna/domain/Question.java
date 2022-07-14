@@ -5,7 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Question extends BaseEntity {
@@ -20,13 +22,18 @@ public class Question extends BaseEntity {
     @Lob
     private String contents;
 
-    @Column(name = "writer_id")
-    private Long writerId;
+    @ManyToOne
+    @JoinColumn(name = "writer_id")
+    private User writer;
 
     @Column(nullable = false)
     private boolean deleted = false;
 
     protected Question() {
+    }
+
+    public Question(String title, String contents) {
+        this(null, title, contents);
     }
 
     public Question(Long id, String title, String contents) {
@@ -35,17 +42,13 @@ public class Question extends BaseEntity {
         this.contents = contents;
     }
 
-    public Question(String title, String contents) {
-        this(null, title, contents);
-    }
-
     public Question writeBy(User writer) {
-        this.writerId = writer.getId();
+        this.writer = writer;
         return this;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.equals(writer);
     }
 
     public void addAnswer(Answer answer) {
@@ -76,12 +79,12 @@ public class Question extends BaseEntity {
         this.contents = contents;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public User getWriter() {
+        return writer;
     }
 
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
+    public void setWriter(final User writer) {
+        this.writer = writer;
     }
 
     public boolean isDeleted() {
@@ -98,7 +101,7 @@ public class Question extends BaseEntity {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", writerId=" + writerId +
+                ", writer=" + writer +
                 ", deleted=" + deleted +
                 '}';
     }
