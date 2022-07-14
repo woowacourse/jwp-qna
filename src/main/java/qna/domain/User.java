@@ -1,7 +1,6 @@
 package qna.domain;
 
 import java.util.Objects;
-import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -11,7 +10,6 @@ import javax.persistence.Id;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.UnAuthorizedException;
 
-@AttributeOverride(name = "createdAt", column = @Column(nullable = false))
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 public class User extends DateTime {
@@ -95,7 +93,7 @@ public class User extends DateTime {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUser(String userId) {
         this.userId = userId;
     }
 
