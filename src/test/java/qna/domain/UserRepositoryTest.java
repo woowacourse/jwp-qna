@@ -2,17 +2,16 @@ package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static qna.domain.UserTest.JAVAJIGI;
-import static qna.domain.UserTest.SANJIGI;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import qna.config.JpaAuditingConfig;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
+@Import(JpaAuditingConfig.class)
 public class UserRepositoryTest {
 
     @Autowired
@@ -32,7 +31,6 @@ public class UserRepositoryTest {
 
         Optional<User> foundUser = userRepository.findByUserId(user.getUserId());
 
-        assertThat(foundUser).isPresent();
-        assertThat(foundUser.get()).isEqualTo(user);
+        assertThat(foundUser).hasValue(user);
     }
 }
