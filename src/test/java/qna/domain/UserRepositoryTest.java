@@ -5,9 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
+import qna.JpaAuditingConfig;
 
+@Import(JpaAuditingConfig.class)
 @TestConstructor(autowireMode = AutowireMode.ALL)
 @DataJpaTest
 class UserRepositoryTest {
