@@ -1,6 +1,7 @@
 package qna.domain;
 
 import java.time.LocalDateTime;
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -9,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 public abstract class DateTime {
 
     @CreatedDate
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
