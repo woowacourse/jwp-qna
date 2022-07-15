@@ -1,9 +1,8 @@
 package qna.domain;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,8 +40,8 @@ class AnswerRepositoryTest {
         final Answer saved = answerRepository.save(answer);
 
         assertAll(
-                () -> assertThat(saved).extracting("writerId", "questionId", "contents")
-                        .containsExactly(user.getId(), question.getId(), answer.getContents()),
+                () -> assertThat(saved).extracting("writer", "question", "contents")
+                        .containsExactly(user, question, answer.getContents()),
                 () -> assertThat(saved).isSameAs(answer)
         );
     }

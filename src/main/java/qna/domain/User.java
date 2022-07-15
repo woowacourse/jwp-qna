@@ -71,6 +71,10 @@ public class User extends BaseTimeEntity {
                 email.equals(target.email);
     }
 
+    public boolean isSameId(final Long id) {
+        return this.id.equals(id);
+    }
+
     public boolean isGuestUser() {
         return false;
     }
