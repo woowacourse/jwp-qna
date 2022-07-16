@@ -1,4 +1,4 @@
-package study.oneway;
+package study.manytoone;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
