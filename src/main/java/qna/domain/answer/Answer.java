@@ -33,7 +33,7 @@ public class Answer extends EntityHistory {
 
     @ManyToOne
     @JoinColumn(name = "question_id")
-    private Question question;
+    private Question question; // FK 관리되는 필드
 
     @ManyToOne
     @JoinColumn(name = "writer_id")
@@ -91,16 +91,7 @@ public class Answer extends EntityHistory {
         return writer.getId();
     }
 
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "id=" + id +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", contents='" + contents + '\'' +
-                ", deleted=" + deleted +
-                ", question=" + question +
-                ", writer=" + writer +
-                '}';
+    public Question getQuestion() {
+        return question;
     }
 }

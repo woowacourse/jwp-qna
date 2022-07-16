@@ -1,5 +1,7 @@
 package qna.domain.question;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import qna.domain.EntityHistory;
 import qna.domain.answer.Answer;
@@ -33,6 +36,9 @@ public class Question extends EntityHistory {
     @ManyToOne
     @JoinColumn(name = "writer_id")
     private User writer;
+
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers = new ArrayList<>();
 
     protected Question() {
     }
@@ -84,16 +90,7 @@ public class Question extends EntityHistory {
         return writer.getId();
     }
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", contents='" + contents + '\'' +
-                ", deleted=" + deleted +
-                ", title='" + title + '\'' +
-                ", writer=" + writer +
-                '}';
+    public List<Answer> getAnswers() {
+        return answers;
     }
 }
