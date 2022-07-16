@@ -67,4 +67,12 @@ public class DeleteHistory {
                 ", createDate=" + createDate +
                 '}';
     }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public Long getDeletedById() {
+        return deletedBy.getId();
+    }
 }

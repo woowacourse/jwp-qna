@@ -31,7 +31,7 @@ public class AnswerTest {
 
         answerRepository.save(answer);
 
-        assertThat(answer.getId()).isEqualTo(1L);
+        assertThat(answer.getId()).isNotNull();
     }
 
     @Test
