@@ -1,4 +1,4 @@
-package study;
+package study.oneway;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

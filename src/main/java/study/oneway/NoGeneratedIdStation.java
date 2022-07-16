@@ -1,4 +1,4 @@
-package study;
+package study.oneway;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
