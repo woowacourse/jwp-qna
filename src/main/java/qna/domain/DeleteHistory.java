@@ -1,13 +1,14 @@
 package qna.domain;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 public class DeleteHistory {
