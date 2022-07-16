@@ -1,12 +1,14 @@
 package qna.domain;
 
-import qna.CannotDeleteException;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class DeleteHistory {
     @Id
@@ -19,7 +21,8 @@ public class DeleteHistory {
     private Long contentId;
     @ManyToOne
     private User deletedBy;
-    private final LocalDateTime createDate = LocalDateTime.now();
+    @CreatedDate
+    private LocalDateTime createDate;
 
     protected DeleteHistory() {
     }

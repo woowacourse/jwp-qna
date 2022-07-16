@@ -1,7 +1,6 @@
 package qna.domain;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -42,12 +41,5 @@ public class UserTest {
                 new User("user1", "password", "alpha", "alpha1@slipp.net"));
 
         assertThat(answer1.getWriter().getName()).isEqualTo("alpha");
-    }
-
-    @Test
-    void deleteUser() {
-        userRepository.delete(user2);
-
-        assertThat(questionRepository.findById(question1.getId())).isEmpty();
     }
 }

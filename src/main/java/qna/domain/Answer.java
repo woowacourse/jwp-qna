@@ -110,4 +110,8 @@ public class Answer extends TimeStampEntity {
                 ", deleted=" + deleted +
                 '}';
     }
+
+    public LocalDateTime getUpdatedAt() {
+        return this.updatedAt;
+    }
 }

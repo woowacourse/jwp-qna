@@ -67,4 +67,19 @@ public class AnswerTest {
         answer.toQuestion(question2);
         assertThat(answer.getQuestionId()).isEqualTo(question1.getId());
     }
+
+    @Test
+    void checkCreateTime() {
+        Answer answer = answerRepository.save(new Answer(user2, question1, "qwe"));
+
+        assertThat(answer.getCreateAt()).isNotNull();
+    }
+
+    @Test
+    void checkUpdateTime() {
+        Answer answer = answerRepository.save(new Answer(user2, question1, "qwe"));
+        answer.setContents("zxc");
+
+        assertThat(answer.getUpdatedAt()).isNotNull();
+    }
 }
