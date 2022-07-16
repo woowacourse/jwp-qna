@@ -50,7 +50,7 @@ public class Answer extends TimeStampEntity {
     }
 
     public void toQuestion(Question question) {
-        if (this.question != null) {
+        if (this.question != null || question.isDeleted()) {
             return;
         }
         this.question = question;

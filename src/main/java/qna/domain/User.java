@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
 @Entity
 public class User extends TimeStampEntity {
     @Id
@@ -108,6 +110,8 @@ public class User extends TimeStampEntity {
     }
 
     public List<Question> getQuestions() {
-        return questions;
+        return questions.stream()
+                .filter(question -> !question.isDeleted())
+                .collect(Collectors.toUnmodifiableList());
     }
 }
