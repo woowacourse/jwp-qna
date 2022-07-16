@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,19 @@ class AnswerRepositoryTest {
     @Autowired
     private AnswerRepository answers;
 
+    @Autowired
+    private QuestionRepository questions;
+
     private static final User JAVAJIGI = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
     private static final Question QUESTION = new Question("제목", "내용");
     private static final Answer ANSWER = new Answer(JAVAJIGI, QUESTION, "답변");
+    private static Question SAVED_QUESTION;
+
+    @BeforeEach
+    void setUp() {
+        SAVED_QUESTION = questions.save(QUESTION);
+        ANSWER.toQuestion(SAVED_QUESTION);
+    }
 
     @DisplayName("답변 생성")
     @Test
@@ -30,7 +41,8 @@ class AnswerRepositoryTest {
 
         assertAll(
                 () -> assertThat(actual.getWriterId()).isEqualTo(JAVAJIGI.getId()),
-                () -> assertThat(actual.getQuestionId()).isEqualTo(QUESTION.getId()),
+                () -> assertThat(actual.getQuestion().getTitle()).isEqualTo(SAVED_QUESTION.getTitle()),
+                () -> assertThat(actual.getQuestion().getContents()).isEqualTo(SAVED_QUESTION.getContents()),
                 () -> assertThat(actual.getContents()).isEqualTo(expected.getContents())
         );
     }
@@ -66,7 +78,7 @@ class AnswerRepositoryTest {
     void findByQuestionIdAndDeletedFalse() {
         Answer answer = answers.save(ANSWER);
 
-        List<Answer> answersDeletedFalse = answers.findByQuestionIdAndDeletedFalse(QUESTION.getId());
+        List<Answer> answersDeletedFalse = answers.findByQuestionIdAndDeletedFalse(SAVED_QUESTION.getId());
 
         assertThat(answersDeletedFalse).contains(answer);
     }
@@ -75,7 +87,7 @@ class AnswerRepositoryTest {
     @Test
     void update() {
         Answer answer = answers.save(ANSWER);
-        Answer updatedAnswer = new Answer(JAVAJIGI, QUESTION, "답변 수정");
+        Answer updatedAnswer = new Answer(JAVAJIGI, SAVED_QUESTION, "답변 수정");
 
         answer.update(updatedAnswer);
 
