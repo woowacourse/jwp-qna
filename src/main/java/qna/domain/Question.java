@@ -27,7 +27,7 @@ public class Question {
     private String contents;
 
     @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.REMOVE})
-    @JoinColumn(name = "user_id",
+    @JoinColumn(name = "write_id",
             foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 

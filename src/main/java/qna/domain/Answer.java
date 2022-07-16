@@ -26,7 +26,7 @@ public class Answer {
     private Long id;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name = "user_id",
+    @JoinColumn(name = "write_id",
             foreignKey = @ForeignKey(name = "fk_answer_writer"))
     private User writer;
 
