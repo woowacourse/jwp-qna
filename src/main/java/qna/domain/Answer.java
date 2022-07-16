@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
@@ -24,7 +25,10 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long writerId;
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "user_id",
+            foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    private User writer;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "question_id",
@@ -61,17 +65,17 @@ public class Answer {
             throw new NotFoundException();
         }
 
-        this.writerId = writer.getId();
+        this.writer = writer;
         this.question = question;
         this.contents = contents;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.equals(writer);
     }
 
     public void update(Answer updatedAnswer) {
-        if (!this.writerId.equals(updatedAnswer.writerId)) {
+        if (!this.writer.equals(updatedAnswer.writer)) {
             throw new IllegalArgumentException("작성자가 달라 답변을 수정할 수 없습니다.");
         }
         this.contents = updatedAnswer.contents;
@@ -89,12 +93,12 @@ public class Answer {
         this.id = id;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public User getWriter() {
+        return writer;
     }
 
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
+    public void setWriter(User writer) {
+        this.writer = writer;
     }
 
     public Question getQuestion() {
@@ -125,7 +129,7 @@ public class Answer {
     public String toString() {
         return "Answer{" +
                 "id=" + id +
-                ", writerId=" + writerId +
+                ", writerId=" + writer +
                 ", questionId=" + question +
                 ", contents='" + contents + '\'' +
                 ", deleted=" + deleted +

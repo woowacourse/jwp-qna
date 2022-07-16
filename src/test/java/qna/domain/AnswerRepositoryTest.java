@@ -21,15 +21,23 @@ class AnswerRepositoryTest {
     @Autowired
     private QuestionRepository questions;
 
+    @Autowired
+    private UserRepository users;
+
     private static final User JAVAJIGI = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
     private static final Question QUESTION = new Question("제목", "내용");
     private static final Answer ANSWER = new Answer(JAVAJIGI, QUESTION, "답변");
+
     private static Question SAVED_QUESTION;
+    private static User SAVED_JAVAJIGI;
 
     @BeforeEach
     void setUp() {
         SAVED_QUESTION = questions.save(QUESTION);
         ANSWER.toQuestion(SAVED_QUESTION);
+
+        SAVED_JAVAJIGI = users.save(JAVAJIGI);
+        ANSWER.setWriter(SAVED_JAVAJIGI);
     }
 
     @DisplayName("답변 생성")
@@ -40,7 +48,7 @@ class AnswerRepositoryTest {
         Answer actual = answers.save(expected);
 
         assertAll(
-                () -> assertThat(actual.getWriterId()).isEqualTo(JAVAJIGI.getId()),
+                () -> assertThat(actual.getWriter().getId()).isEqualTo(SAVED_JAVAJIGI.getId()),
                 () -> assertThat(actual.getQuestion().getTitle()).isEqualTo(SAVED_QUESTION.getTitle()),
                 () -> assertThat(actual.getQuestion().getContents()).isEqualTo(SAVED_QUESTION.getContents()),
                 () -> assertThat(actual.getContents()).isEqualTo(expected.getContents())
@@ -87,7 +95,7 @@ class AnswerRepositoryTest {
     @Test
     void update() {
         Answer answer = answers.save(ANSWER);
-        Answer updatedAnswer = new Answer(JAVAJIGI, SAVED_QUESTION, "답변 수정");
+        Answer updatedAnswer = new Answer(SAVED_JAVAJIGI, SAVED_QUESTION, "답변 수정");
 
         answer.update(updatedAnswer);
 
