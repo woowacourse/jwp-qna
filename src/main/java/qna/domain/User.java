@@ -37,7 +37,7 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updateDate;
 
-    private User() {
+    protected User() {
     }
 
     public User(String userId, String password, String name, String email) {

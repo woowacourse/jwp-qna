@@ -35,7 +35,7 @@ public class Answer {
     @Column(name = "updated_at")
     private LocalDateTime updateDate;
 
-    private Answer() {
+    protected Answer() {
     }
 
     public Answer(User writer, Question question, String contents) {

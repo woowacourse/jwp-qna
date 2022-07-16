@@ -28,7 +28,7 @@ public class Question {
     @Column(name = "updated_at")
     private LocalDateTime updateData;
 
-    private Question() {
+    protected Question() {
     }
 
     public Question(String title, String contents) {
