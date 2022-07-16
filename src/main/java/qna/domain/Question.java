@@ -1,5 +1,7 @@
 package qna.domain;
 
+import qna.UnAuthorizedException;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,7 @@ public class Question extends MappedEntity {
     @Column(nullable = false)
     private boolean deleted = false;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", orphanRemoval = true)
     private final List<Answer> answers = new ArrayList<>();
 
     public Question(String title, String contents) {
@@ -36,8 +38,13 @@ public class Question extends MappedEntity {
     }
 
     public Question writeBy(User writer) {
-        this.writer = writer;
-        writer.addQuestion(this);
+        if (writer == null) {
+            throw new UnAuthorizedException();
+        }
+        if (this.writer == null) {
+            this.writer = writer;
+            writer.addQuestion(this);
+        }
         return this;
     }
 

@@ -51,15 +51,17 @@ public class Answer extends MappedEntity {
 
     public void toQuestion(Question question) {
         if (this.question != null) {
-            this.question.deleteAnswer(this);
+            return;
         }
         this.question = question;
         question.addAnswer(this);
     }
 
     public void toWriter(User user) {
+        if (this.writer != null) {
+            return;
+        }
         this.writer = user;
-        user.addAnswer(this);
     }
 
     public Long getId() {

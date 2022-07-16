@@ -21,13 +21,7 @@ public class User extends MappedEntity {
     @Column(length = 50)
     private String email;
 
-    @OneToMany(mappedBy = "deletedBy")
-    private final List<DeleteHistory> deleteHistories = new ArrayList<>();
-
-    @OneToMany(mappedBy = "writer")
-    private final List<Answer> answers = new ArrayList<>();
-
-    @OneToMany(mappedBy = "writer")
+    @OneToMany(mappedBy = "writer", orphanRemoval = true)
     private final List<Question> questions = new ArrayList<>();
 
     protected User() {
@@ -76,16 +70,6 @@ public class User extends MappedEntity {
                 email.equals(target.email);
     }
 
-    public void addAnswer(Answer answer) {
-        if (!this.answers.contains(answer)) {
-            answers.add(answer);
-        }
-    }
-
-    public boolean isGuestUser() {
-        return false;
-    }
-
     public Long getId() {
         return id;
     }
@@ -106,16 +90,6 @@ public class User extends MappedEntity {
         return email;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void addDeleteHistory(DeleteHistory deleteHistory) {
-        if (!this.deleteHistories.contains(deleteHistory)) {
-            deleteHistories.add(deleteHistory);
-        }
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -133,7 +107,7 @@ public class User extends MappedEntity {
         }
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public List<Question> getQuestions() {
+        return questions;
     }
 }

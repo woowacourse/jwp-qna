@@ -1,5 +1,9 @@
 package qna.domain;
 
+import qna.CannotDeleteException;
+import qna.NotFoundException;
+import qna.UnAuthorizedException;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -15,16 +19,23 @@ public class DeleteHistory {
     private Long contentId;
     @ManyToOne
     private User deletedBy;
-    private LocalDateTime createDate = LocalDateTime.now();
+    private final LocalDateTime createDate = LocalDateTime.now();
 
     protected DeleteHistory() {
     }
 
-    public DeleteHistory(ContentType contentType, Long contentId, User deletedBy, LocalDateTime createDate) {
+    public DeleteHistory(ContentType contentType, Long contentId, User deletedBy) {
         this.contentType = contentType;
         this.contentId = contentId;
+
+        if (contentType == null) {
+            throw new NotFoundException();
+        }
+
+        if (deletedBy == null) {
+            throw new UnAuthorizedException();
+        }
         this.deletedBy = deletedBy;
-        this.createDate = createDate;
     }
 
     @Override
