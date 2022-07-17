@@ -1,18 +1,15 @@
 package qna.domain;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import qna.UnAuthorizedException;
 
 @Entity
-public class User {
+public class User extends TimeStamped {
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @Id
@@ -30,13 +27,6 @@ public class User {
 
     @Column(length = 50)
     private String email;
-
-    @CreationTimestamp
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 
     protected User() {
     }
@@ -105,14 +95,6 @@ public class User {
 
     public String getEmail() {
         return email;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
     }
 
     @Override

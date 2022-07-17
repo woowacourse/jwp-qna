@@ -9,11 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@DataJpaTest
-class UserRepositoryTest {
-
-    @Autowired
-    private UserRepository users;
+class UserRepositoryTest extends RepositoryTest {
 
     @DisplayName("id가 일치하는 유저 조회")
     @Test
