@@ -5,23 +5,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import qna.fixture.AnswerFixture;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
 import qna.fixture.QuestionFixture;
 import qna.fixture.UserFixture;
 
+@TestConstructor(autowireMode = AutowireMode.ALL)
 @DataJpaTest
 public class AnswerRepositoryTest {
 
-    @Autowired
     private UserRepository users;
-
-    @Autowired
     private QuestionRepository questions;
-
-    @Autowired
     private AnswerRepository answers;
+
+    public AnswerRepositoryTest(
+        UserRepository users,
+        QuestionRepository questions,
+        AnswerRepository answers) {
+        this.users = users;
+        this.questions = questions;
+        this.answers = answers;
+    }
 
     @Test
     @DisplayName("답변을 저장한다.")
