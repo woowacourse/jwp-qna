@@ -2,6 +2,8 @@ package qna.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -20,11 +22,25 @@ class UserRepositoryTest {
 	@DisplayName("User를 저장한다")
 	@Test
 	void save() {
-		User user = new User("does", "1234", "더즈", "ldk980130@gmail.com");
-		userRepository.save(user);
-		User does = userRepository.findByUserId("does")
-			.get();
+		userRepository.save(UserTest.JAVAJIGI);
 
-		assertThat(does).isEqualTo(user);
+		Optional<User> user = userRepository.findByUserId(UserTest.JAVAJIGI.getUserId());
+
+		assertThat(user)
+			.map(User::getUserId)
+			.get()
+			.isEqualTo("javajigi");
+	}
+
+	@DisplayName("User 정보를 수정한다.")
+	@Test
+	void update() {
+		User loginUser = userRepository.save(UserTest.JAVAJIGI);
+		User target = UserTest.SANJIGI;
+
+		User user = userRepository.findByUserId("javajigi").get();
+		user.update(loginUser, target);
+
+		assertThat(user.equalsNameAndEmail(target)).isTrue();
 	}
 }

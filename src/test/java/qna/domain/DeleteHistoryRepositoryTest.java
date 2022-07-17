@@ -2,8 +2,6 @@ package qna.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -27,8 +25,9 @@ class DeleteHistoryRepositoryTest {
 	@DisplayName("DeleteHistory를 저장한다.")
 	@Test
 	void save() {
-		Question question = questionRepository.save(new Question("title", "content"));
-		question.writeBy(userRepository.save(new User("ldk", "ldk", "does", "gmail.com")));
+		User writer = userRepository.save(UserTest.JAVAJIGI);
+		Question question = questionRepository.save(QuestionTest.Q1.writeBy(writer));
+
 		DeleteHistory deleteHistory = new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriter());
 		deleteHistoryRepository.save(deleteHistory);
 
