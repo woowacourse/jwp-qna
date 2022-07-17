@@ -6,16 +6,19 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@DataJpaTest
-class QuestionRepositoryTest {
+class QuestionRepositoryTest extends CashManager {
 
     @Autowired
     private QuestionRepository questions;
+
+    @Autowired
+    private EntityManager entityManager;
 
     private static final Question QUESTION = new Question("제목", "내용");
 
@@ -26,42 +29,55 @@ class QuestionRepositoryTest {
 
         Question actual = questions.save(expected);
 
-        assertAll(
-                () -> assertThat(actual.getTitle()).isEqualTo(expected.getTitle()),
-                () -> assertThat(actual.getContents()).isEqualTo(expected.getContents())
-        );
+        assertThat(actual).usingRecursiveComparison()
+                .ignoringFields("id")
+                .ignoringFields("createDate")
+                .ignoringFields("updateDate")
+                .isEqualTo(expected);
     }
 
     @DisplayName("질문 조회")
     @Test
     void findById() {
         Question expected = questions.save(QUESTION);
+        synchronize();
 
         Optional<Question> actual = questions.findById(expected.getId());
 
-        assertThat(actual).hasValue(expected);
+        assertThat(actual).isPresent();
+        assertThat(actual.get()).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 
     @DisplayName("삭제되지 않은 질문 목록 조회")
     @Test
     void findByDeletedFalse() {
-        questions.save(new Question("제목1", "내용1"));
-        questions.save(new Question("제목2", "내용2"));
-        questions.save(new Question("제목3", "내용3"));
+        Question question1 = questions.save(new Question("제목1", "내용1"));
+        Question question2 = questions.save(new Question("제목2", "내용2"));
+        Question question3 = questions.save(new Question("제목3", "내용3"));
+        List<Question> expected = List.of(question1, question2, question3);
+        synchronize();
 
-        List<Question> questionsDeletedFalse = questions.findByDeletedFalse();
+        List<Question> actual = questions.findByDeletedFalse();
 
-        assertThat(questionsDeletedFalse).hasSize(3);
+        assertAll(
+                () -> assertThat(actual).hasSize(expected.size()),
+                () -> assertThat(actual).usingRecursiveFieldByFieldElementComparator()
+                        .isEqualTo(expected)
+        );
     }
 
     @DisplayName("삭제되지 않은 질문 조회")
     @Test
     void findByIdAndDeletedFalse() {
-        Question question = questions.save(QUESTION);
+        Question expected = questions.save(QUESTION);
+        synchronize();
 
-        Optional<Question> actual = questions.findByIdAndDeletedFalse(question.getId());
+        Optional<Question> actual = questions.findByIdAndDeletedFalse(expected.getId());
 
         assertThat(actual).isPresent();
+        assertThat(actual.get()).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 
     @DisplayName("삭제된 질문 조회 시 조회되지 않음")
@@ -69,6 +85,7 @@ class QuestionRepositoryTest {
     void findByIdAndDeletedTrue() {
         Question question = questions.save(QUESTION);
         question.delete();
+        synchronize();
 
         Optional<Question> actual = questions.findByIdAndDeletedFalse(question.getId());
 
@@ -78,23 +95,27 @@ class QuestionRepositoryTest {
     @DisplayName("질문 정보 수정")
     @Test
     void update() {
-        Question question = questions.save(QUESTION);
+        Question expected = questions.save(QUESTION);
         Question updatedQuestion = new Question("제목 수정", "내용 수정");
 
-        question.update(updatedQuestion);
+        expected.update(updatedQuestion);
+        synchronize();
 
-        assertAll(
-                () -> assertThat(question.getTitle()).isEqualTo(updatedQuestion.getTitle()),
-                () -> assertThat(question.getContents()).isEqualTo(updatedQuestion.getContents())
-        );
+        Optional<Question> actual = questions.findById(expected.getId());
+
+        assertThat(actual).isPresent();
+        assertThat(actual.get()).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 
     @DisplayName("질문 삭제")
     @Test
     void delete() {
         Question question = questions.save(QUESTION);
+        synchronize();
 
         questions.delete(question);
+        synchronize();
 
         assertThat(questions.findAll()).hasSize(0);
     }
