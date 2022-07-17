@@ -118,15 +118,4 @@ public class Answer extends BaseTime {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
-
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "id=" + id +
-                ", writerId=" + writer +
-                ", questionId=" + question +
-                ", contents='" + contents + '\'' +
-                ", deleted=" + deleted +
-                '}';
-    }
 }
