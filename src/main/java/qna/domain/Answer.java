@@ -2,6 +2,7 @@ package qna.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,11 +22,11 @@ public class Answer extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_id")
+    @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name="fk_answer_writer"))
     private User writer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "question_id", foreignKey = @ForeignKey(name="fk_answer_to_question"))
     private Question question;
 
     @Lob
