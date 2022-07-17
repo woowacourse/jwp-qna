@@ -24,9 +24,9 @@ class UserRepositoryTest {
     @Test
     void save() {
         User user = new User("jurl", "1234", "주디", "dbswnfl2@");
-        User save = userRepository.save(user);
+        User actual = userRepository.save(user);
 
-        assertThat(user == save).isTrue();
+        assertThat(actual == user).isTrue();
     }
 
     @Test
@@ -34,7 +34,7 @@ class UserRepositoryTest {
         User user = new User("jurl", "1234", "주디", "dbswnfl2@");
         userRepository.save(user);
 
-        Optional<User> byUserId = userRepository.findByUserId(user.getUserId());
-        assertThat(byUserId).hasValue(user);
+        Optional<User> actual = userRepository.findByUserId(user.getUserId());
+        assertThat(actual).hasValue(user);
     }
 }

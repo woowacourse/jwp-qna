@@ -26,27 +26,27 @@ class QuestionRepositoryTest {
 
     @Test
     void findByDeletedFalse() {
-        Question question = new Question("title", "contents");
-        Question question1 = new Question("title2", "contents");
-        question.setDeleted(true);
+        Question deletedQuestion = new Question("title", "contents");
+        deletedQuestion.setDeleted(true);
+        questionRepository.save(deletedQuestion);
+        Question question = new Question("title2", "contents");
         questionRepository.save(question);
-        questionRepository.save(question1);
 
-        List<Question> byDeletedFalse = questionRepository.findByDeletedFalse();
+        List<Question> actual = questionRepository.findByDeletedFalse();
 
         assertAll(
-                () -> assertThat(byDeletedFalse.size()).isEqualTo(1),
-                () -> assertThat(byDeletedFalse.get(0)).isEqualTo(question1));
+                () -> assertThat(actual.size()).isEqualTo(1),
+                () -> assertThat(actual.get(0)).isEqualTo(question));
     }
 
     @Test
     void findByIdAndDeletedFalse() {
-        Question question = new Question("title", "contents");
-        question.setDeleted(true);
-        questionRepository.save(question);
+        Question deletedQuestion = new Question("title", "contents");
+        deletedQuestion.setDeleted(true);
+        questionRepository.save(deletedQuestion);
 
-        List<Question> byDeletedFalse = questionRepository.findByDeletedFalse();
+        List<Question> actual = questionRepository.findByDeletedFalse();
 
-        assertThat(byDeletedFalse.size()).isEqualTo(0);
+        assertThat(actual.size()).isEqualTo(0);
     }
 }

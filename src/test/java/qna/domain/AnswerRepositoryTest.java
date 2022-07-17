@@ -22,7 +22,7 @@ class AnswerRepositoryTest {
     private final UserRepository userRepository;
 
     private final QuestionRepository questionRepository;
-    
+
     public AnswerRepositoryTest(AnswerRepository answerRepository, UserRepository userRepository,
                                 QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;
@@ -35,13 +35,13 @@ class AnswerRepositoryTest {
         User user = userRepository.save(new User("aaa", "1234", "jurl", "dbswnfl2"));
         Question question = questionRepository.save(new Question("title", "content"));
         Answer answer = new Answer(user, question, "content");
-        Answer save = answerRepository.save(answer);
+        answerRepository.save(answer);
 
-        List<Answer> byQuestionIdAndDeletedFalse = answerRepository.findByQuestionIdAndDeletedFalse(question.getId());
+        List<Answer> actual = answerRepository.findByQuestionIdAndDeletedFalse(question.getId());
 
         assertAll(
-                () -> assertThat(byQuestionIdAndDeletedFalse.size()).isEqualTo(1),
-                () -> assertThat(byQuestionIdAndDeletedFalse.get(0)).isEqualTo(save)
+                () -> assertThat(actual.size()).isEqualTo(1),
+                () -> assertThat(actual.get(0)).isEqualTo(answer)
         );
     }
 
@@ -50,10 +50,9 @@ class AnswerRepositoryTest {
         User user = userRepository.save(new User("aaa", "1234", "jurl", "dbswnfl2"));
         Question question = questionRepository.save(new Question("title", "content"));
         Answer answer = new Answer(user, question, "content");
-        Answer save = answerRepository.save(answer);
 
-        Optional<Answer> byIdAndDeletedFalse = answerRepository.findByIdAndDeletedFalse(save.getId());
+        Optional<Answer> actual = answerRepository.findByIdAndDeletedFalse(answer.getId());
 
-        assertThat(byIdAndDeletedFalse).hasValue(answer);
+        assertThat(actual).hasValue(answer);
     }
 }
