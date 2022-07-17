@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Question extends DateTime {
+public class Question extends BaseDateTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +36,7 @@ public class Question extends DateTime {
     protected Question() {
 
     }
-    
+
     public Question(String title, String contents) {
         this(null, title, contents);
     }

@@ -12,7 +12,7 @@ import qna.UnAuthorizedException;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class User extends DateTime {
+public class User extends BaseDateTimeEntity {
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @Id

@@ -7,7 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @MappedSuperclass
-public abstract class DateTime {
+public abstract class BaseDateTimeEntity {
 
     @CreatedDate
     @Column(nullable = false)

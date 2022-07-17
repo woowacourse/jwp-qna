@@ -16,7 +16,7 @@ import qna.UnAuthorizedException;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Answer extends DateTime {
+public class Answer extends BaseDateTimeEntity {
 
 
     @Id
