@@ -15,8 +15,8 @@ class AnswerRepositoryTest extends RepositoryTest {
     @DisplayName("Answer를 저장")
     @Test
     void save() {
-        User user = saveUser();
-        Question question = saveQuestion(user);
+        User user = saveTestUser();
+        Question question = saveTestQuestion(user);
 
         Answer expected = new Answer(user, question, "질문에 대한 답변입니다.");
 
@@ -28,8 +28,8 @@ class AnswerRepositoryTest extends RepositoryTest {
     @DisplayName("Question Id가 알치하고 삭제되지 않은 모든 Answer 조회")
     @Test
     void findByQuestionIdAndDeletedFalse() {
-        User user = saveUser();
-        Question question = saveQuestion(user);
+        User user = saveTestUser();
+        Question question = saveTestQuestion(user);
 
         Answer expectedIncluded = new Answer(user, question, "질문에 대한 답변입니다.");
         answers.save(expectedIncluded);
@@ -49,8 +49,8 @@ class AnswerRepositoryTest extends RepositoryTest {
     @DisplayName("Id가 일치하고 삭제되지 않은 Answer를 조회하고, 값이 존재")
     @Test
     void findByIdAndDeletedFalse_resultExist() {
-        User user = saveUser();
-        Question question = saveQuestion(user);
+        User user = saveTestUser();
+        Question question = saveTestQuestion(user);
 
         Answer expect = new Answer(user, question, "질문에 대한 답변입니다.");
         Answer saved = answers.save(expect);
@@ -66,8 +66,8 @@ class AnswerRepositoryTest extends RepositoryTest {
     @DisplayName("Id가 일치하고 삭제되지 않은 Answer를 조회하고, 값이 존재하지 않음")
     @Test
     void findByIdAndDeletedFalse_resultDoesNotExist() {
-        User user = saveUser();
-        Question question = saveQuestion(user);
+        User user = saveTestUser();
+        Question question = saveTestQuestion(user);
 
         Answer expectNotFound = new Answer(user, question, "질문에 대한 답변입니다.");
         expectNotFound.delete();
