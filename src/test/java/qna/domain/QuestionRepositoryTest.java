@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +14,6 @@ class QuestionRepositoryTest extends CashManager {
 
     @Autowired
     private QuestionRepository questions;
-
-    @Autowired
-    private EntityManager entityManager;
 
     private static final Question QUESTION = new Question("제목", "내용");
 
