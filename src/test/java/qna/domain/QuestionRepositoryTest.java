@@ -2,8 +2,7 @@ package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import static qna.domain.QuestionTest.Q1;
-import static qna.domain.QuestionTest.Q2;
+import static qna.domain.UserTest.JAVAJIGI;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +20,15 @@ class QuestionRepositoryTest {
     private QuestionRepository questionRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private EntityManager entityManager;
 
     @Test
     void save() {
+        User savedUser = userRepository.save(JAVAJIGI);
+        Question Q1 = new Question("title1", "contents1", savedUser);
         Question savedQuestion = questionRepository.save(Q1);
 
         assertThat(savedQuestion).usingRecursiveComparison()
@@ -34,6 +38,8 @@ class QuestionRepositoryTest {
 
     @Test
     void findById() {
+        User savedUser = userRepository.save(JAVAJIGI);
+        Question Q1 = new Question("title1", "contents1", savedUser);
         Question savedQuestion = questionRepository.save(Q1);
         entityManager.clear();
 
@@ -41,24 +47,29 @@ class QuestionRepositoryTest {
 
         assertThat(result).isPresent();
         assertThat(result.get()).usingRecursiveComparison()
+                .ignoringFields("id", "answers")
                 .isEqualTo(savedQuestion);
     }
 
     @Test
     void findByDeletedFalse() {
+        User savedUser = userRepository.save(JAVAJIGI);
+        Question Q1 = new Question("title1", "contents1", savedUser);
+        Question Q2 = new Question("title2", "content2", savedUser);
+        Q1.setDeleted(true);
         questionRepository.save(Q1);
         questionRepository.save(Q2);
-        Question savedQuestion = questionRepository.save(new Question("제목", "내용"));
-        savedQuestion.setDeleted(true);
         entityManager.clear();
 
         List<Question> questionsDeletedFalse = this.questionRepository.findByDeletedFalse();
 
-        assertThat(questionsDeletedFalse).hasSize(2);
+        assertThat(questionsDeletedFalse).hasSize(1);
     }
 
     @Test
     void findByIdAndDeletedFalseWithDeletedTrue() {
+        User savedUser = userRepository.save(JAVAJIGI);
+        Question Q1 = new Question("title1", "contents1", savedUser);
         Question deletedQuestion = Q1;
         deletedQuestion.setDeleted(true);
         Question savedQuestion = questionRepository.save(deletedQuestion);
@@ -70,6 +81,9 @@ class QuestionRepositoryTest {
 
     @Test
     void findAll() {
+        User savedUser = userRepository.save(JAVAJIGI);
+        Question Q1 = new Question("title1", "contents1", savedUser);
+        Question Q2 = new Question("title2", "content2", savedUser);
         Question savedQuestion1 = questionRepository.save(Q1);
         Question savedQuestion2 = questionRepository.save(Q2);
         entityManager.clear();
@@ -81,6 +95,8 @@ class QuestionRepositoryTest {
 
     @Test
     void deleteById() {
+        User savedUser = userRepository.save(JAVAJIGI);
+        Question Q1 = new Question("title1", "contents1", savedUser);
         Question savedQuestion = questionRepository.save(Q1);
         entityManager.clear();
 
