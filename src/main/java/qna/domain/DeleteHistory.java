@@ -26,7 +26,7 @@ public class DeleteHistory extends BaseEntity{
     @JoinColumn(name = "deleted_by_id")
     private User deletedUser;
 
-    public DeleteHistory() {
+    protected DeleteHistory() {
     }
 
     public DeleteHistory(ContentType contentType, Long contentId, User deletedUser) {
