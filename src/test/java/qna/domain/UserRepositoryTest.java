@@ -4,10 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static qna.domain.UserTest.JAVAJIGI;
 
 import java.util.Optional;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestConstructor;
 
