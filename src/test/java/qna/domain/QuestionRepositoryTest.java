@@ -9,6 +9,7 @@ import static qna.domain.UserTest.SANJIGI;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestConstructor;
 
+@RequiredArgsConstructor
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DataJpaTest
@@ -24,11 +26,6 @@ class QuestionRepositoryTest {
     private final QuestionRepository questionRepository;
 
     private final UserRepository userRepository;
-
-    public QuestionRepositoryTest(QuestionRepository questionRepository, UserRepository userRepository) {
-        this.questionRepository = questionRepository;
-        this.userRepository = userRepository;
-    }
 
     @DisplayName("삭제되지 않은 질문을 조회한다.")
     @Test

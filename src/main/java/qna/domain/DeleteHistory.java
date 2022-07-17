@@ -11,7 +11,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class DeleteHistory {
     @Id
@@ -34,9 +42,6 @@ public class DeleteHistory {
         this.createDate = createDate;
     }
 
-    protected DeleteHistory() {
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -55,16 +60,5 @@ public class DeleteHistory {
     @Override
     public int hashCode() {
         return Objects.hash(id, contentType, contentId, user);
-    }
-
-    @Override
-    public String toString() {
-        return "DeleteHistory{" +
-                "id=" + id +
-                ", contentType=" + contentType +
-                ", contentId=" + contentId +
-                ", user=" + user +
-                ", createDate=" + createDate +
-                '}';
     }
 }
