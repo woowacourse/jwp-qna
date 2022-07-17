@@ -18,7 +18,7 @@ import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
 @Entity
-public class Answer extends Time {
+public class Answer extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

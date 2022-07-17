@@ -12,7 +12,7 @@ import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Question extends Time {
+public class Question extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import qna.UnAuthorizedException;
 
 @Entity
-public class User extends Time {
+public class User extends BaseTime {
 
     public static final GuestUser GUEST_USER = new GuestUser();
 
