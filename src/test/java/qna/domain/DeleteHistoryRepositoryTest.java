@@ -24,14 +24,14 @@ public class DeleteHistoryRepositoryTest {
     @Test
     @DisplayName("삭제 내역을 저장한다.")
     void save() {
-        Question expectQuestion = QuestionFixture.Q1;
-        Question savedQuestion = questions.save(expectQuestion);
-        savedQuestion.setDeleted(true);
-
         User user = UserFixture.JAVAJIGI;
         User savedUser = users.save(user);
+        Question question = new Question("title1", "contents1").writeBy(savedUser);
+        Question savedQuestion = questions.save(question);
+        savedQuestion.setDeleted(true);
 
-        DeleteHistory deleteHistory = new DeleteHistory(ContentType.QUESTION, savedQuestion.getId(), savedUser.getId());
+
+        DeleteHistory deleteHistory = new DeleteHistory(ContentType.QUESTION, savedQuestion.getId(), savedUser);
         DeleteHistory saveDeleteHistory = deleteHistories.save(deleteHistory);
 
         assertThat(saveDeleteHistory.getId()).isNotNull();

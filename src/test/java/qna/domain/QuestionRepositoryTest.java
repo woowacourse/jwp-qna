@@ -15,12 +15,16 @@ import qna.fixture.UserFixture;
 public class QuestionRepositoryTest {
 
     @Autowired
+    private UserRepository users;
+    @Autowired
     private QuestionRepository questions;
 
     @Test
     @DisplayName("질문을 저장한다.")
     void save() {
-        Question expect = new Question("title1", "contents1").writeBy(UserFixture.JAVAJIGI);
+        User user = UserFixture.JAVAJIGI;
+        User savedUser = users.save(user);
+        Question expect = new Question("title1", "contents1").writeBy(savedUser);
         Question actual = questions.save(expect);
 
         assertAll(
@@ -32,25 +36,29 @@ public class QuestionRepositoryTest {
     @Test
     @DisplayName("식별자가 삭제되지 않았을 경우 정상적으로 조회된다")
     void findByIdAndDeletedFalse_not_deleted() {
-        Question expect = QuestionFixture.Q1;
-        Question saveQuestion = questions.save(expect);
+        User user = UserFixture.JAVAJIGI;
+        User savedUser = users.save(user);
+        Question expect = new Question("title1", "contents1").writeBy(savedUser);
+        Question savedQuestion = questions.save(expect);
 
-        Optional<Question> findQuestion = questions.findByIdAndDeletedFalse(saveQuestion.getId());
+        Optional<Question> findQuestion = questions.findByIdAndDeletedFalse(savedQuestion.getId());
 
         assertAll(
             () -> assertThat(findQuestion).isNotEmpty(),
-            () -> assertThat(saveQuestion).isEqualTo(findQuestion.get())
+            () -> assertThat(savedQuestion).isEqualTo(findQuestion.get())
         );
     }
 
     @Test
     @DisplayName("식별자가 삭제되었을 경우 정상적으로 작동하지 않는다.")
     void findByIdAndDeletedFalse_not_true() {
-        Question expect = QuestionFixture.Q1;
-        Question saveQuestion = questions.save(expect);
+        User user = UserFixture.JAVAJIGI;
+        User savedUser = users.save(user);
+        Question expect = new Question("title1", "contents1").writeBy(savedUser);
+        Question savedQuestion = questions.save(expect);
 
-        saveQuestion.setDeleted(true);
-        Optional<Question> findQuestion = questions.findByIdAndDeletedFalse(saveQuestion.getId());
+        savedQuestion.setDeleted(true);
+        Optional<Question> findQuestion = questions.findByIdAndDeletedFalse(savedQuestion.getId());
 
         assertThat(findQuestion).isEmpty();
     }
