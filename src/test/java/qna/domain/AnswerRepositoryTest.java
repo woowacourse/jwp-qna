@@ -48,10 +48,9 @@ class AnswerRepositoryTest {
         Answer actual = answers.save(expected);
 
         assertAll(
-                () -> assertThat(actual.getWriter().getId()).isEqualTo(SAVED_JAVAJIGI.getId()),
-                () -> assertThat(actual.getQuestion().getTitle()).isEqualTo(SAVED_QUESTION.getTitle()),
-                () -> assertThat(actual.getQuestion().getContents()).isEqualTo(SAVED_QUESTION.getContents()),
-                () -> assertThat(actual.getContents()).isEqualTo(expected.getContents())
+                () -> assertThat(actual.getWriter()).isEqualTo(SAVED_JAVAJIGI),
+                () -> assertThat(actual.getQuestion()).isEqualTo(SAVED_QUESTION),
+                () -> assertThat(actual).isEqualTo(expected)
         );
     }
 
@@ -62,10 +61,7 @@ class AnswerRepositoryTest {
 
         Optional<Answer> actual = answers.findById(expected.getId());
 
-        assertAll(
-                () -> assertThat(actual).isPresent(),
-                () -> assertThat(actual.get()).isEqualTo(expected)
-        );
+        assertThat(actual).hasValue(expected);
     }
 
     @DisplayName("삭제되지 않은 답변 조회")

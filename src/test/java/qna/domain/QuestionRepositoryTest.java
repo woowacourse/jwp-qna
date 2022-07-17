@@ -39,7 +39,7 @@ class QuestionRepositoryTest {
 
         Optional<Question> actual = questions.findById(expected.getId());
 
-        assertThat(actual.get()).isEqualTo(expected);
+        assertThat(actual).hasValue(expected);
     }
 
     @DisplayName("삭제되지 않은 질문 목록 조회")

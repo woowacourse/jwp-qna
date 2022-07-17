@@ -36,7 +36,7 @@ class UserRepositoryTest {
 
         Optional<User> actual = users.findById(expected.getId());
 
-        assertThat(actual.get()).isEqualTo(expected);
+        assertThat(actual).hasValue(expected);
     }
 
     @DisplayName("사용자 아이디를 이용하여 사용자 정보 조회")
@@ -46,7 +46,7 @@ class UserRepositoryTest {
 
         Optional<User> actual = users.findByUserId(expected.getUserId());
 
-        assertThat(actual.get()).isEqualTo(expected);
+        assertThat(actual).hasValue(expected);
     }
 
     @DisplayName("사용자 정보 수정")
