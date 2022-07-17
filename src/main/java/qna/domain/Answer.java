@@ -1,6 +1,5 @@
 package qna.domain;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
@@ -19,7 +18,7 @@ import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
 @Entity
-public class Answer {
+public class Answer extends Time {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,12 +39,6 @@ public class Answer {
 
     @Column(nullable = false)
     private boolean deleted = false;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createDate = LocalDateTime.now();
-
-    @Column(name = "updated_at")
-    private LocalDateTime updateDate;
 
     protected Answer() {
     }
@@ -79,6 +72,7 @@ public class Answer {
             throw new IllegalArgumentException("작성자가 달라 답변을 수정할 수 없습니다.");
         }
         this.contents = updatedAnswer.contents;
+        updateDate();
     }
 
     public void toQuestion(Question question) {
