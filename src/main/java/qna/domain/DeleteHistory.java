@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -13,7 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class DeleteHistory {
 
@@ -30,7 +34,7 @@ public class DeleteHistory {
     @JoinColumn(name = "deleted_by_id")
     private User deletedBy;
 
-    @CreationTimestamp
+    @CreatedDate
     private LocalDateTime createDate;
 
     protected DeleteHistory() {
