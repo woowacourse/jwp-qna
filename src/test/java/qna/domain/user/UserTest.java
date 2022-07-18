@@ -67,18 +67,77 @@ public class UserTest {
         }
 
         @Test
-        void 영속성_컨텍스트에_이미_존재하는_식별자로_새로운_엔티티_저장시_merge가_호출되면서_값_업데이트() {
+        void DB에_존재하는_데이터의_식별자를_지닌_새로운_엔티티_저장시_merge가_호출되면서_값_업데이트() {
             final User 비영속_엔티티 = new User("javajigi", "password", "name", "javajigi@slipp.net");
             final User 영속_엔티티1 = users.save(비영속_엔티티);
             final Long 식별자 = 영속_엔티티1.getId();
             em.flush(); // INSERT
 
             final User 동일_식별자의_비영속_엔티티 = new User(식별자, "javajigi", "password2", "name2", "javajigi2@slipp.net");
+            동일_식별자의_비영속_엔티티.setCreatedAt(영속_엔티티1.getCreatedAt());
+            동일_식별자의_비영속_엔티티.setUpdatedAt(영속_엔티티1.getUpdatedAt());
             final User 영속_엔티티2 = users.save(동일_식별자의_비영속_엔티티);
             em.flush(); // UPDATE
 
             assertThat(영속_엔티티1).usingRecursiveComparison().isEqualTo(영속_엔티티2);
-            assertThat(동일_식별자의_비영속_엔티티).usingRecursiveComparison().isEqualTo(영속_엔티티2);
+        }
+    }
+
+    @DisplayName("@CreatedDate와 @LastModifiedDate가 붙은 createdAt와 updatedAt")
+    @Nested
+    class AuditingTest {
+
+        @Test
+        void save_호출_시점에_createdAt와_updatedAt에_자동생성된_해당_시점_정보가_값으로_담김() {
+            final User entity = new User("javajigi", "password", "name", "javajigi@slipp.net");
+            assertThat(entity.getCreatedAt()).isNull();
+            assertThat(entity.getUpdatedAt()).isNull();
+
+            final User savedEntity = users.save(entity);
+            assertThat(savedEntity.getCreatedAt()).isNotNull();
+            assertThat(savedEntity.getUpdatedAt()).isNotNull();
+            assertThat(savedEntity.getCreatedAt()).isEqualTo(savedEntity.getUpdatedAt());
+        }
+
+        @Test
+        void 생성되어_영속상태가_된_엔티티는_flush가_호출되기_전에_값이_수정되어도_수정된_것으로_간주() throws InterruptedException {
+            final User savedEntity = users.save(new User("javajigi", "password", "name", "javajigi@slipp.net"));
+            Thread.sleep(500);
+
+            savedEntity.setEmail("new_email_address");
+            final User updatedEntity = users.save(savedEntity);
+            em.flush();
+
+            assertThat(savedEntity.getCreatedAt()).isNotEqualTo(savedEntity.getUpdatedAt());
+            assertThat(updatedEntity.getCreatedAt()).isNotEqualTo(updatedEntity.getUpdatedAt());
+        }
+
+        @Test
+        void DB에_존재하는_데이터의_식별자를_지닌_엔티티_저장시_merge가_호출되면서_auditing_없이_null_값_그대로_활용() {
+            final User savedEntity = users.save(new User("javajigi", "password", "name", "javajigi@slipp.net"));
+            final Long 식별자 = savedEntity.getId();
+            em.flush();
+
+            assertThat(savedEntity.getCreatedAt()).isNotNull();
+            assertThat(savedEntity.getUpdatedAt()).isNotNull();
+
+            final User updatedEntity = users.save(new User(식별자, "javajigi", "password", "name", "javajigi@slipp.net"));
+
+            assertThat(updatedEntity.getCreatedAt()).isNull();
+            assertThat(updatedEntity.getUpdatedAt()).isNull();
+            assertThat(savedEntity).isEqualTo(updatedEntity);
+        }
+
+        @Test
+        void 식별자를_지닌_엔티티에_대해_save_호출시_merge가_호출되지만_DB에_저장되지_않은_데이터인_경우_새로운_엔티티를_생성하며_그_시점에_createdAt와_updatedAt_값에_대해_auditing_발생() {
+            final User entity = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
+            assertThat(entity.getCreatedAt()).isNull();
+            assertThat(entity.getUpdatedAt()).isNull();
+
+            final User savedEntity = users.save(entity);
+            assertThat(savedEntity.getCreatedAt()).isNotNull();
+            assertThat(savedEntity.getUpdatedAt()).isNotNull();
+            assertThat(entity != savedEntity).isTrue();
         }
     }
 }

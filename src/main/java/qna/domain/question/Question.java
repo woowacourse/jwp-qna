@@ -1,11 +1,16 @@
 package qna.domain.question;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import qna.domain.EntityHistory;
 import qna.domain.answer.Answer;
@@ -28,7 +33,12 @@ public class Question extends EntityHistory {
     @Column(nullable = false, length = 100)
     private String title;
 
-    private Long writerId;
+    @ManyToOne
+    @JoinColumn(name = "writer_id")
+    private User writer;
+
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers = new ArrayList<>();
 
     protected Question() {
     }
@@ -41,11 +51,11 @@ public class Question extends EntityHistory {
         this.id = id;
         this.contents = contents;
         this.title = title;
-        this.writerId = writer.getId();
+        this.writer = writer;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.equals(writer);
     }
 
     public void addAnswer(Answer answer) {
@@ -72,7 +82,15 @@ public class Question extends EntityHistory {
         this.deleted = deleted;
     }
 
+    public User getWriter() {
+        return writer;
+    }
+
     public Long getWriterId() {
-        return writerId;
+        return writer.getId();
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
     }
 }

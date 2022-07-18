@@ -5,7 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import qna.domain.EntityHistory;
 import qna.domain.question.Question;
@@ -29,11 +31,15 @@ public class Answer extends EntityHistory {
     @Column(nullable = false)
     private boolean deleted = false;
 
-    private Long questionId;
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question question; // FK 관리되는 필드
 
-    private Long writerId;
+    @ManyToOne
+    @JoinColumn(name = "writer_id")
+    private User writer;
 
-    public Answer() {
+    protected Answer() {
     }
 
     public Answer(User writer, Question question, String contents) {
@@ -48,17 +54,17 @@ public class Answer extends EntityHistory {
             throw new NotFoundException();
         }
         this.id = id;
-        this.writerId = writer.getId();
-        this.questionId = question.getId();
+        this.writer = writer;
+        this.question = question;
         this.contents = contents;
     }
 
     public boolean isOwner(User loginUser) {
-        return writerId.equals(loginUser.getId());
+        return writer.equals(loginUser);
     }
 
     public void toQuestion(Question question) {
-        this.questionId = question.getId();
+        this.question = question;
     }
 
     public Long getId() {
@@ -77,20 +83,15 @@ public class Answer extends EntityHistory {
         this.deleted = deleted;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public User getWriter() {
+        return writer;
     }
 
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "id=" + id +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", contents='" + contents + '\'' +
-                ", deleted=" + deleted +
-                ", questionId=" + questionId +
-                ", writerId=" + writerId +
-                '}';
+    public Long getWriterId() {
+        return writer.getId();
+    }
+
+    public Question getQuestion() {
+        return question;
     }
 }

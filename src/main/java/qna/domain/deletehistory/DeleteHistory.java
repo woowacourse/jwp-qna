@@ -8,7 +8,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import qna.domain.user.User;
 
 @Table(name = "delete_history")
 @Entity
@@ -25,15 +29,17 @@ public class DeleteHistory {
 
     private LocalDateTime createDate = LocalDateTime.now();
 
-    private Long deletedById;
+    @ManyToOne
+    @JoinColumn(name = "deleted_by_id")
+    private User deleter;
 
-    public DeleteHistory() {
+    protected DeleteHistory() {
     }
 
-    public DeleteHistory(ContentType contentType, Long contentId, Long deletedById, LocalDateTime createDate) {
+    public DeleteHistory(ContentType contentType, Long contentId, User deleter, LocalDateTime createDate) {
         this.contentType = contentType;
         this.contentId = contentId;
-        this.deletedById = deletedById;
+        this.deleter = deleter;
         this.createDate = createDate;
     }
 
@@ -65,11 +71,11 @@ public class DeleteHistory {
         return Objects.equals(id, that.id)
                 && Objects.equals(contentId, that.contentId)
                 && contentType == that.contentType
-                && Objects.equals(deletedById, that.deletedById);
+                && Objects.equals(deleter, that.deleter);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, contentId, contentType, createDate, deletedById);
+        return Objects.hash(id, contentId, contentType, createDate, deleter);
     }
 }
