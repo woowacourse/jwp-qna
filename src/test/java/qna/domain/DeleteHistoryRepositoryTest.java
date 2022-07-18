@@ -18,11 +18,16 @@ class DeleteHistoryRepositoryTest {
     private DeleteHistoryRepository deleteHistoryRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private EntityManager entityManager;
 
     @Test
     void save() {
-        DeleteHistory deleteHistory = new DeleteHistory(ContentType.ANSWER, 1L, 1L);
+        User user = new User("Rex", "rex1!", "렉스", "rex#woowa.com");
+        User savedUser = userRepository.save(user);
+        DeleteHistory deleteHistory = new DeleteHistory(ContentType.ANSWER, 1L, savedUser);
 
         DeleteHistory savedDeleteHistory = deleteHistoryRepository.save(deleteHistory);
 
@@ -33,7 +38,10 @@ class DeleteHistoryRepositoryTest {
 
     @Test
     void findById() {
-        DeleteHistory deleteHistory = new DeleteHistory(ContentType.ANSWER, 1L, 1L);
+        User user = new User("Rex", "rex1!", "렉스", "rex#woowa.com");
+        User savedUser = userRepository.save(user);
+
+        DeleteHistory deleteHistory = new DeleteHistory(ContentType.ANSWER, 1L, savedUser);
         DeleteHistory savedDeleteHistory = deleteHistoryRepository.save(deleteHistory);
         entityManager.clear();
 
@@ -46,10 +54,15 @@ class DeleteHistoryRepositoryTest {
 
     @Test
     void findAll() {
-        DeleteHistory deleteHistory1 = new DeleteHistory(ContentType.ANSWER, 1L, 1L);
-        DeleteHistory savedDeleteHistory1 = deleteHistoryRepository.save(deleteHistory1);
-        DeleteHistory deleteHistory2 = new DeleteHistory(ContentType.QUESTION, 2L, 2L);
-        DeleteHistory savedDeleteHistory2 = deleteHistoryRepository.save(deleteHistory2);
+        User user1 = new User("Rex", "rex1!", "렉스", "rex@woowa.com");
+        User savedUser1 = userRepository.save(user1);
+        User user2 = new User("Momo", "momo1!", "모모", "momo@woowa.com");
+        User savedUser2 = userRepository.save(user2);
+
+        DeleteHistory deleteHistory1 = new DeleteHistory(ContentType.ANSWER, 1L, savedUser1);
+        deleteHistoryRepository.save(deleteHistory1);
+        DeleteHistory deleteHistory2 = new DeleteHistory(ContentType.QUESTION, 2L, savedUser2);
+        deleteHistoryRepository.save(deleteHistory2);
         entityManager.clear();
 
         List<DeleteHistory> result = deleteHistoryRepository.findAll();
@@ -59,7 +72,10 @@ class DeleteHistoryRepositoryTest {
 
     @Test
     void deleteById() {
-        DeleteHistory deleteHistory = new DeleteHistory(ContentType.ANSWER, 1L, 1L);
+        User user = new User("Rex", "rex1!", "렉스", "rex#woowa.com");
+        User savedUser = userRepository.save(user);
+
+        DeleteHistory deleteHistory = new DeleteHistory(ContentType.ANSWER, 1L, savedUser);
         DeleteHistory savedDeleteHistory = deleteHistoryRepository.save(deleteHistory);
         entityManager.clear();
 
