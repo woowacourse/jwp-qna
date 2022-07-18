@@ -40,6 +40,14 @@ public class QnaService {
     }
 
     @Transactional
+    public void updateQuestionContent(Long id, String contents) {
+        Question question = questionRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(NotFoundException::new);
+        question.setContents(contents);
+        question.updateTimeOfUpdated();
+    }
+
+    @Transactional
     public void deleteQuestion(User loginUser, Long questionId) throws CannotDeleteException {
         Question question = findQuestionById(questionId);
         if (!question.isOwner(loginUser)) {

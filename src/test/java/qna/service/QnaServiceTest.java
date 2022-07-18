@@ -52,6 +52,16 @@ class QnaServiceTest {
     }
 
     @Test
+    public void update_contents() {
+        String contentToBeUpdated = "contents2";
+        when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
+
+        qnaService.updateQuestionContent(question.getId(), contentToBeUpdated);
+
+        assertThat(question.getContents()).isEqualTo(contentToBeUpdated);
+    }
+
+    @Test
     public void delete_성공() throws Exception {
         when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
         when(answerRepository.findByQuestionAndDeletedFalse(question.getId())).thenReturn(Arrays.asList(answer));
