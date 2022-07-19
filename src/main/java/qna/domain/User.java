@@ -1,6 +1,5 @@
 package qna.domain;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,23 +7,17 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.UnAuthorizedException;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class User {
+public class User extends BaseDateTimeEntity {
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
 
     @Column(length = 50)
     private String email;
@@ -34,9 +27,6 @@ public class User {
 
     @Column(length = 20, nullable = false)
     private String password;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     @Column(length = 20, nullable = false, unique = true)
     private String userId;
@@ -103,7 +93,7 @@ public class User {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUser(String userId) {
         this.userId = userId;
     }
 

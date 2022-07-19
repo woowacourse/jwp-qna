@@ -6,33 +6,42 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
+import qna.JpaAuditingConfig;
 
+@Import(JpaAuditingConfig.class)
+@TestConstructor(autowireMode = AutowireMode.ALL)
 @DataJpaTest
 class AnswerRepositoryTest {
 
-    @Autowired
-    private AnswerRepository answerRepository;
+    private final AnswerRepository answerRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
+
+    public AnswerRepositoryTest(AnswerRepository answerRepository, UserRepository userRepository,
+                                QuestionRepository questionRepository) {
+        this.answerRepository = answerRepository;
+        this.userRepository = userRepository;
+        this.questionRepository = questionRepository;
+    }
 
     @Test
     void findByQuestionIdAndDeletedFalse() {
         User user = userRepository.save(new User("aaa", "1234", "jurl", "dbswnfl2"));
         Question question = questionRepository.save(new Question("title", "content"));
         Answer answer = new Answer(user, question, "content");
-        Answer save = answerRepository.save(answer);
+        answerRepository.save(answer);
 
-        List<Answer> byQuestionIdAndDeletedFalse = answerRepository.findByQuestionIdAndDeletedFalse(question.getId());
+        List<Answer> actual = answerRepository.findByQuestionIdAndDeletedFalse(question.getId());
 
         assertAll(
-                () -> assertThat(byQuestionIdAndDeletedFalse.size()).isEqualTo(1),
-                () -> assertThat(byQuestionIdAndDeletedFalse.get(0)).isEqualTo(save)
+                () -> assertThat(actual.size()).isEqualTo(1),
+                () -> assertThat(actual.get(0)).isEqualTo(answer)
         );
     }
 
@@ -41,12 +50,9 @@ class AnswerRepositoryTest {
         User user = userRepository.save(new User("aaa", "1234", "jurl", "dbswnfl2"));
         Question question = questionRepository.save(new Question("title", "content"));
         Answer answer = new Answer(user, question, "content");
-        Answer save = answerRepository.save(answer);
 
-        Optional<Answer> byIdAndDeletedFalse = answerRepository.findByIdAndDeletedFalse(save.getId());
+        Optional<Answer> actual = answerRepository.findByIdAndDeletedFalse(answer.getId());
 
-        byIdAndDeletedFalse.ifPresent(
-                it -> assertThat(it).isEqualTo(answer)
-        );
+        assertThat(actual).hasValue(answer);
     }
 }
