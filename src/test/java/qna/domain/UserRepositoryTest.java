@@ -8,7 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class UserRepositoryTest extends CashManager {
+class UserRepositoryTest extends RepositoryTest {
 
     @Autowired
     private UserRepository users;

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
-public class CashManager {
+public class RepositoryTest {
 
     @Autowired
     private EntityManager entityManager;

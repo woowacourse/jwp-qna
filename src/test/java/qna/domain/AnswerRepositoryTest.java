@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class AnswerRepositoryTest extends CashManager {
+class AnswerRepositoryTest extends RepositoryTest {
 
     @Autowired
     private AnswerRepository answers;
