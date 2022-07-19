@@ -4,10 +4,13 @@ import qna.UnAuthorizedException;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
 @Entity
-public class User {
-    public static final GuestUser GUEST_USER = new GuestUser();
+public class User extends TimeStampEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,13 +23,10 @@ public class User {
     @Column(length = 50)
     private String email;
 
-    @Column(nullable = false)
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    @OneToMany(mappedBy = "writer", orphanRemoval = true)
+    private final List<Question> questions = new ArrayList<>();
 
-    @Column
-    private LocalDateTime updatedAt;
-
-    public User() {
+    protected User() {
     }
 
     public User(String userId, String password, String name, String email) {
@@ -72,10 +72,6 @@ public class User {
                 email.equals(target.email);
     }
 
-    public boolean isGuestUser() {
-        return false;
-    }
-
     public Long getId() {
         return id;
     }
@@ -107,10 +103,15 @@ public class User {
                 '}';
     }
 
-    private static class GuestUser extends User {
-        @Override
-        public boolean isGuestUser() {
-            return true;
+    public void addQuestion(Question question) {
+        if (!this.questions.contains(question)) {
+            this.questions.add(question);
         }
+    }
+
+    public List<Question> getQuestions() {
+        return questions.stream()
+                .filter(question -> !question.isDeleted())
+                .collect(Collectors.toUnmodifiableList());
     }
 }

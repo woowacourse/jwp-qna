@@ -4,16 +4,119 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
 public class AnswerTest {
-    public static final Answer A1 = new Answer(UserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");
-    public static final Answer A2 = new Answer(UserTest.SANJIGI, QuestionTest.Q1, "Answers Contents2");
 
+    @PersistenceContext
+    EntityManager em;
     @Autowired
     private AnswerRepository answerRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private QuestionRepository questionRepository;
+
     @Test
     void save() {
-        answerRepository.save(A1);
+        User user = userRepository.save(new User(1L, "user1", "password", "name", "user1@slipp.net"));
+        Question question = questionRepository.save(new Question("title2", "contents2").writeBy(user));
+        Answer answer = new Answer(user, question, "Answers Contents1");
+
+        answerRepository.save(answer);
+
+        assertThat(answer.getId()).isNotNull();
+    }
+
+    @Test
+    void updateContent() {
+        User user = userRepository.save(new User(1L, "user1", "password", "name", "user1@slipp.net"));
+        Question question = questionRepository.save(new Question("title2", "contents2").writeBy(user));
+        Answer answer = new Answer(user, question, "Answers Contents1");
+        answerRepository.save(answer);
+
+        answer.setContents("asihjdiaosshdjioshjod");
+
+        assertThat(question.getAnswers().get(0).getContents()).isEqualTo(answer.getContents());
+    }
+
+    @Test
+    void checkUser() {
+        User user = userRepository.save(new User(1L, "user1", "password", "name", "user1@slipp.net"));
+        Question question = questionRepository.save(new Question("title2", "contents2").writeBy(user));
+        Answer answer = new Answer(user, question, "Answers Contents1");
+        answerRepository.save(answer);
+
+        assertThat(answer.getWriterId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    void cannotChangeUser() {
+        User user = userRepository.save(new User(1L, "user1", "password", "name", "user1@slipp.net"));
+        Question question = questionRepository.save(new Question("title2", "contents2").writeBy(user));
+        Answer answer = new Answer(user, question, "Answers Contents1");
+        answerRepository.save(answer);
+
+        User newbie = userRepository.save(new User(2L, "newbie", "password", "newbie", "newbie@slipp.net"));
+
+        answer.toWriter(newbie);
+        assertThat(answer.getWriterId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    void cannotChangeQuestion() {
+        User user = userRepository.save(new User(1L, "user1", "password", "name", "user1@slipp.net"));
+        Question question = questionRepository.save(new Question("title2", "contents2").writeBy(user));
+        Answer answer = new Answer(user, question, "Answers Contents1");
+        answerRepository.save(answer);
+
+        Question question2 = questionRepository.save(new Question("asd", "qwe"));
+        answer.toQuestion(question2);
+        assertThat(answer.getQuestionId()).isEqualTo(question.getId());
+    }
+
+    @Test
+    void checkCreateTime() {
+        User user = userRepository.save(new User(1L, "user1", "password", "name", "user1@slipp.net"));
+        Question question = questionRepository.save(new Question("title2", "contents2").writeBy(user));
+        Answer answer = new Answer(user, question, "Answers Contents1");
+        answerRepository.save(answer);
+
+        assertThat(answer.getCreateAt()).isNotNull();
+    }
+
+    @Test
+    void checkUpdateTime() {
+        User user = userRepository.save(new User(1L, "user1", "password", "name", "user1@slipp.net"));
+        Question question = questionRepository.save(new Question("title2", "contents2").writeBy(user));
+        Answer answer = new Answer(user, question, "Answers Contents1");
+        answerRepository.save(answer);
+
+        answer.setContents("zxc");
+
+        assertThat(answer.getUpdatedAt()).isNotNull();
+    }
+
+    @Test
+    void deleteAnswer() {
+        User user = userRepository.save(new User(1L, "user1", "password", "name", "user1@slipp.net"));
+        Question question = questionRepository.save(new Question("title2", "contents2").writeBy(user));
+        Answer answer = new Answer(user, question, "Answers Contents1");
+        answerRepository.save(answer);
+
+        answerRepository.delete(answer);
+
+        em.flush();
+        em.clear();
+
+        Question question1 = questionRepository.findById(question.getId()).get();
+
+        assertThat(question1.getAnswers()).isEmpty();
     }
 }

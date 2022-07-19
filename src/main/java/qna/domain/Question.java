@@ -1,31 +1,35 @@
 package qna.domain;
 
+import qna.UnAuthorizedException;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
-public class Question {
+public class Question extends TimeStampEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, length = 100)
     private String title;
-    @Column
+
     @Lob
     private String contents;
-    @Column
-    private Long writerId;
+    @ManyToOne
+    private User writer;
     @Column(nullable = false)
     private boolean deleted = false;
 
-    @Column(nullable = false)
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    @OneToMany(mappedBy = "question", orphanRemoval = true)
+    private final List<Answer> answers = new ArrayList<>();
 
     public Question(String title, String contents) {
         this(null, title, contents);
     }
 
-    public Question() {
+    protected Question() {
     }
 
     public Question(Long id, String title, String contents) {
@@ -35,16 +39,24 @@ public class Question {
     }
 
     public Question writeBy(User writer) {
-        this.writerId = writer.getId();
+        if (writer == null) {
+            throw new UnAuthorizedException();
+        }
+        if (this.writer == null) {
+            this.writer = writer;
+            writer.addQuestion(this);
+        }
         return this;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.getId().equals(writer.getId());
     }
 
     public void addAnswer(Answer answer) {
-        answer.toQuestion(this);
+        if (!this.answers.contains(answer)) {
+            answers.add(answer);
+        }
     }
 
     public Long getId() {
@@ -60,11 +72,17 @@ public class Question {
     }
 
     public Long getWriterId() {
-        return writerId;
+        return writer.getId();
     }
 
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
+    public List<Answer> getAnswers() {
+        return answers.stream()
+                .filter(answer -> !answer.isDeleted())
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    public User getWriter() {
+        return writer;
     }
 
     public boolean isDeleted() {
@@ -75,14 +93,26 @@ public class Question {
         this.deleted = deleted;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setContents(String contents) {
+        this.contents = contents;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", writerId=" + writerId +
+                ", writerId=" + writer.getId() +
                 ", deleted=" + deleted +
                 '}';
+    }
+
+    public void deleteAnswer(Answer answer) {
+        this.answers.remove(answer);
     }
 }
