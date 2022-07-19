@@ -34,8 +34,7 @@ public class QnaService {
 
     @Transactional(readOnly = true)
     public Question findQuestionById(Long id) {
-        return questionRepository.findByIdAndDeletedFalse(id)
-                .orElseThrow(NotFoundException::new);
+        return questionRepository.findByIdAndDeletedFalse(id).orElseThrow(NotFoundException::new);
     }
 
     @Transactional
@@ -46,6 +45,7 @@ public class QnaService {
         validateAnswerWriter(loginUser, answers);
 
         question.setDeleted(true);
+        deleteAnswers(answers);
 
         saveDeleteHistory(questionId, question, answers);
     }
@@ -61,6 +61,12 @@ public class QnaService {
             if (!answer.isOwner(loginUser)) {
                 throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
             }
+        }
+    }
+
+    private void deleteAnswers(final List<Answer> answers) {
+        for (Answer answer : answers) {
+            answer.setDeleted(true);
         }
     }
 
