@@ -17,19 +17,18 @@ class DeleteHistoryRepositoryTest extends RepositoryTest {
     @Autowired
     private UserRepository users;
 
-    private static final User JAVAJIGI = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
-
-    private static User SAVED_JAVAJIGI;
+    private static User savedJavajigi;
 
     @BeforeEach
     void setUp() {
-        SAVED_JAVAJIGI = users.save(JAVAJIGI);
+        User javajigi = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        savedJavajigi = users.save(javajigi);
     }
 
     @DisplayName("삭제 이력 생성")
     @Test
     void save() {
-        DeleteHistory expected = new DeleteHistory(ContentType.QUESTION, 1L, SAVED_JAVAJIGI, LocalDateTime.now());
+        DeleteHistory expected = new DeleteHistory(ContentType.QUESTION, 1L, savedJavajigi, LocalDateTime.now());
 
         DeleteHistory actual = deleteHistories.save(expected);
 

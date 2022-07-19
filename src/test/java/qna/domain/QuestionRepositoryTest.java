@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,26 +16,28 @@ class QuestionRepositoryTest extends RepositoryTest {
     @Autowired
     private QuestionRepository questions;
 
-    private static final Question QUESTION = new Question("제목", "내용");
+    private static Question question;
+
+    @BeforeEach
+    void setUp() {
+        question = new Question("제목", "내용");
+    }
 
     @DisplayName("질문 생성")
     @Test
     void save() {
-        Question expected = QUESTION;
+        Question expected = question;
 
         Question actual = questions.save(expected);
 
         assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("id")
-                .ignoringFields("createDate")
-                .ignoringFields("updateDate")
                 .isEqualTo(expected);
     }
 
     @DisplayName("질문 조회")
     @Test
     void findById() {
-        Question expected = questions.save(QUESTION);
+        Question expected = questions.save(question);
         synchronize();
 
         Optional<Question> actual = questions.findById(expected.getId());
@@ -65,7 +68,7 @@ class QuestionRepositoryTest extends RepositoryTest {
     @DisplayName("삭제되지 않은 질문 조회")
     @Test
     void findByIdAndDeletedFalse() {
-        Question expected = questions.save(QUESTION);
+        Question expected = questions.save(question);
         synchronize();
 
         Optional<Question> actual = questions.findByIdAndDeletedFalse(expected.getId());
@@ -78,7 +81,7 @@ class QuestionRepositoryTest extends RepositoryTest {
     @DisplayName("삭제된 질문 조회 시 조회되지 않음")
     @Test
     void findByIdAndDeletedTrue() {
-        Question question = questions.save(QUESTION);
+        Question question = questions.save(QuestionRepositoryTest.question);
         question.delete();
         synchronize();
 
@@ -90,7 +93,7 @@ class QuestionRepositoryTest extends RepositoryTest {
     @DisplayName("질문 정보 수정")
     @Test
     void update() {
-        Question expected = questions.save(QUESTION);
+        Question expected = questions.save(question);
         Question updatedQuestion = new Question("제목 수정", "내용 수정");
 
         expected.update(updatedQuestion);
@@ -106,10 +109,10 @@ class QuestionRepositoryTest extends RepositoryTest {
     @DisplayName("질문 삭제")
     @Test
     void delete() {
-        Question question = questions.save(QUESTION);
+        Question deletedQuestion = questions.save(question);
         synchronize();
 
-        questions.delete(question);
+        questions.delete(deletedQuestion);
         synchronize();
 
         assertThat(questions.findAll()).hasSize(0);

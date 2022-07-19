@@ -21,40 +21,38 @@ class AnswerRepositoryTest extends RepositoryTest {
     @Autowired
     private UserRepository users;
 
-    private static final User JAVAJIGI = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
-    private static final Question QUESTION = new Question("제목", "내용");
-    private static final Answer ANSWER = new Answer(JAVAJIGI, QUESTION, "답변");
-
-    private static Question SAVED_QUESTION;
-    private static User SAVED_JAVAJIGI;
+    private static Answer answer;
+    private static Question savedQuestion;
+    private static User savedJavajigi;
 
     @BeforeEach
     void setUp() {
-        SAVED_QUESTION = questions.save(QUESTION);
-        ANSWER.toQuestion(SAVED_QUESTION);
+        User javajigi = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        Question question = new Question("제목", "내용");
+        answer = new Answer(javajigi, question, "답변");
 
-        SAVED_JAVAJIGI = users.save(JAVAJIGI);
-        ANSWER.setWriter(SAVED_JAVAJIGI);
+        savedQuestion = questions.save(question);
+        answer.toQuestion(savedQuestion);
+
+        savedJavajigi = users.save(javajigi);
+        answer.setWriter(savedJavajigi);
     }
 
     @DisplayName("답변 생성")
     @Test
     void save() {
-        Answer expected = ANSWER;
+        Answer expected = answer;
 
         Answer actual = answers.save(expected);
 
         assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("id")
-                .ignoringFields("createDate")
-                .ignoringFields("updateDate")
                 .isEqualTo(expected);
     }
 
     @DisplayName("답변 조회")
     @Test
     void findById() {
-        Answer expected = answers.save(ANSWER);
+        Answer expected = answers.save(answer);
         synchronize();
 
         Optional<Answer> actual = answers.findById(expected.getId());
@@ -67,7 +65,7 @@ class AnswerRepositoryTest extends RepositoryTest {
     @DisplayName("삭제되지 않은 답변 조회")
     @Test
     void findByIdAndDeletedFalse() {
-        Answer expected = answers.save(ANSWER);
+        Answer expected = answers.save(answer);
         synchronize();
 
         Optional<Answer> actual = answers.findByIdAndDeletedFalse(expected.getId());
@@ -80,13 +78,13 @@ class AnswerRepositoryTest extends RepositoryTest {
     @DisplayName("질문에 속하는 답변 목록 조회")
     @Test
     void findByQuestionIdAndDeletedFalse() {
-        Answer answer1 = answers.save(new Answer(SAVED_JAVAJIGI, SAVED_QUESTION, "답변1"));
-        Answer answer2 = answers.save(new Answer(SAVED_JAVAJIGI, SAVED_QUESTION, "답변2"));
-        Answer answer3 = answers.save(new Answer(SAVED_JAVAJIGI, SAVED_QUESTION, "답변3"));
+        Answer answer1 = answers.save(new Answer(savedJavajigi, savedQuestion, "답변1"));
+        Answer answer2 = answers.save(new Answer(savedJavajigi, savedQuestion, "답변2"));
+        Answer answer3 = answers.save(new Answer(savedJavajigi, savedQuestion, "답변3"));
         List<Answer> expected = List.of(answer1, answer2, answer3);
         synchronize();
 
-        List<Answer> actual = answers.findByQuestionIdAndDeletedFalse(SAVED_QUESTION.getId());
+        List<Answer> actual = answers.findByQuestionIdAndDeletedFalse(savedQuestion.getId());
 
         assertThat(actual).usingRecursiveFieldByFieldElementComparator()
                 .isEqualTo(expected);
@@ -95,13 +93,13 @@ class AnswerRepositoryTest extends RepositoryTest {
     @DisplayName("답변 수정")
     @Test
     void update() {
-        Answer answer = answers.save(ANSWER);
-        Answer expected = new Answer(SAVED_JAVAJIGI, SAVED_QUESTION, "답변 수정");
+        Answer savedAnswer = answers.save(answer);
+        Answer expected = new Answer(savedJavajigi, savedQuestion, "답변 수정");
 
-        answer.update(expected);
+        savedAnswer.update(expected);
         synchronize();
 
-        Optional<Answer> actual = answers.findById(answer.getId());
+        Optional<Answer> actual = answers.findById(savedAnswer.getId());
 
         assertThat(actual).isPresent();
         assertThat(actual.get()).usingRecursiveComparison()
@@ -114,10 +112,10 @@ class AnswerRepositoryTest extends RepositoryTest {
     @DisplayName("답변 삭제")
     @Test
     void delete() {
-        Answer answer = answers.save(ANSWER);
+        Answer deletedAnswer = answers.save(answer);
         synchronize();
 
-        answers.delete(answer);
+        answers.delete(deletedAnswer);
         synchronize();
 
         assertThat(answers.findAll()).hasSize(0);
