@@ -72,7 +72,6 @@ public class Answer extends BaseTime {
             throw new IllegalArgumentException("작성자가 달라 답변을 수정할 수 없습니다.");
         }
         this.contents = updatedAnswer.contents;
-        updateDate();
     }
 
     public void toQuestion(Question question) {
