@@ -21,8 +21,4 @@ public abstract class BaseTime {
     @Column(name = "updated_at")
     @LastModifiedDate
     private LocalDateTime updateDate;
-
-    protected void updateDate() {
-        updateDate = LocalDateTime.now();
-    }
 }

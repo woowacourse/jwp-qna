@@ -57,7 +57,6 @@ public class User extends BaseTime {
 
         this.name = target.name;
         this.email = target.email;
-        updateDate();
     }
 
     private boolean matchUserId(String userId) {

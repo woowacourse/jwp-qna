@@ -63,12 +63,10 @@ public class Question extends BaseTime {
         }
         this.title = updatedQuestion.title;
         this.contents = updatedQuestion.contents;
-        updateDate();
     }
 
     public void delete() {
         this.deleted = true;
-        updateDate();
     }
 
     public Long getId() {
