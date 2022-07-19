@@ -7,12 +7,17 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
 
+@TestConstructor(autowireMode = AutowireMode.ALL)
 class UserRepositoryTest extends RepositoryTest {
 
-    @Autowired
     private UserRepository users;
+
+    public UserRepositoryTest(UserRepository users) {
+        this.users = users;
+    }
 
     private static User javajigi;
 

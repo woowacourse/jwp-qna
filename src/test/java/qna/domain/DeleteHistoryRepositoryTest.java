@@ -7,17 +7,21 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
 
+@TestConstructor(autowireMode = AutowireMode.ALL)
 class DeleteHistoryRepositoryTest extends RepositoryTest {
 
-    @Autowired
-    private DeleteHistoryRepository deleteHistories;
-
-    @Autowired
-    private UserRepository users;
-
     private static User savedJavajigi;
+
+    private final DeleteHistoryRepository deleteHistories;
+    private final UserRepository users;
+
+    public DeleteHistoryRepositoryTest(DeleteHistoryRepository deleteHistories, UserRepository users) {
+        this.deleteHistories = deleteHistories;
+        this.users = users;
+    }
 
     @BeforeEach
     void setUp() {

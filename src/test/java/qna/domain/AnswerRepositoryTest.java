@@ -8,22 +8,25 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
 
+@TestConstructor(autowireMode = AutowireMode.ALL)
 class AnswerRepositoryTest extends RepositoryTest {
-
-    @Autowired
-    private AnswerRepository answers;
-
-    @Autowired
-    private QuestionRepository questions;
-
-    @Autowired
-    private UserRepository users;
 
     private static Answer answer;
     private static Question savedQuestion;
     private static User savedJavajigi;
+
+    private final AnswerRepository answers;
+    private final QuestionRepository questions;
+    private final UserRepository users;
+
+    public AnswerRepositoryTest(AnswerRepository answers, QuestionRepository questions, UserRepository users) {
+        this.answers = answers;
+        this.questions = questions;
+        this.users = users;
+    }
 
     @BeforeEach
     void setUp() {

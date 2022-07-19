@@ -9,14 +9,19 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
 
+@TestConstructor(autowireMode = AutowireMode.ALL)
 class QuestionRepositoryTest extends RepositoryTest {
 
-    @Autowired
-    private QuestionRepository questions;
-
     private static Question question;
+
+    private final QuestionRepository questions;
+
+    public QuestionRepositoryTest(QuestionRepository questions) {
+        this.questions = questions;
+    }
 
     @BeforeEach
     void setUp() {
