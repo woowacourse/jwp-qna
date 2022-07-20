@@ -49,9 +49,11 @@ class QnaServiceTest {
         when(answerRepository.findByQuestionIdAndDeletedFalse(question.getId())).thenReturn(Arrays.asList(answer));
 
         assertThat(question.isDeleted()).isFalse();
+        assertThat(answer.isDeleted()).isFalse();
         qnaService.deleteQuestion(UserTest.JAVAJIGI, question.getId());
 
         assertThat(question.isDeleted()).isTrue();
+        assertThat(answer.isDeleted()).isTrue();
         verifyDeleteHistories();
     }
 
