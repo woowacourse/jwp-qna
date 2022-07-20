@@ -8,8 +8,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
 
-class UserRepositoryTest extends RepositoryTest {
+@TestConstructor(autowireMode = AutowireMode.ALL)
+@DataJpaTest
+class UserRepositoryTest {
+
+    private final UserRepository users;
+
+    UserRepositoryTest(UserRepository users) {
+        this.users = users;
+    }
 
     @DisplayName("id가 일치하는 유저 조회")
     @Test
