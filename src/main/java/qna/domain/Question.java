@@ -1,5 +1,6 @@
 package qna.domain;
 
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 public class Question extends BaseEntity {
@@ -19,6 +21,9 @@ public class Question extends BaseEntity {
 
     @Column(nullable = false, length = 100)
     private String title;
+
+    @LastModifiedDate
+    protected LocalDateTime updatedAt;
 
     @Lob
     private String contents;

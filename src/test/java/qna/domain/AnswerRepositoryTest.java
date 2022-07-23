@@ -3,6 +3,7 @@ package qna.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -86,10 +87,10 @@ class AnswerRepositoryTest {
         User user = UserFixture.JAVAJIGI;
         User savedUser = users.save(user);
 
-        Question question = new Question("title1", "contents1").writeBy(savedUser);
-        Question savedQuestion = questions.save(question);
-
-        Answer expected = new Answer(savedUser, savedQuestion, "Answers Contents1");
-        Answer actual = answers.save(expected);
+        assertAll(
+                () -> assertThat(savedUser.getId()).isNotNull(),
+                () -> assertThat(savedUser.getName()).isEqualTo(UserFixture.JAVAJIGI.getName()),
+                () -> assertThat(savedUser.getEmail()).isEqualTo(UserFixture.JAVAJIGI.getEmail())
+        );
     }
 }

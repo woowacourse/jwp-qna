@@ -15,17 +15,11 @@ public abstract class BaseEntity {
     @Column(nullable = false)
     @CreatedDate
     protected LocalDateTime createdAt;
-    @LastModifiedDate
-    protected LocalDateTime updatedAt;
 
     protected BaseEntity() {
     }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
     }
 }

@@ -11,11 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import org.springframework.data.annotation.LastModifiedDate;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
 @Entity
-public class Answer extends BaseEntity {
+public class Answer extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +31,9 @@ public class Answer extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "question_id", foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
+
+    @LastModifiedDate
+    protected LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name = "fk_answer_writer"))
@@ -56,7 +60,6 @@ public class Answer extends BaseEntity {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
-        this.createdAt = LocalDateTime.now();
     }
 
     public boolean isOwner(User writer) {
