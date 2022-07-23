@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Question extends BaseTime {
@@ -24,7 +24,7 @@ public class Question extends BaseTime {
     @Lob
     private String contents;
 
-    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.REMOVE})
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.REMOVE})
     @JoinColumn(name = "write_id",
             foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
