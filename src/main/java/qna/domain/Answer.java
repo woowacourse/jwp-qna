@@ -88,15 +88,4 @@ public class Answer extends TimeStamped {
     public String getContents() {
         return contents;
     }
-
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "id=" + id +
-                ", writer=" + writer +
-                ", question=" + question +
-                ", contents='" + contents + '\'' +
-                ", deleted=" + deleted +
-                '}';
-    }
 }
