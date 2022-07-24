@@ -1,6 +1,8 @@
 package qna.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -10,7 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import org.springframework.data.annotation.LastModifiedDate;
+import qna.CannotDeleteException;
 
 @Entity
 public class Question extends BaseEntity {
@@ -31,6 +35,9 @@ public class Question extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
+
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers = new ArrayList<>();
 
     @Column(nullable = false)
     private boolean deleted = false;
@@ -54,12 +61,41 @@ public class Question extends BaseEntity {
         return this;
     }
 
-    public boolean isOwner(User writer) {
-        return this.writer.equals(writer);
+    public void delete(User loginUser) throws CannotDeleteException {
+        validateUserOwner(loginUser);
+        validateAnswerNotExists(loginUser);
+
+        setDeleted(true);
+        deleteAnswers();
+    }
+
+    private void deleteAnswers() {
+        for (Answer answer : answers) {
+            answer.setDeleted(true);
+        }
+    }
+
+    private void validateAnswerNotExists(User loginUser) {
+        for (Answer answer : answers) {
+            if (!answer.isOwner(loginUser)) {
+                throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+            }
+        }
+    }
+
+    private void validateUserOwner(User loginUser) {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
     }
 
     public void addAnswer(Answer answer) {
+        this.answers.add(answer);
         answer.toQuestion(this);
+    }
+
+    public boolean isOwner(User writer) {
+        return this.writer.equals(writer);
     }
 
     public Long getId() {
@@ -100,5 +136,13 @@ public class Question extends BaseEntity {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 }
