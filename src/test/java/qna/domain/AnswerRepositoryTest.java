@@ -1,6 +1,7 @@
 package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,10 +35,12 @@ class AnswerRepositoryTest extends RepositoryTest {
         Question question = new Question("제목", "내용");
         answer = new Answer(javajigi, question, "답변");
 
+        savedJavajigi = users.save(javajigi);
+
         savedQuestion = questions.save(question);
+        savedQuestion.setWriter(savedJavajigi);
         answer.toQuestion(savedQuestion);
 
-        savedJavajigi = users.save(javajigi);
         answer.setWriter(savedJavajigi);
     }
 
@@ -61,8 +64,13 @@ class AnswerRepositoryTest extends RepositoryTest {
         Optional<Answer> actual = answers.findById(expected.getId());
 
         assertThat(actual).isPresent();
-        assertThat(actual.get()).usingRecursiveComparison()
-                .isEqualTo(expected);
+        assertAll(
+                () -> assertThat(actual.get()).usingRecursiveComparison()
+                        .ignoringFields("writer", "question")
+                        .isEqualTo(expected),
+                () -> assertThat(actual.get().getWriter().getUserId()).isEqualTo(savedJavajigi.getUserId()),
+                () -> assertThat(actual.get().getQuestion().getContents()).isEqualTo(savedQuestion.getContents())
+        );
     }
 
     @DisplayName("삭제되지 않은 답변 조회")
@@ -74,8 +82,13 @@ class AnswerRepositoryTest extends RepositoryTest {
         Optional<Answer> actual = answers.findByIdAndDeletedFalse(expected.getId());
 
         assertThat(actual).isPresent();
-        assertThat(actual.get()).usingRecursiveComparison()
-                .isEqualTo(expected);
+        assertAll(
+                () -> assertThat(actual.get()).usingRecursiveComparison()
+                        .ignoringFields("writer", "question")
+                        .isEqualTo(expected),
+                () -> assertThat(actual.get().getWriter().getUserId()).isEqualTo(savedJavajigi.getUserId()),
+                () -> assertThat(actual.get().getQuestion().getContents()).isEqualTo(savedQuestion.getContents())
+        );
     }
 
     @DisplayName("질문에 속하는 답변 목록 조회")
@@ -89,7 +102,7 @@ class AnswerRepositoryTest extends RepositoryTest {
 
         List<Answer> actual = answers.findByQuestionIdAndDeletedFalse(savedQuestion.getId());
 
-        assertThat(actual).usingRecursiveFieldByFieldElementComparator()
+        assertThat(actual).usingElementComparatorIgnoringFields("writer", "question")
                 .isEqualTo(expected);
     }
 
@@ -106,9 +119,7 @@ class AnswerRepositoryTest extends RepositoryTest {
 
         assertThat(actual).isPresent();
         assertThat(actual.get()).usingRecursiveComparison()
-                .ignoringFields("id")
-                .ignoringFields("createDate")
-                .ignoringFields("updateDate")
+                .ignoringFields("id", "createDate", "updateDate", "writer", "question")
                 .isEqualTo(expected);
     }
 
