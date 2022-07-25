@@ -1,15 +1,19 @@
 package qna.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import java.time.LocalDateTime;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class Question {
+public class Question extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,14 +25,15 @@ public class Question {
     @Lob
     private String contents;
 
-    private Long writerId;
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.REMOVE},
+            fetch = FetchType.LAZY)
+    @JoinColumn(name = "write_id",
+            foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
 
     private boolean deleted = false;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updateData;
-
-    private Question() {
+    protected Question() {
     }
 
     public Question(String title, String contents) {
@@ -42,12 +47,12 @@ public class Question {
     }
 
     public Question writeBy(User writer) {
-        this.writerId = writer.getId();
+        this.writer = writer;
         return this;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.equals(writer);
     }
 
     public void addAnswer(Answer answer) {
@@ -60,12 +65,10 @@ public class Question {
         }
         this.title = updatedQuestion.title;
         this.contents = updatedQuestion.contents;
-        this.updateData = LocalDateTime.now();
     }
 
     public void delete() {
         this.deleted = true;
-        updateData = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -92,12 +95,12 @@ public class Question {
         this.contents = contents;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public User getWriter() {
+        return writer;
     }
 
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
+    public void setWriter(User writer) {
+        this.writer = writer;
     }
 
     public boolean isDeleted() {
@@ -106,16 +109,5 @@ public class Question {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
-    }
-
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                ", writerId=" + writerId +
-                ", deleted=" + deleted +
-                '}';
     }
 }

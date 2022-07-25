@@ -6,88 +6,131 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
 
-@DataJpaTest
-class AnswerRepositoryTest {
+@TestConstructor(autowireMode = AutowireMode.ALL)
+class AnswerRepositoryTest extends RepositoryTest {
 
-    @Autowired
-    private AnswerRepository answers;
+    private static Answer answer;
+    private static Question savedQuestion;
+    private static User savedJavajigi;
 
-    private static final User JAVAJIGI = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
-    private static final Question QUESTION = new Question("제목", "내용");
-    private static final Answer ANSWER = new Answer(JAVAJIGI, QUESTION, "답변");
+    private final AnswerRepository answers;
+    private final QuestionRepository questions;
+    private final UserRepository users;
+
+    public AnswerRepositoryTest(AnswerRepository answers, QuestionRepository questions, UserRepository users) {
+        this.answers = answers;
+        this.questions = questions;
+        this.users = users;
+    }
+
+    @BeforeEach
+    void setUp() {
+        User javajigi = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        Question question = new Question("제목", "내용");
+        answer = new Answer(javajigi, question, "답변");
+
+        savedJavajigi = users.save(javajigi);
+
+        savedQuestion = questions.save(question);
+        savedQuestion.setWriter(savedJavajigi);
+        answer.toQuestion(savedQuestion);
+
+        answer.setWriter(savedJavajigi);
+    }
 
     @DisplayName("답변 생성")
     @Test
     void save() {
-        Answer expected = ANSWER;
+        Answer expected = answer;
 
         Answer actual = answers.save(expected);
 
-        assertAll(
-                () -> assertThat(actual.getWriterId()).isEqualTo(JAVAJIGI.getId()),
-                () -> assertThat(actual.getQuestionId()).isEqualTo(QUESTION.getId()),
-                () -> assertThat(actual.getContents()).isEqualTo(expected.getContents())
-        );
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 
     @DisplayName("답변 조회")
     @Test
     void findById() {
-        Answer expected = answers.save(ANSWER);
+        Answer expected = answers.save(answer);
+        synchronize();
 
         Optional<Answer> actual = answers.findById(expected.getId());
 
+        assertThat(actual).isPresent();
         assertAll(
-                () -> assertThat(actual).isPresent(),
-                () -> assertThat(actual.get()).isEqualTo(expected)
+                () -> assertThat(actual.get()).usingRecursiveComparison()
+                        .ignoringFields("writer", "question")
+                        .isEqualTo(expected),
+                () -> assertThat(actual.get().getWriter().getUserId()).isEqualTo(savedJavajigi.getUserId()),
+                () -> assertThat(actual.get().getQuestion().getContents()).isEqualTo(savedQuestion.getContents())
         );
     }
 
     @DisplayName("삭제되지 않은 답변 조회")
     @Test
     void findByIdAndDeletedFalse() {
-        Answer expected = answers.save(ANSWER);
+        Answer expected = answers.save(answer);
+        synchronize();
 
         Optional<Answer> actual = answers.findByIdAndDeletedFalse(expected.getId());
 
+        assertThat(actual).isPresent();
         assertAll(
-                () -> assertThat(actual).isPresent(),
-                () -> assertThat(actual.get()).isEqualTo(expected)
+                () -> assertThat(actual.get()).usingRecursiveComparison()
+                        .ignoringFields("writer", "question")
+                        .isEqualTo(expected),
+                () -> assertThat(actual.get().getWriter().getUserId()).isEqualTo(savedJavajigi.getUserId()),
+                () -> assertThat(actual.get().getQuestion().getContents()).isEqualTo(savedQuestion.getContents())
         );
     }
 
     @DisplayName("질문에 속하는 답변 목록 조회")
     @Test
     void findByQuestionIdAndDeletedFalse() {
-        Answer answer = answers.save(ANSWER);
+        Answer answer1 = answers.save(new Answer(savedJavajigi, savedQuestion, "답변1"));
+        Answer answer2 = answers.save(new Answer(savedJavajigi, savedQuestion, "답변2"));
+        Answer answer3 = answers.save(new Answer(savedJavajigi, savedQuestion, "답변3"));
+        List<Answer> expected = List.of(answer1, answer2, answer3);
+        synchronize();
 
-        List<Answer> answersDeletedFalse = answers.findByQuestionIdAndDeletedFalse(QUESTION.getId());
+        List<Answer> actual = answers.findByQuestionIdAndDeletedFalse(savedQuestion.getId());
 
-        assertThat(answersDeletedFalse).contains(answer);
+        assertThat(actual).usingElementComparatorIgnoringFields("writer", "question")
+                .isEqualTo(expected);
     }
 
     @DisplayName("답변 수정")
     @Test
     void update() {
-        Answer answer = answers.save(ANSWER);
-        Answer updatedAnswer = new Answer(JAVAJIGI, QUESTION, "답변 수정");
+        Answer savedAnswer = answers.save(answer);
+        Answer expected = new Answer(savedJavajigi, savedQuestion, "답변 수정");
 
-        answer.update(updatedAnswer);
+        savedAnswer.update(expected);
+        synchronize();
 
-        assertThat(answer.getContents()).isEqualTo(updatedAnswer.getContents());
+        Optional<Answer> actual = answers.findById(savedAnswer.getId());
+
+        assertThat(actual).isPresent();
+        assertThat(actual.get()).usingRecursiveComparison()
+                .ignoringFields("id", "createDate", "updateDate", "writer", "question")
+                .isEqualTo(expected);
     }
 
     @DisplayName("답변 삭제")
     @Test
     void delete() {
-        Answer answer = answers.save(ANSWER);
+        Answer deletedAnswer = answers.save(answer);
+        synchronize();
 
-        answers.delete(answer);
+        answers.delete(deletedAnswer);
+        synchronize();
 
         assertThat(answers.findAll()).hasSize(0);
     }

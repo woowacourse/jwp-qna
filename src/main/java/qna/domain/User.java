@@ -1,17 +1,17 @@
 package qna.domain;
 
-import qna.UnAuthorizedException;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
-import java.util.Objects;
+
+import qna.UnAuthorizedException;
 
 @Entity
-public class User {
+public class User extends BaseTime {
 
     public static final GuestUser GUEST_USER = new GuestUser();
 
@@ -31,13 +31,7 @@ public class User {
     @Column(length = 50)
     private String email;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createDate = LocalDateTime.now();
-
-    @Column(name = "updated_at")
-    private LocalDateTime updateDate;
-
-    private User() {
+    protected User() {
     }
 
     public User(String userId, String password, String name, String email) {
@@ -63,7 +57,6 @@ public class User {
 
         this.name = target.name;
         this.email = target.email;
-        this.updateDate = LocalDateTime.now();
     }
 
     private boolean matchUserId(String userId) {
@@ -125,17 +118,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
     }
 
     private static class GuestUser extends User {
