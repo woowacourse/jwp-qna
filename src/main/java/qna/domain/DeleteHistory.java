@@ -1,6 +1,8 @@
 package qna.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,10 +46,38 @@ public class DeleteHistory {
     protected DeleteHistory() {
     }
 
+    public static List<DeleteHistory> of(Question question) {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+
+        if (question.isDeleted()) {
+            deleteHistories.add(DeleteHistory.from(question));
+        }
+
+        for (Answer answer : question.getAnswers()) {
+            if (answer.isDeleted()) {
+                deleteHistories.add(DeleteHistory.from(answer));
+            }
+        }
+
+        return deleteHistories;
+    }
+
+    private static DeleteHistory from(Question question) {
+        return new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriter(), LocalDateTime.now());
+    }
+
+    private static DeleteHistory from(Answer answer) {
+        return new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now());
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         DeleteHistory that = (DeleteHistory) o;
         return Objects.equals(id, that.id) &&
                 contentType == that.contentType &&
