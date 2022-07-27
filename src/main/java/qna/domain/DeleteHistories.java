@@ -15,7 +15,7 @@ public class DeleteHistories {
     public static DeleteHistories of(Question question) {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
         DeleteHistory deleteHistory = new DeleteHistory(ContentType.QUESTION, question.getId(),
-                question.getWriter(), LocalDateTime.now());
+                question.getWriter());
         deleteHistories.add(deleteHistory);
 
         addAnswersToDeleteHistories(question, deleteHistories);
@@ -26,8 +26,7 @@ public class DeleteHistories {
         List<Answer> answers = question.getAnswers();
         for (Answer answer : answers) {
             answer.setDeleted(true);
-            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(),
-                    LocalDateTime.now()));
+            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter()));
         }
     }
 
