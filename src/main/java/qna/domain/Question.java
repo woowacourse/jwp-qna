@@ -3,6 +3,7 @@ package qna.domain;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -11,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Question extends TimeStamped {
@@ -30,20 +30,25 @@ public class Question extends TimeStamped {
     @JoinColumn(name = "writer_id", nullable = false, foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answers = new ArrayList<>();
+    @Embedded
+    private Answers answers;
 
     @Column(nullable = false)
     private boolean deleted = false;
 
     public Question(String title, String contents) {
-        this(null, title, contents);
+        this(null, title, contents, new ArrayList<>());
     }
 
     public Question(Long id, String title, String contents) {
+        this(id, title, contents, new ArrayList<>());
+    }
+
+    public Question(Long id, String title, String contents, List<Answer> answers) {
         this.id = id;
         this.title = title;
         this.contents = contents;
+        this.answers = new Answers(answers);
     }
 
     protected Question() {
@@ -72,12 +77,7 @@ public class Question extends TimeStamped {
     }
 
     public boolean isAnswersAllDeletable() {
-        for (Answer answer : answers) {
-            if (!answer.isOwner(writer)) {
-                return false;
-            }
-        }
-        return true;
+        return answers.isAllDeletable(writer);
     }
 
     public Long getId() {
@@ -97,6 +97,6 @@ public class Question extends TimeStamped {
     }
 
     public List<Answer> getAnswers() {
-        return answers;
+        return answers.getAnswers();
     }
 }
