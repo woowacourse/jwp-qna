@@ -1,9 +1,9 @@
 package qna.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import org.springframework.data.annotation.LastModifiedDate;
 import qna.CannotDeleteException;
 
@@ -36,8 +35,8 @@ public class Question extends BaseEntity {
     @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answers = new ArrayList<>();
+    @Embedded
+    private Answers answers = new Answers();
 
     @Column(nullable = false)
     private boolean deleted = false;
@@ -65,16 +64,11 @@ public class Question extends BaseEntity {
         validateUserOwner(loginUser);
         validateAnswerNotExists(loginUser);
 
-        setDeleted(true);
         return DeleteHistories.of(this);
     }
 
     private void validateAnswerNotExists(User loginUser) {
-        for (Answer answer : answers) {
-            if (!answer.isOwner(loginUser)) {
-                throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-            }
-        }
+        answers.validateAnswerNotExists(loginUser);
     }
 
     private void validateUserOwner(User loginUser) {
@@ -86,6 +80,11 @@ public class Question extends BaseEntity {
     public void addAnswer(Answer answer) {
         this.answers.add(answer);
         answer.toQuestion(this);
+    }
+
+    public DeleteHistory deleteSoft() {
+        setDeleted(true);
+        return new DeleteHistory(ContentType.QUESTION, getId(), getWriter());
     }
 
     public boolean isOwner(User writer) {
@@ -117,6 +116,6 @@ public class Question extends BaseEntity {
     }
 
     public List<Answer> getAnswers() {
-        return answers;
+        return answers.getValues();
     }
 }

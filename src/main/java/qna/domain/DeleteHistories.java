@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DeleteHistories {
 
-    private List<DeleteHistory> values;
+    private final List<DeleteHistory> values;
 
     private DeleteHistories(List<DeleteHistory> deleteHistories) {
         this.values = deleteHistories;
@@ -19,14 +19,14 @@ public class DeleteHistories {
     }
 
     private static void addQuestion(Question question, List<DeleteHistory> deleteHistories) {
-        DeleteHistory deleteHistory = new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriter());
+        DeleteHistory deleteHistory = question.deleteSoft();
         deleteHistories.add(deleteHistory);
     }
 
     private static void addAnswers(List<Answer> answers, List<DeleteHistory> deleteHistories) {
         for (Answer answer : answers) {
-            answer.setDeleted(true);
-            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter()));
+            DeleteHistory deleteHistory = answer.deleteSoft();
+            deleteHistories.add(deleteHistory);
         }
     }
 

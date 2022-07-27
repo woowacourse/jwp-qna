@@ -62,6 +62,11 @@ public class Answer extends BaseEntity {
         this.contents = contents;
     }
 
+    public DeleteHistory deleteSoft() {
+        setDeleted(true);
+        return new DeleteHistory(ContentType.ANSWER, getId(), getWriter());
+    }
+
     public boolean isOwner(User writer) {
         return this.writer.equals(writer);
     }
