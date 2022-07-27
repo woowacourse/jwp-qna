@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import qna.CannotDeleteException;
 
 @Entity
 public class Question extends TimeStamped {
@@ -59,10 +60,6 @@ public class Question extends TimeStamped {
         return this;
     }
 
-    public boolean isOwner(User writer) {
-        return this.writer.equals(writer);
-    }
-
     public void addAnswer(Answer answer) {
         answers.add(answer);
         answer.toQuestion(this);
@@ -72,12 +69,17 @@ public class Question extends TimeStamped {
         return deleted;
     }
 
-    public void delete() {
+    public void delete(User user) throws CannotDeleteException {
+        checkIsWrittenBy(user);
+
+        answers.deleteAll(user);
         this.deleted = true;
     }
 
-    public boolean isAnswersAllDeletable() {
-        return answers.isAllDeletable(writer);
+    private void checkIsWrittenBy(User user) throws CannotDeleteException {
+        if (!writer.equals(user)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
     }
 
     public Long getId() {
