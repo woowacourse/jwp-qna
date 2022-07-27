@@ -102,32 +102,16 @@ public class Question extends BaseEntity {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getContents() {
         return contents;
     }
 
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
     public User getWriter() {
         return writer;
-    }
-
-    public void setWriter(User writer) {
-        this.writer = writer;
     }
 
     public boolean isDeleted() {
@@ -142,7 +126,4 @@ public class Question extends BaseEntity {
         return answers;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
 }
