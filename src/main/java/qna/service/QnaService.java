@@ -31,13 +31,12 @@ public class QnaService {
     @Transactional
     public void deleteQuestion(User loginUser, Long questionId) {
         Question question = findQuestionById(questionId);
-        question.delete(loginUser);
+        DeleteHistories deleteHistories = question.deleteAndCreateDeleteHistories(loginUser);
 
-        createAndSaveDeleteHistories(question);
+        saveDeleteHistories(deleteHistories);
     }
 
-    private void createAndSaveDeleteHistories(Question question) {
-        DeleteHistories deleteHistories = DeleteHistories.of(question);
+    private void saveDeleteHistories(DeleteHistories deleteHistories) {
         deleteHistoryService.saveAll(deleteHistories.getValues());
     }
 }

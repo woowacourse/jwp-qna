@@ -19,7 +19,7 @@ class QuestionTest {
 
         User otherUser = UserFixture.SANJIGI;
 
-        assertThatThrownBy(() -> question.delete(otherUser))
+        assertThatThrownBy(() -> question.deleteAndCreateDeleteHistories(otherUser))
                 .isInstanceOf(CannotDeleteException.class);
     }
 
@@ -32,7 +32,7 @@ class QuestionTest {
 
         question.addAnswer(new Answer(otherUser, question, "답변1"));
 
-        assertThatThrownBy(() -> question.delete(user))
+        assertThatThrownBy(() -> question.deleteAndCreateDeleteHistories(user))
                 .isInstanceOf(CannotDeleteException.class);
     }
 
@@ -43,7 +43,7 @@ class QuestionTest {
         Question question = new Question("title1", "contents1").writeBy(user);
         question.addAnswer(new Answer(user, question, "답변1"));
 
-        question.delete(user);
+        question.deleteAndCreateDeleteHistories(user);
         List<Answer> answers = question.getAnswers();
 
         assertThat(question.isDeleted()).isTrue();

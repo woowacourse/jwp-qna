@@ -61,18 +61,12 @@ public class Question extends BaseEntity {
         return this;
     }
 
-    public void delete(User loginUser) throws CannotDeleteException {
+    public DeleteHistories deleteAndCreateDeleteHistories(User loginUser) throws CannotDeleteException {
         validateUserOwner(loginUser);
         validateAnswerNotExists(loginUser);
 
         setDeleted(true);
-        deleteAnswers();
-    }
-
-    private void deleteAnswers() {
-        for (Answer answer : answers) {
-            answer.setDeleted(true);
-        }
+        return DeleteHistories.of(this);
     }
 
     private void validateAnswerNotExists(User loginUser) {
@@ -125,5 +119,4 @@ public class Question extends BaseEntity {
     public List<Answer> getAnswers() {
         return answers;
     }
-
 }
