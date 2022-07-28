@@ -34,7 +34,7 @@ class QuestionRepositoryTest {
         questions.save(expectIncluded);
 
         Question expectNotIncluded = new Question("질문의 제목입니다.", "질문의 내용입니다.").writeBy(user);
-        expectNotIncluded.delete(user);
+        expectNotIncluded.deleteBy(user);
         questions.save(expectNotIncluded);
 
         List<Question> actual = questions.findByDeletedFalse();
@@ -65,7 +65,7 @@ class QuestionRepositoryTest {
     void findByIdAndDeletedFalse_resultDoesNotExist() throws CannotDeleteException {
         User user = users.save((new User("user", "password", "사용자", "user@gmail.com")));
         Question expect = new Question("질문의 제목입니다.", "질문의 내용입니다.").writeBy(user);
-        expect.delete(user);
+        expect.deleteBy(user);
         Question saved = questions.save(expect);
 
         Optional<Question> actual = questions.findByIdAndDeletedFalse(saved.getId());
