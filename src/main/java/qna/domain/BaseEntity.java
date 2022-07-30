@@ -7,6 +7,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EntityListeners(AuditingEntityListener.class)
@@ -17,6 +18,7 @@ public abstract class BaseEntity {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     public LocalDateTime getCreatedAt() {
@@ -25,9 +27,5 @@ public abstract class BaseEntity {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
-    }
-
-    public void updateTimeOfUpdated() {
-        this.updatedAt = LocalDateTime.now();
     }
 }

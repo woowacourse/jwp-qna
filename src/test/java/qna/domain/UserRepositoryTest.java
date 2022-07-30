@@ -28,7 +28,7 @@ class UserRepositoryTest {
         User savedUser = userRepository.save(JAVAJIGI);
 
         assertThat(savedUser).usingRecursiveComparison()
-                .ignoringFields("id", "createdAt")
+                .ignoringFields("id", "createdAt", "updatedAt")
                 .isEqualTo(JAVAJIGI);
     }
 

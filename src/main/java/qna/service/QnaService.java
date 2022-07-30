@@ -44,7 +44,6 @@ public class QnaService {
         Question question = questionRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(NotFoundException::new);
         question.setContents(contents);
-        question.updateTimeOfUpdated();
     }
 
     @Transactional
