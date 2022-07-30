@@ -10,12 +10,15 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+
+import qna.JpaAuditingConfiguration;
 
 @DataJpaTest
+@Import(JpaAuditingConfiguration.class)
 class AnswerRepositoryTest {
 
     @Autowired
@@ -30,52 +33,35 @@ class AnswerRepositoryTest {
     @Autowired
     private EntityManager entityManager;
 
-    User savedUser1, savedUser2;
-    Question savedQuestion1, savedQuestion2;
-
-    @BeforeEach
-    void setUp() {
-        savedUser1 = userRepository.save(JAVAJIGI);
-        Question Q1 = new Question("title1", "contents1", savedUser1);
-        savedQuestion1 = questionRepository.save(Q1);
-
-        savedUser2 = userRepository.save(SANJIGI);
-        Question Q2 = new Question("title2", "contents2", savedUser2);
-        savedQuestion2 = questionRepository.save(Q2);
-    }
-
     @Test
     void save() {
-        Answer answer = new Answer(savedUser1, savedQuestion1, "AnswerContent");
+        User savedUser = userRepository.save(JAVAJIGI);
+        Question Q1 = new Question("questionTitle", "contents", savedUser);
+        Question savedQuestion = questionRepository.save(Q1);
+        Answer answer = new Answer(savedUser, savedQuestion, "answerContent");
 
         Answer savedAnswer = answerRepository.save(answer);
 
         assertThat(savedAnswer).usingRecursiveComparison()
-                .ignoringFields("id")
+                .ignoringFields("id", "createdAt", "updatedAt")
                 .isEqualTo(answer);
     }
 
     @Test
     void findById() {
-        Answer answer = new Answer(savedUser1, savedQuestion1, "AnswerContent");
-        Answer savedAnswer = answerRepository.save(answer);
-        entityManager.clear();
+        Answer savedAnswer = createAnswer(JAVAJIGI);
+        synchronize();
 
-        Optional<Answer> result = answerRepository.findById(answer.getId());
+        Optional<Answer> result = answerRepository.findById(savedAnswer.getId());
 
         assertThat(result).isPresent();
-        assertThat(result.get()).usingRecursiveComparison()
-                .ignoringFields("question")
-                .isEqualTo(savedAnswer);
     }
 
     @Test
     void findAll() {
-        Answer answer1 = new Answer(savedUser1, savedQuestion1, "AnswerContent");
-        answerRepository.save(answer1);
-        Answer answer2 = new Answer(savedUser2, savedQuestion2, "AnswerContent");
-        answerRepository.save(answer2);
-        entityManager.clear();
+        Answer answer1 = createAnswer(JAVAJIGI);
+        Answer answer2 = createAnswer(SANJIGI);
+        synchronize();
 
         List<Answer> result = answerRepository.findAll();
 
@@ -84,16 +70,26 @@ class AnswerRepositoryTest {
 
     @Test
     void deleteById() {
-        Answer answer = new Answer(savedUser1, savedQuestion1, "AnswerContent");
-        Answer savedAnswer = answerRepository.save(answer);
-        entityManager.clear();
+        Answer savedAnswer = createAnswer(SANJIGI);
+        synchronize();
 
         answerRepository.deleteById(savedAnswer.getId());
-        answerRepository.flush();
+        synchronize();
 
-        entityManager.clear();
         Optional<Answer> result = answerRepository.findById(savedAnswer.getId());
-
         assertThat(result).isEmpty();
+    }
+
+    Answer createAnswer(User user) {
+        User savedUser = userRepository.save(user);
+        Question Q1 = new Question("questionTitle", "contents", savedUser);
+        Question savedQuestion = questionRepository.save(Q1);
+        Answer answer = new Answer(savedUser, savedQuestion, "answerContent");
+        return answerRepository.save(answer);
+    }
+
+    void synchronize() {
+        entityManager.flush();
+        entityManager.clear();
     }
 }
