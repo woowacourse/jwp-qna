@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import org.springframework.data.annotation.LastModifiedDate;
+import qna.CannotDeleteException;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
@@ -63,8 +64,15 @@ public class Answer extends BaseEntity {
     }
 
     public DeleteHistory deleteSoft() {
-        setDeleted(true);
+        validate();
+        this.deleted = true;
         return new DeleteHistory(ContentType.ANSWER, getId(), getWriter());
+    }
+
+    private void validate() {
+        if (this.deleted) {
+            throw new CannotDeleteException("이미 삭제된 질문입니다.");
+        }
     }
 
     public boolean isOwner(User writer) {

@@ -85,8 +85,15 @@ public class Question extends BaseEntity {
     }
 
     public DeleteHistory deleteSoft() {
+        validate();
         this.deleted = true;
         return new DeleteHistory(ContentType.QUESTION, getId(), getWriter());
+    }
+
+    private void validate() {
+        if (this.deleted) {
+            throw new CannotDeleteException("이미 삭제된 질문입니다.");
+        }
     }
 
     public boolean isOwner(User writer) {
