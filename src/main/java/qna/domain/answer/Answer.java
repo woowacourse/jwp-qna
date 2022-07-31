@@ -75,10 +75,6 @@ public class Answer extends EntityHistory {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
     public DeleteHistory delete() {
         this.deleted = true;
         return DeleteHistory.of(this);

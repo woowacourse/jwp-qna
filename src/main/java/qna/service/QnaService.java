@@ -1,13 +1,11 @@
 package qna.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import qna.domain.answer.Answer;
-import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.question.Question;
 import qna.domain.question.QuestionRepository;
 import qna.domain.user.User;
@@ -40,7 +38,7 @@ public class QnaService {
         validateQuestionMaker(loginUser, question);
         validateOnlyAuthorAnswers(loginUser, question.getAnswers());
 
-        saveDeleteHistories(question);
+        deleteHistoryService.saveAll(question.delete());
     }
 
     private void validateQuestionMaker(User loginUser, Question question) throws CannotDeleteException {
@@ -55,15 +53,5 @@ public class QnaService {
                 throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
             }
         }
-    }
-
-    private void saveDeleteHistories(Question question) {
-        question.toDeleted();
-        List<DeleteHistory> deleteHistories = question.getAnswers()
-                .stream()
-                .map(DeleteHistory::of)
-                .collect(Collectors.toList());
-        deleteHistories.add(DeleteHistory.of(question));
-        deleteHistoryService.saveAll(deleteHistories);
     }
 }

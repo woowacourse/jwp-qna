@@ -96,13 +96,6 @@ public class Question extends EntityHistory {
         return answers;
     }
 
-    public void toDeleted() {
-        this.deleted = true;
-        for (Answer answer : this.answers) {
-            answer.setDeleted(true);
-        }
-    }
-
     public List<DeleteHistory> delete() {
         this.deleted = true;
         List<DeleteHistory> deleteHistories = answers.stream()
