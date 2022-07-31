@@ -49,4 +49,16 @@ class QuestionTest {
         assertThat(question.isDeleted()).isTrue();
         assertThat(answers.get(0).isDeleted()).isTrue();
     }
+
+    @Test
+    @DisplayName("질문을 중복해서 삭제하려고 하면 예외를 반환한다")
+    void deleteFail_DuplicatedDelete() {
+        User user = UserFixture.JAVAJIGI;
+        Question question = new Question("title1", "contents1").writeBy(user);
+        question.addAnswer(new Answer(user, question, "답변1"));
+        question.deleteAndCreateDeleteHistories(user);
+
+        assertThatThrownBy(() -> question.deleteAndCreateDeleteHistories(user))
+                .isInstanceOf(CannotDeleteException.class);
+    }
 }
