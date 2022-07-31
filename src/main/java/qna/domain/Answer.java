@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import qna.CannotDeleteException;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
@@ -57,10 +58,6 @@ public class Answer extends TimeStamped {
     protected Answer() {
     }
 
-    public boolean isOwner(User writer) {
-        return this.writer.equals(writer);
-    }
-
     public void toQuestion(Question question) {
         this.question = question;
     }
@@ -69,8 +66,17 @@ public class Answer extends TimeStamped {
         return deleted;
     }
 
-    public void delete() {
-        this.deleted = true;
+    public void deleteBy(User user) throws CannotDeleteException {
+        if (!deleted) {
+            checkIsWrittenBy(user);
+            this.deleted = true;
+        }
+    }
+
+    private void checkIsWrittenBy(User user) throws CannotDeleteException {
+        if (!this.writer.equals(user)) {
+            throw new CannotDeleteException("답변은 작성자 본인만 삭제할 수 있습니다");
+        }
     }
 
     public Long getId() {

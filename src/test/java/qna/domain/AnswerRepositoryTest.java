@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
+import qna.CannotDeleteException;
 
 @TestConstructor(autowireMode = AutowireMode.ALL)
 @DataJpaTest
@@ -40,7 +41,7 @@ class AnswerRepositoryTest {
 
     @DisplayName("Question Id가 알치하고 삭제되지 않은 모든 Answer 조회")
     @Test
-    void findByQuestionIdAndDeletedFalse() {
+    void findByQuestionIdAndDeletedFalse() throws CannotDeleteException {
         User user = users.save((new User("user", "password", "사용자", "user@gmail.com")));
         Question question = questions.save(new Question("질문입니다.", "질문의 내용입니다.").writeBy(user));
 
@@ -48,7 +49,7 @@ class AnswerRepositoryTest {
         answers.save(expectedIncluded);
 
         Answer expectedNotIncluded = new Answer(user, question, "질문에 대한 삭제 될 답변입니다.");
-        expectedNotIncluded.delete();
+        expectedNotIncluded.deleteBy(user);
         answers.save(expectedNotIncluded);
 
         List<Answer> actual = answers.findByQuestionIdAndDeletedFalse(question.getId());
@@ -78,12 +79,12 @@ class AnswerRepositoryTest {
 
     @DisplayName("Id가 일치하고 삭제되지 않은 Answer를 조회하고, 값이 존재하지 않음")
     @Test
-    void findByIdAndDeletedFalse_resultDoesNotExist() {
+    void findByIdAndDeletedFalse_resultDoesNotExist() throws CannotDeleteException {
         User user = users.save((new User("user", "password", "사용자", "user@gmail.com")));
         Question question = questions.save(new Question("질문입니다.", "질문의 내용입니다.").writeBy(user));
 
         Answer expectNotFound = new Answer(user, question, "질문에 대한 삭제 될 답변입니다.");
-        expectNotFound.delete();
+        expectNotFound.deleteBy(user);
         Answer savedAnswer = answers.save(expectNotFound);
 
         Optional<Answer> actual = answers.findByIdAndDeletedFalse(savedAnswer.getId());

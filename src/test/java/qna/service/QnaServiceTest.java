@@ -29,7 +29,7 @@ class QnaServiceTest {
 
     private static final User USER_JAVAJIGI = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
     private static final User USER_SANJIGI = new User(2L, "sanjigi", "password", "name", "sanjigi@slipp.net");
-    private static final Question QUESTION_1 = new Question("title1", "contents1").writeBy(USER_JAVAJIGI);
+    private static final Question QUESTION = new Question("title", "contents").writeBy(USER_JAVAJIGI);
 
     @Mock
     private QuestionRepository questionRepository;
@@ -85,7 +85,7 @@ class QnaServiceTest {
 
     @Test
     public void delete_답변_중_다른_사람이_쓴_글() {
-        Answer answer2 = new Answer(2L, USER_SANJIGI, QUESTION_1, "Answers Contents1");
+        Answer answer2 = new Answer(2L, USER_SANJIGI, QUESTION, "Answers Contents1");
         question.addAnswer(answer2);
 
         when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));

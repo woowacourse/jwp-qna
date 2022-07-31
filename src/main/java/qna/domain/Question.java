@@ -72,7 +72,7 @@ public class Question extends TimeStamped {
     public void deleteBy(User user) throws CannotDeleteException {
         checkIsWrittenBy(user);
 
-        answers.deleteAll(user);
+        answers.deleteAllBy(user);
         this.deleted = true;
     }
 

@@ -70,7 +70,7 @@ class QuestionTest {
         Question question = new Question("게시글", "게시글 내용").writeBy(writer);
         Answer answer = new Answer(other, question, "다른 사람이 쓴 답변입니다.");
         question.addAnswer(answer);
-        answer.delete();
+        answer.deleteBy(other);
 
         assertThat(question.isDeleted()).isFalse();
         question.deleteBy(writer);
