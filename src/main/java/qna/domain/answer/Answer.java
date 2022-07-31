@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import qna.domain.EntityHistory;
 import qna.domain.deletehistory.DeleteHistory;
@@ -20,6 +21,7 @@ import qna.exception.UnAuthorizedException;
 
 @Table(name = "answer")
 @Entity
+@SQLDelete(sql = "UPDATE answer SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 public class Answer extends EntityHistory {
 

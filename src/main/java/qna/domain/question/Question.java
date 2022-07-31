@@ -13,6 +13,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import qna.domain.EntityHistory;
 import qna.domain.answer.Answer;
@@ -21,6 +22,7 @@ import qna.domain.user.User;
 
 @Table(name = "question")
 @Entity
+@SQLDelete(sql = "UPDATE question SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 public class Question extends EntityHistory {
 

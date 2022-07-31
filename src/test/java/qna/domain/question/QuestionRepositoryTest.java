@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import qna.domain.user.User;
 import qna.domain.user.UserRepository;
 
@@ -23,6 +24,9 @@ class QuestionRepositoryTest {
 
     @Autowired
     private UserRepository users;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     /**
      * JPA 엔티티 위에 @Where(clause = "deleted=false")를 붙였으므로, 디폴트로 deleted 값이 거짓인 데이터만 조회됨
@@ -54,5 +58,23 @@ class QuestionRepositoryTest {
         Optional<Question> actual2 = questions.findById(9999L);
         Optional<Question> expected2 = Optional.ofNullable(null);
         assertThat(actual2).isEqualTo(expected2);
+    }
+
+    /**
+     * JPA 엔티티 위의 @SQLDelete를 통해 delete 메서드 호출시 다른 SQL문이 실행되도록 덮어씀
+     */
+    @Test
+    void delete_메서드는_데이터를_삭제하지_않고_deleted_컬럼의_값만_수정함() {
+        User newUser = users.save(JAVAJIGI);
+        final Question 문제 = new Question("title1", "contents1", newUser);
+        questions.save(문제);
+
+        assertThat(문제.isDeleted()).isFalse();
+        questions.delete(문제);
+        questions.flush();
+
+        boolean actual = jdbcTemplate.queryForObject("SELECT deleted FROM question WHERE id = " + 문제.getId(),
+                Boolean.class);
+        assertThat(actual).isTrue();
     }
 }

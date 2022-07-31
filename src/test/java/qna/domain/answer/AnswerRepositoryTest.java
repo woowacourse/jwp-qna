@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import qna.domain.question.Question;
 import qna.domain.question.QuestionRepository;
 import qna.domain.user.User;
@@ -29,6 +30,9 @@ class AnswerRepositoryTest {
 
     @Autowired
     private UserRepository users;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     private Question question1;
     private Question question2;
@@ -72,5 +76,21 @@ class AnswerRepositoryTest {
         Optional<Answer> actual2 = answers.findById(9999L);
         Optional<Answer> expected2 = Optional.ofNullable(null);
         assertThat(actual2).isEqualTo(expected2);
+    }
+
+    /**
+     * JPA 엔티티 위의 @SQLDelete를 통해 delete 메서드 호출시 다른 SQL문이 실행되도록 덮어씀
+     */
+    @Test
+    void delete_메서드는_데이터를_삭제하지_않고_deleted_컬럼의_값만_수정() {
+        final Answer 답 = new Answer(user1, question1, "contents1");
+        answers.save(답);
+
+        assertThat(답.isDeleted()).isFalse();
+        answers.delete(답);
+        answers.flush();
+
+        boolean actual = jdbcTemplate.queryForObject("SELECT deleted FROM answer WHERE id = " + 답.getId(), Boolean.class);
+        assertThat(actual).isTrue();
     }
 }
