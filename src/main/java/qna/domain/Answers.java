@@ -18,10 +18,6 @@ public class Answers {
     public Answers() {
     }
 
-    public Answers(List<Answer> values) {
-        this.values = values;
-    }
-
     public List<Answer> getValues() {
         return values;
     }
