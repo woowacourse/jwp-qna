@@ -80,6 +80,10 @@ public class Answer extends TimeStampEntity {
         this.contents = contents;
     }
 
+    public Question getQuestion() {
+        return question;
+    }
+
     public Long getQuestionId() {
         return this.question.getId();
     }
