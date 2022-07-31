@@ -88,6 +88,19 @@ class QuestionTest {
 
             assertThat(question.getAnswers()).isEmpty();
         }
+
+        @Test
+        void question에서_연관된_answers_중_deleted_값이_false인_데이터는_조회대상에서_자동으로_누락() {
+            Answer deletedAnswer = new Answer(user, newQuestion, "deleted content");
+            deletedAnswer.delete();
+            answers.save(new Answer(user, newQuestion, "contents"));
+            answers.saveAndFlush(deletedAnswer);
+            entityManager.clear();
+
+            Question question = questions.findAll().get(0);
+
+            assertThat(question.getAnswers()).hasSize(1);
+        }
     }
 
     @DisplayName("delete 메서드 상태 변화 및 반환값 검증")
