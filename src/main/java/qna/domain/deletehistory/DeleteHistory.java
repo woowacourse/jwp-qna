@@ -10,8 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import qna.domain.answer.Answer;
+import qna.domain.question.Question;
 import qna.domain.user.User;
 
 @Table(name = "delete_history")
@@ -27,7 +28,7 @@ public class DeleteHistory {
     @Enumerated(EnumType.STRING)
     private ContentType contentType;
 
-    private LocalDateTime createDate = LocalDateTime.now();
+    private final LocalDateTime createDate = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "deleted_by_id")
@@ -36,12 +37,20 @@ public class DeleteHistory {
     protected DeleteHistory() {
     }
 
-    public DeleteHistory(ContentType contentType, Long contentId, User deleter, LocalDateTime createDate) {
+    public DeleteHistory(ContentType contentType, Long contentId, User deleter) {
         this.contentType = contentType;
         this.contentId = contentId;
         this.deleter = deleter;
-        this.createDate = createDate;
     }
+
+    public static DeleteHistory of(Question question) {
+        return new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriter());
+    }
+
+    public static DeleteHistory of(Answer answer) {
+        return new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter());
+    }
+
 
     public Long getId() {
         return id;
