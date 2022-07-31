@@ -61,22 +61,9 @@ public class Question extends BaseEntity {
     }
 
     public DeleteHistories deleteAndCreateDeleteHistories(User loginUser) throws CannotDeleteException {
-        validateUserOwner(loginUser);
-        validateAnswerNotExists(loginUser);
-
-        DeleteHistory questionDeleteHistory = this.deleteSoft();
-        DeleteHistories answersDeleteHistories = answers.deleteSoft();
+        DeleteHistory questionDeleteHistory = this.deleteSoft(loginUser);
+        DeleteHistories answersDeleteHistories = answers.deleteSoft(loginUser);
         return DeleteHistories.from(questionDeleteHistory, answersDeleteHistories);
-    }
-
-    private void validateAnswerNotExists(User loginUser) {
-        answers.validateAnswerNotExists(loginUser);
-    }
-
-    private void validateUserOwner(User loginUser) {
-        if (!isOwner(loginUser)) {
-            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
-        }
     }
 
     public void addAnswer(Answer answer) {
@@ -84,16 +71,20 @@ public class Question extends BaseEntity {
         answer.toQuestion(this);
     }
 
-    public DeleteHistory deleteSoft() {
-        validate();
+    public DeleteHistory deleteSoft(User loginUser) {
+        validate(loginUser);
         this.deleted = true;
         return new DeleteHistory(ContentType.QUESTION, getId(), getWriter());
     }
 
-    private void validate() {
+    private void validate(User loginUser) {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
         if (this.deleted) {
             throw new CannotDeleteException("이미 삭제된 질문입니다.");
         }
+        answers.validateAnswerNotExists(loginUser);
     }
 
     public boolean isOwner(User writer) {

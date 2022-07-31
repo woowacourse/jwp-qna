@@ -38,10 +38,10 @@ public class Answers {
         }
     }
 
-    public DeleteHistories deleteSoft() {
+    public DeleteHistories deleteSoft(User loginUser) {
         DeleteHistories deleteHistories = new DeleteHistories();
         for (Answer answer : values) {
-            DeleteHistory deleteHistory = answer.deleteSoft();
+            DeleteHistory deleteHistory = answer.deleteSoft(loginUser);
             deleteHistories.add(deleteHistory);
         }
         return deleteHistories;

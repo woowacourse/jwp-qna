@@ -63,13 +63,16 @@ public class Answer extends BaseEntity {
         this.contents = contents;
     }
 
-    public DeleteHistory deleteSoft() {
-        validate();
+    public DeleteHistory deleteSoft(User loginUser) {
+        validate(loginUser);
         this.deleted = true;
         return new DeleteHistory(ContentType.ANSWER, getId(), getWriter());
     }
 
-    private void validate() {
+    private void validate(User loginUser) {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
         if (this.deleted) {
             throw new CannotDeleteException("이미 삭제된 질문입니다.");
         }
