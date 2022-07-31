@@ -36,7 +36,7 @@ class DeleteHistoryRepositoryTest {
 
         Question expect = new Question("title1", "contents1").writeBy(savedUser);
         Question savedQuestion = questions.save(expect);
-        savedQuestion.setDeleted(true);
+        savedQuestion.delete(true);
 
         DeleteHistory deleteHistory = new DeleteHistory(ContentType.QUESTION, savedQuestion.getId(), savedUser);
 

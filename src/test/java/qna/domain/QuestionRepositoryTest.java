@@ -63,7 +63,7 @@ class QuestionRepositoryTest {
         Question question = new Question("title1", "contents1").writeBy(savedUser);
         Question savedQuestion = questions.save(question);
 
-        savedQuestion.setDeleted(true);
+        savedQuestion.delete(true);
 
         Optional<Question> found = questions.findByIdAndDeletedFalse(savedQuestion.getId());
 

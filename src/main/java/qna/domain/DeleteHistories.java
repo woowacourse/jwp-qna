@@ -7,30 +7,26 @@ public class DeleteHistories {
 
     private final List<DeleteHistory> values;
 
-    private DeleteHistories(List<DeleteHistory> deleteHistories) {
+    public DeleteHistories(List<DeleteHistory> deleteHistories) {
         this.values = deleteHistories;
     }
 
-    public static DeleteHistories of(Question question) {
+    public DeleteHistories() {
+        this.values = new ArrayList<>();
+    }
+
+    public static DeleteHistories from(DeleteHistory questionDeleteHistory, DeleteHistories answerDeleteHistories) {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
-        addQuestion(question, deleteHistories);
-        addAnswers(question.getAnswers(), deleteHistories);
+        deleteHistories.add(questionDeleteHistory);
+        deleteHistories.addAll(answerDeleteHistories.getValues());
         return new DeleteHistories(deleteHistories);
-    }
-
-    private static void addQuestion(Question question, List<DeleteHistory> deleteHistories) {
-        DeleteHistory deleteHistory = question.deleteSoft();
-        deleteHistories.add(deleteHistory);
-    }
-
-    private static void addAnswers(List<Answer> answers, List<DeleteHistory> deleteHistories) {
-        for (Answer answer : answers) {
-            DeleteHistory deleteHistory = answer.deleteSoft();
-            deleteHistories.add(deleteHistory);
-        }
     }
 
     public List<DeleteHistory> getValues() {
         return values;
+    }
+
+    public void add(DeleteHistory deleteHistory) {
+        this.values.add(deleteHistory);
     }
 }

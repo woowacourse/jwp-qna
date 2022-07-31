@@ -64,7 +64,9 @@ public class Question extends BaseEntity {
         validateUserOwner(loginUser);
         validateAnswerNotExists(loginUser);
 
-        return DeleteHistories.of(this);
+        DeleteHistory questionDeleteHistory = this.deleteSoft();
+        DeleteHistories answersDeleteHistories = answers.deleteSoft();
+        return DeleteHistories.from(questionDeleteHistory, answersDeleteHistories);
     }
 
     private void validateAnswerNotExists(User loginUser) {
@@ -83,7 +85,7 @@ public class Question extends BaseEntity {
     }
 
     public DeleteHistory deleteSoft() {
-        setDeleted(true);
+        this.deleted = true;
         return new DeleteHistory(ContentType.QUESTION, getId(), getWriter());
     }
 
@@ -111,7 +113,7 @@ public class Question extends BaseEntity {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
+    public void delete(boolean deleted) {
         this.deleted = deleted;
     }
 
@@ -126,6 +128,8 @@ public class Question extends BaseEntity {
                 ", title='" + title + '\'' +
                 ", updatedAt=" + updatedAt +
                 ", contents='" + contents + '\'' +
+                ", writer=" + writer +
+                ", answers=" + answers +
                 ", deleted=" + deleted +
                 '}';
     }

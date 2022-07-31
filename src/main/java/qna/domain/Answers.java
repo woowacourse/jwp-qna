@@ -37,4 +37,13 @@ public class Answers {
             }
         }
     }
+
+    public DeleteHistories deleteSoft() {
+        DeleteHistories deleteHistories = new DeleteHistories();
+        for (Answer answer : values) {
+            DeleteHistory deleteHistory = answer.deleteSoft();
+            deleteHistories.add(deleteHistory);
+        }
+        return deleteHistories;
+    }
 }
