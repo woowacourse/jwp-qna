@@ -1,5 +1,6 @@
 package qna.domain.answer;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,12 +11,11 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import qna.domain.EntityHistory;
+import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.question.Question;
 import qna.domain.user.User;
 import qna.exception.NotFoundException;
 import qna.exception.UnAuthorizedException;
-
-import java.util.Objects;
 
 @Table(name = "answer")
 @Entity
@@ -77,6 +77,11 @@ public class Answer extends EntityHistory {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public DeleteHistory delete() {
+        this.deleted = true;
+        return DeleteHistory.of(this);
     }
 
     public User getWriter() {

@@ -2,6 +2,7 @@ package qna.domain.question;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import qna.domain.EntityHistory;
 import qna.domain.answer.Answer;
+import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.user.User;
 
 @Table(name = "question")
@@ -99,5 +101,14 @@ public class Question extends EntityHistory {
         for (Answer answer : this.answers) {
             answer.setDeleted(true);
         }
+    }
+
+    public List<DeleteHistory> delete() {
+        this.deleted = true;
+        List<DeleteHistory> deleteHistories = answers.stream()
+                .map(Answer::delete)
+                .collect(Collectors.toList());
+        deleteHistories.add(DeleteHistory.of(this));
+        return deleteHistories;
     }
 }

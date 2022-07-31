@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import qna.domain.answer.Answer;
 import qna.domain.answer.AnswerRepository;
+import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.user.User;
 import qna.domain.user.UserRepository;
 
@@ -38,7 +39,7 @@ class QuestionTest {
     void setUp() {
         user = users.save(new User("javajigi", "password", "name", "javajigi@slipp.net"));
         newQuestion = questions.save(new Question("title1", "contents1", user));
-       }
+    }
 
     @Test
     void getWriterId_메서드처럼_클래스_내부에서_연관관계를_호출하려는_경우에도_SELECT문_실행하여_지연로딩_발생() {
@@ -80,5 +81,29 @@ class QuestionTest {
         Question question = questions.findAll().get(0);
 
         assertThat(question.getAnswers()).isEmpty();
+    }
+
+    @Test
+    void delete_메서드는_현재_데이터를_삭제된_상태로_변경() {
+        Question question = new Question("title2", "contents2", user);
+
+        question.delete();
+
+        assertThat(question.isDeleted()).isEqualTo(true);
+    }
+
+    @Test
+    void delete_메서드는_현재_데이터_자체와_연관된_데이터에_대한_DeleteHistory_리스트_반환() {
+        Question question = new Question("title2", "contents2", user);
+        Answer answer1 = new Answer(user, newQuestion, "contents1");
+        Answer answer2 = new Answer(user, newQuestion, "contents2");
+        question.addAnswer(answer1);
+        question.addAnswer(answer2);
+
+        List<DeleteHistory> actual = question.delete();
+        List<DeleteHistory> expected = List.of(DeleteHistory.of(answer1),
+                DeleteHistory.of(answer2), DeleteHistory.of(question));
+
+        assertThat(actual).isEqualTo(expected);
     }
 }
