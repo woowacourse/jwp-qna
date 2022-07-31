@@ -118,4 +118,15 @@ public class Question extends BaseEntity {
     public List<Answer> getAnswers() {
         return answers.getValues();
     }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", updatedAt=" + updatedAt +
+                ", contents='" + contents + '\'' +
+                ", deleted=" + deleted +
+                '}';
+    }
 }

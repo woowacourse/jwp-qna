@@ -102,4 +102,16 @@ public class Answer extends BaseEntity {
     public void setQuestion(Question question) {
         this.question = question;
     }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id=" + id +
+                ", deleted=" + deleted +
+                ", question=" + question +
+                ", updatedAt=" + updatedAt +
+                ", writer=" + writer +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }
