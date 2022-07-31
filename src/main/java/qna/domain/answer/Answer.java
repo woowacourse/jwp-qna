@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Where;
 import qna.domain.EntityHistory;
 import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.question.Question;
@@ -19,6 +20,7 @@ import qna.exception.UnAuthorizedException;
 
 @Table(name = "answer")
 @Entity
+@Where(clause = "deleted=false")
 public class Answer extends EntityHistory {
 
     @Id
