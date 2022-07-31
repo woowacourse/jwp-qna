@@ -63,10 +63,6 @@ public class Answer extends EntityHistory {
         return writer.equals(loginUser);
     }
 
-    public void toQuestion(Question question) {
-        this.question = question;
-    }
-
     public Long getId() {
         return id;
     }

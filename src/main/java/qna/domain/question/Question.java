@@ -59,7 +59,7 @@ public class Question extends EntityHistory {
     }
 
     public void addAnswer(Answer answer) {
-        answer.toQuestion(this);
+        answers.add(answer);
     }
 
     public Long getId() {
@@ -92,5 +92,12 @@ public class Question extends EntityHistory {
 
     public List<Answer> getAnswers() {
         return answers;
+    }
+
+    public void toDeleted() {
+        this.deleted = true;
+        for (Answer answer : this.answers) {
+            answer.setDeleted(true);
+        }
     }
 }

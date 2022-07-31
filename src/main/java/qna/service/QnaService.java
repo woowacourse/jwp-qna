@@ -1,13 +1,12 @@
 package qna.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import qna.domain.answer.Answer;
-import qna.domain.answer.AnswerRepository;
 import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.question.Question;
 import qna.domain.question.QuestionRepository;
@@ -21,14 +20,11 @@ public class QnaService {
     private static final Logger log = LoggerFactory.getLogger(QnaService.class);
 
     private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
     private final DeleteHistoryService deleteHistoryService;
 
     public QnaService(QuestionRepository questionRepository,
-                      AnswerRepository answerRepository,
                       DeleteHistoryService deleteHistoryService) {
         this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
         this.deleteHistoryService = deleteHistoryService;
     }
 
@@ -39,14 +35,12 @@ public class QnaService {
     }
 
     @Transactional
-    public void deleteQuestion(User loginUser, Long questionId) throws CannotDeleteException {
+    public void deleteQuestion(User loginUser, Long questionId) {
         Question question = findQuestionById(questionId);
         validateQuestionMaker(loginUser, question);
+        validateOnlyAuthorAnswers(loginUser, question.getAnswers());
 
-        List<Answer> answers = answerRepository.findByQuestionAndDeletedFalse(question);
-        validateOnlyAuthorAnswers(loginUser, answers);
-
-        saveDeleteHistories(question, answers);
+        saveDeleteHistories(question);
     }
 
     private void validateQuestionMaker(User loginUser, Question question) throws CannotDeleteException {
@@ -63,14 +57,13 @@ public class QnaService {
         }
     }
 
-    private void saveDeleteHistories(Question question, List<Answer> answers) {
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-        question.setDeleted(true);
+    private void saveDeleteHistories(Question question) {
+        question.toDeleted();
+        List<DeleteHistory> deleteHistories = question.getAnswers()
+                .stream()
+                .map(DeleteHistory::of)
+                .collect(Collectors.toList());
         deleteHistories.add(DeleteHistory.of(question));
-        for (Answer answer : answers) {
-            answer.setDeleted(true);
-            deleteHistories.add(DeleteHistory.of(answer));
-        }
         deleteHistoryService.saveAll(deleteHistories);
     }
 }
