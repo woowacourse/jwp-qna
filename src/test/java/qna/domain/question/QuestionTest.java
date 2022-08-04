@@ -1,6 +1,7 @@
 package qna.domain.question;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -16,6 +17,7 @@ import qna.domain.answer.AnswerRepository;
 import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.user.User;
 import qna.domain.user.UserRepository;
+import qna.exception.CannotDeleteException;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DataJpaTest
@@ -103,16 +105,16 @@ class QuestionTest {
         }
     }
 
-    @DisplayName("delete 메서드 상태 변화 및 반환값 검증")
+    @DisplayName("delete 메서드 검증")
     @Nested
-    class DeleteTest {
+    class DeleteByTest {
 
         @Test
         void 현재_데이터를_삭제된_상태로_변경() {
             User user = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
             Question question = new Question(1L, "title2", "contents2", user);
 
-            question.delete();
+            question.deleteBy(user);
 
             assertThat(question.isDeleted()).isEqualTo(true);
         }
@@ -126,11 +128,33 @@ class QuestionTest {
             question.addAnswer(answer1);
             question.addAnswer(answer2);
 
-            List<DeleteHistory> actual = question.delete();
+            List<DeleteHistory> actual = question.deleteBy(user);
             List<DeleteHistory> expected = List.of(DeleteHistory.of(answer1),
                     DeleteHistory.of(answer2), DeleteHistory.of(question));
 
             assertThat(actual).isEqualTo(expected);
+        }
+
+        @Test
+        void 다른_사람이_쓴_글을_제거하려는_경우_예외발생() {
+            User user = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
+            Question question = new Question(1L, "title2", "contents2", user);
+            User someoneElse = new User(1L, "kotlinjigi", "password", "jason", "jason@slipp.net");
+
+            assertThatThrownBy(() -> question.deleteBy(someoneElse))
+                    .isInstanceOf(CannotDeleteException.class);
+        }
+
+        @Test
+        void 답변_중_작성자_이외의_사람이_쓴_글이_포함된_경우_예외발생() {
+            User pobi = new User(1L, "javajigi", "password", "pobi", "javajigi@slipp.net");
+            User jason = new User(2L, "kotlinjigi", "password", "jason", "jason@slipp.net");
+            Question question = new Question(1L,"title2", "contents2", pobi);
+            Answer answer = new Answer(1L, jason, question, "Answers Contents1");
+            question.addAnswer(answer);
+
+            assertThatThrownBy(() -> question.deleteBy(pobi))
+                    .isInstanceOf(CannotDeleteException.class);
         }
     }
 }

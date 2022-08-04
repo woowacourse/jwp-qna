@@ -19,6 +19,7 @@ import qna.domain.EntityHistory;
 import qna.domain.answer.Answer;
 import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.user.User;
+import qna.exception.CannotDeleteException;
 
 @Table(name = "question")
 @Entity
@@ -107,6 +108,32 @@ public class Question extends EntityHistory {
                 .collect(Collectors.toList());
         deleteHistories.add(DeleteHistory.of(this));
         return deleteHistories;
+    }
+
+    public List<DeleteHistory> deleteBy(User user) {
+        validateQuestionMaker(user);
+        validateQuestionContainsOnlyAuthorAnswers(user);
+        this.deleted = true;
+        List<DeleteHistory> deleteHistories = answers.stream()
+                .map(Answer::delete)
+                .collect(Collectors.toList());
+        deleteHistories.add(DeleteHistory.of(this));
+        return deleteHistories;
+    }
+
+    private void validateQuestionMaker(User loginUser) {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+    }
+
+    private void validateQuestionContainsOnlyAuthorAnswers(User loginUser) {
+        boolean containsNonAuthorAnswer = answers.stream()
+                .anyMatch(answer -> !answer.isOwner(loginUser));
+
+        if (containsNonAuthorAnswer) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
     }
 
     @Override
