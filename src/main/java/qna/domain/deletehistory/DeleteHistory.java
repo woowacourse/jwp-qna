@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import qna.domain.answer.Answer;
-import qna.domain.question.Question;
 import qna.domain.user.User;
 
 @Table(name = "delete_history")
@@ -42,15 +40,6 @@ public class DeleteHistory {
         this.contentId = contentId;
         this.deleter = deleter;
     }
-
-    public static DeleteHistory of(Question question) {
-        return new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriter());
-    }
-
-    public static DeleteHistory of(Answer answer) {
-        return new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter());
-    }
-
 
     public Long getId() {
         return id;
