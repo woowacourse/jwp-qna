@@ -101,15 +101,6 @@ public class Question extends EntityHistory {
         return answers;
     }
 
-    public List<DeleteHistory> delete() {
-        this.deleted = true;
-        List<DeleteHistory> deleteHistories = answers.stream()
-                .map(Answer::delete)
-                .collect(Collectors.toList());
-        deleteHistories.add(DeleteHistory.of(this));
-        return deleteHistories;
-    }
-
     public List<DeleteHistory> deleteBy(User user) {
         validateQuestionMaker(user);
         validateQuestionContainsOnlyAuthorAnswers(user);
