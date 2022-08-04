@@ -39,7 +39,7 @@ class AnswerTest {
     @Test
     void delete_메서드는_현재_데이터에_대한_DeleteHistory_반환() {
         DeleteHistory actual = answer.delete();
-        DeleteHistory expected = DeleteHistory.of(answer);
+        DeleteHistory expected = answer.toDeleteHistory();
 
         assertThat(actual).isEqualTo(expected);
     }

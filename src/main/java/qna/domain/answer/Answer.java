@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import qna.domain.EntityHistory;
+import qna.domain.deletehistory.ContentType;
 import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.question.Question;
 import qna.domain.user.User;
@@ -81,7 +82,11 @@ public class Answer extends EntityHistory {
 
     public DeleteHistory delete() {
         this.deleted = true;
-        return DeleteHistory.of(this);
+        return toDeleteHistory();
+    }
+
+    public DeleteHistory toDeleteHistory() {
+        return new DeleteHistory(ContentType.ANSWER, id, writer);
     }
 
     public User getWriter() {
