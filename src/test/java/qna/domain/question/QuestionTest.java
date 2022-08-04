@@ -34,18 +34,18 @@ class QuestionTest {
     @Autowired
     private EntityManager entityManager;
 
-    private User user;
-    private Question newQuestion;
-
-    @BeforeEach
-    void setUp() {
-        user = users.save(new User("javajigi", "password", "name", "javajigi@slipp.net"));
-        newQuestion = questions.save(new Question("title1", "contents1", user));
-    }
-
     @DisplayName("findAll 메서드 호출시, SELECT문 실행 여부 및 대상 검증")
     @Nested
     class FindAllTest {
+
+        private User user;
+        private Question newQuestion;
+
+        @BeforeEach
+        void setUp() {
+            user = users.save(new User("javajigi", "password", "name", "javajigi@slipp.net"));
+            newQuestion = questions.save(new Question("title1", "contents1", user));
+        }
 
         @Test
         void getWriterId_메서드처럼_클래스_내부에서_연관관계를_호출하려는_경우에도_SELECT문_실행하여_지연로딩_발생() {
@@ -108,8 +108,9 @@ class QuestionTest {
     class DeleteTest {
 
         @Test
-        void delete_메서드는_현재_데이터를_삭제된_상태로_변경() {
-            Question question = new Question("title2", "contents2", user);
+        void 현재_데이터를_삭제된_상태로_변경() {
+            User user = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
+            Question question = new Question(1L, "title2", "contents2", user);
 
             question.delete();
 
@@ -117,10 +118,11 @@ class QuestionTest {
         }
 
         @Test
-        void delete_메서드는_현재_데이터_자체와_연관된_데이터에_대한_DeleteHistory_리스트_반환() {
-            Question question = new Question("title2", "contents2", user);
-            Answer answer1 = new Answer(user, newQuestion, "contents1");
-            Answer answer2 = new Answer(user, newQuestion, "contents2");
+        void 현재_데이터_자체와_연관된_데이터에_대한_DeleteHistory_리스트_반환() {
+            User user = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
+            Question question = new Question(1L, "title2", "contents2", user);
+            Answer answer1 = new Answer(1L, user, question, "contents1");
+            Answer answer2 = new Answer(2L, user, question, "contents2");
             question.addAnswer(answer1);
             question.addAnswer(answer2);
 
