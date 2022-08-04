@@ -14,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import qna.domain.answer.Answer;
-import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.question.Question;
 import qna.domain.question.QuestionRepository;
 import qna.domain.user.UserTest;
@@ -50,7 +49,7 @@ class QnaServiceTest {
         qnaService.deleteQuestion(UserTest.JAVAJIGI, question.getId());
 
         assertThat(question.isDeleted()).isTrue();
-        verifyDeleteHistories();
+        verify(deleteHistoryService).saveAll(List.of(answer.toDeleteHistory(), question.toDeleteHistory()));
     }
 
     @Test
@@ -59,33 +58,5 @@ class QnaServiceTest {
 
         assertThatThrownBy(() -> qnaService.deleteQuestion(UserTest.SANJIGI, question.getId()))
                 .isInstanceOf(CannotDeleteException.class);
-    }
-
-    @Test
-    public void delete_성공_질문자_답변자_같음() {
-        when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
-
-        qnaService.deleteQuestion(UserTest.JAVAJIGI, question.getId());
-
-        assertThat(question.isDeleted()).isTrue();
-        assertThat(answer.isDeleted()).isTrue();
-        verifyDeleteHistories();
-    }
-
-    @Test
-    public void delete_답변_중_다른_사람이_쓴_글() {
-        Question question = new Question(1L, "title1", "contents1", UserTest.JAVAJIGI);
-        Answer answer2 = new Answer(2L, UserTest.SANJIGI, question, "Answers Contents1");
-        question.addAnswer(answer2);
-
-        when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
-
-        assertThatThrownBy(() -> qnaService.deleteQuestion(UserTest.JAVAJIGI, question.getId()))
-                .isInstanceOf(CannotDeleteException.class);
-    }
-
-    private void verifyDeleteHistories() {
-        List<DeleteHistory> deleteHistories = List.of(answer.toDeleteHistory(), question.toDeleteHistory());
-        verify(deleteHistoryService).saveAll(deleteHistories);
     }
 }
