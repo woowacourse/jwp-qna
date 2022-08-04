@@ -95,4 +95,17 @@ public class Answer extends EntityHistory {
     public Question getQuestion() {
         return question;
     }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id=" + id +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", contents='" + contents + '\'' +
+                ", deleted=" + deleted +
+                ", questionId=" + question.getId() +
+                ", writerId=" + writer.getId() +
+                '}';
+    }
 }

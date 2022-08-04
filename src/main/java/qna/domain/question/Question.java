@@ -108,4 +108,18 @@ public class Question extends EntityHistory {
         deleteHistories.add(DeleteHistory.of(this));
         return deleteHistories;
     }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", contents='" + contents + '\'' +
+                ", deleted=" + deleted +
+                ", title='" + title + '\'' +
+                ", writerId=" + writer.getId() +
+                ", answers=" + answers +
+                '}';
+    }
 }
