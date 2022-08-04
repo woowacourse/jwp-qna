@@ -130,7 +130,7 @@ class QuestionTest {
 
             List<DeleteHistory> actual = question.deleteBy(user);
             List<DeleteHistory> expected = List.of(answer1.toDeleteHistory(),
-                    answer2.toDeleteHistory(), DeleteHistory.of(question));
+                    answer2.toDeleteHistory(), question.toDeleteHistory());
 
             assertThat(actual).isEqualTo(expected);
         }

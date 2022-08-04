@@ -17,6 +17,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import qna.domain.EntityHistory;
 import qna.domain.answer.Answer;
+import qna.domain.deletehistory.ContentType;
 import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.user.User;
 import qna.exception.CannotDeleteException;
@@ -105,11 +106,7 @@ public class Question extends EntityHistory {
         validateQuestionMaker(user);
         validateQuestionContainsOnlyAuthorAnswers(user);
         this.deleted = true;
-        List<DeleteHistory> deleteHistories = answers.stream()
-                .map(Answer::delete)
-                .collect(Collectors.toList());
-        deleteHistories.add(DeleteHistory.of(this));
-        return deleteHistories;
+        return generateDeleteHistories();
     }
 
     private void validateQuestionMaker(User loginUser) {
@@ -125,6 +122,18 @@ public class Question extends EntityHistory {
         if (containsNonAuthorAnswer) {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
+    }
+
+    private List<DeleteHistory> generateDeleteHistories() {
+        List<DeleteHistory> deleteHistories = answers.stream()
+                .map(Answer::delete)
+                .collect(Collectors.toList());
+        deleteHistories.add(toDeleteHistory());
+        return deleteHistories;
+    }
+
+    public DeleteHistory toDeleteHistory() {
+        return new DeleteHistory(ContentType.QUESTION, id, writer);
     }
 
     @Override
