@@ -20,6 +20,7 @@ import qna.domain.answer.Answer;
 import qna.domain.deletehistory.ContentType;
 import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.user.User;
+import qna.exception.AlreadyDeletedException;
 import qna.exception.CannotDeleteException;
 
 @Table(name = "question")
@@ -105,6 +106,9 @@ public class Question extends EntityHistory {
     public List<DeleteHistory> deleteBy(User user) {
         validateQuestionMaker(user);
         validateQuestionContainsOnlyAuthorAnswers(user);
+        if (deleted) {
+            throw new AlreadyDeletedException("이미 삭제된 질문입니다.");
+        }
         this.deleted = true;
         return generateDeleteHistories();
     }

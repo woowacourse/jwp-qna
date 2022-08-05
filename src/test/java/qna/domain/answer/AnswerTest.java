@@ -1,6 +1,7 @@
 package qna.domain.answer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.question.Question;
 import qna.domain.user.User;
 import qna.domain.user.UserRepository;
+import qna.exception.AlreadyDeletedException;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DataJpaTest
@@ -42,5 +44,13 @@ class AnswerTest {
         DeleteHistory expected = answer.toDeleteHistory();
 
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void 이미_삭제된_경우_예외발생() {
+        answer.delete();
+
+        assertThatThrownBy(() -> answer.delete())
+                .isInstanceOf(AlreadyDeletedException.class);
     }
 }

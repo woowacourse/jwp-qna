@@ -17,6 +17,7 @@ import qna.domain.deletehistory.ContentType;
 import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.question.Question;
 import qna.domain.user.User;
+import qna.exception.AlreadyDeletedException;
 import qna.exception.NotFoundException;
 import qna.exception.UnAuthorizedException;
 
@@ -81,6 +82,9 @@ public class Answer extends EntityHistory {
     }
 
     public DeleteHistory delete() {
+        if (deleted) {
+            throw new AlreadyDeletedException("이미 삭제된 답입니다.");
+        }
         this.deleted = true;
         return toDeleteHistory();
     }

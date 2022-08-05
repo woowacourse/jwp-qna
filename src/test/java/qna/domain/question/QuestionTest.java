@@ -17,6 +17,7 @@ import qna.domain.answer.AnswerRepository;
 import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.user.User;
 import qna.domain.user.UserRepository;
+import qna.exception.AlreadyDeletedException;
 import qna.exception.CannotDeleteException;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -155,6 +156,17 @@ class QuestionTest {
 
             assertThatThrownBy(() -> question.deleteBy(pobi))
                     .isInstanceOf(CannotDeleteException.class);
+        }
+
+        @Test
+        void 이미_삭제된_경우_예외발생() {
+            User user = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
+            Question question = new Question(1L, "title2", "contents2", user);
+
+            question.deleteBy(user);
+
+            assertThatThrownBy(() -> question.deleteBy(user))
+                    .isInstanceOf(AlreadyDeletedException.class);
         }
     }
 }
