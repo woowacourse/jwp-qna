@@ -13,6 +13,7 @@ import qna.domain.question.Question;
 import qna.domain.user.User;
 import qna.domain.user.UserRepository;
 import qna.exception.AlreadyDeletedException;
+import qna.exception.CannotDeleteException;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DataJpaTest
@@ -32,6 +33,14 @@ class AnswerTest {
     }
 
     @Test
+    void validateDeletableBy_메서드에_생성자_이외의_사용자가_입력된_경우_예외발생() {
+        User anotherUser = users.save(new User("kotlinjigi", "password", "jason", "jason@slipp.net"));
+
+        assertThatThrownBy(() -> answer.validateDeletableBy(anotherUser))
+                .isInstanceOf(CannotDeleteException.class);
+    }
+
+    @Test
     void delete_메서드는_현재_데이터를_삭제된_상태로_변경() {
         answer.delete();
 
@@ -47,7 +56,7 @@ class AnswerTest {
     }
 
     @Test
-    void 이미_삭제된_경우_예외발생() {
+    void delete_메서드는_이미_삭제된_경우_예외발생() {
         answer.delete();
 
         assertThatThrownBy(() -> answer.delete())

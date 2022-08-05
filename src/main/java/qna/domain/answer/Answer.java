@@ -18,6 +18,7 @@ import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.question.Question;
 import qna.domain.user.User;
 import qna.exception.AlreadyDeletedException;
+import qna.exception.CannotDeleteException;
 import qna.exception.NotFoundException;
 import qna.exception.UnAuthorizedException;
 
@@ -65,8 +66,10 @@ public class Answer extends EntityHistory {
         this.contents = contents;
     }
 
-    public boolean isOwner(User loginUser) {
-        return writer.equals(loginUser);
+    public void validateDeletableBy(User user) {
+        if (!writer.equals(user)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변은 삭제할 수 없습니다.");
+        }
     }
 
     public Long getId() {
