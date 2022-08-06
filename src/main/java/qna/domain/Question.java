@@ -1,9 +1,11 @@
 package qna.domain;
 
+import qna.CannotDeleteException;
 import qna.UnAuthorizedException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,8 +24,8 @@ public class Question extends TimeStampEntity {
     @Column(nullable = false)
     private boolean deleted = false;
 
-    @OneToMany(mappedBy = "question", orphanRemoval = true)
-    private final List<Answer> answers = new ArrayList<>();
+    @Embedded
+    private final Answers answers = new Answers(new ArrayList<>());
 
     public Question(String title, String contents) {
         this(null, title, contents);
@@ -54,21 +56,11 @@ public class Question extends TimeStampEntity {
     }
 
     public void addAnswer(Answer answer) {
-        if (!this.answers.contains(answer)) {
-            answers.add(answer);
-        }
+        answers.addAnswer(answer);
     }
 
     public Long getId() {
         return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContents() {
-        return contents;
     }
 
     public Long getWriterId() {
@@ -76,9 +68,29 @@ public class Question extends TimeStampEntity {
     }
 
     public List<Answer> getAnswers() {
-        return answers.stream()
-                .filter(answer -> !answer.isDeleted())
-                .collect(Collectors.toUnmodifiableList());
+        return answers.getAnswers();
+    }
+
+    public DeleteHistories delete(User loginUser, Answers answers) throws CannotDeleteException {
+        validateAlreadyDeleted();
+        validateUserMatch(loginUser);
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, this.getId(), loginUser));
+        deleteHistories.addAll(answers.delete(loginUser));
+        this.deleted = true;
+        return new DeleteHistories(deleteHistories);
+    }
+
+    private void validateUserMatch(User loginUser) throws CannotDeleteException {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+    }
+
+    private void validateAlreadyDeleted() throws CannotDeleteException {
+        if (isDeleted()) {
+            throw new CannotDeleteException("이미 삭제한 질문입니다.");
+        }
     }
 
     public User getWriter() {
@@ -87,18 +99,6 @@ public class Question extends TimeStampEntity {
 
     public boolean isDeleted() {
         return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
     }
 
     @Override
@@ -110,9 +110,5 @@ public class Question extends TimeStampEntity {
                 ", writerId=" + writer.getId() +
                 ", deleted=" + deleted +
                 '}';
-    }
-
-    public void deleteAnswer(Answer answer) {
-        this.answers.remove(answer);
     }
 }
