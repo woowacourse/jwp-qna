@@ -7,12 +7,14 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import qna.domain.Answer;
+import qna.domain.AnswerRepository;
 import qna.domain.ContentType;
 import qna.domain.DeleteHistory;
 import qna.domain.Question;
@@ -23,7 +25,10 @@ import qna.domain.User;
 class QnaServiceTest {
 
     @Mock
-    private QuestionRepository questionRepository;
+    private AnswerRepository answers;
+
+    @Mock
+    private QuestionRepository questions;
 
     @Mock
     private DeleteHistoryService deleteHistoryService;
@@ -31,14 +36,15 @@ class QnaServiceTest {
     @InjectMocks
     private QnaService qnaService;
 
+    @DisplayName("질문 삭제")
     @Test
-    public void delete_성공() throws Exception {
+    void deleteQuestion() {
         User javajigi = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
         Question question = new Question(1L, "title", "contents").writeBy(javajigi);
         Answer answer = new Answer(1L, javajigi, question, "Answers Contents1");
         question.addAnswer(answer);
 
-        when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
+        when(questions.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
         qnaService.deleteQuestion(javajigi, question.getId());
 
         assertThat(question.isDeleted()).isTrue();
@@ -49,5 +55,22 @@ class QnaServiceTest {
         );
 
         verify(deleteHistoryService).saveAll(deleteHistories);
+    }
+    
+    @DisplayName("답변 삭제")
+    @Test
+    void deleteAnswer() {
+        User javajigi = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
+        Question question = new Question(1L, "title", "contents").writeBy(javajigi);
+        Answer answer = new Answer(1L, javajigi, question, "Answers Contents1");
+
+        when(answers.findByIdAndDeletedFalse(answer.getId())).thenReturn(Optional.of(answer));
+        qnaService.deleteAnswer(javajigi, answer.getId());
+
+        assertThat(answer.isDeleted()).isTrue();
+
+        DeleteHistory deleteHistory = new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter());
+
+        verify(deleteHistoryService).save(deleteHistory);
     }
 }

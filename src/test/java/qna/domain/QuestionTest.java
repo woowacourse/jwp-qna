@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,13 +48,15 @@ class QuestionTest {
         Answer answer = new Answer(1L, writer, question, "작성자가 작성한 답변입니다.");
         question.addAnswer(answer);
 
-        DeleteHistory expected1 = new DeleteHistory(ContentType.ANSWER, answer.getId(), writer);
-        DeleteHistory expected2 = new DeleteHistory(ContentType.QUESTION, question.getId(), writer);
+        List<DeleteHistory> expected = Arrays.asList(
+                new DeleteHistory(ContentType.ANSWER, answer.getId(), writer),
+                new DeleteHistory(ContentType.QUESTION, question.getId(), writer)
+        );
         List<DeleteHistory> actual = question.deleteBy(writer);
 
         assertAll(
                 () -> assertThat(question.isDeleted()).isTrue(),
-                () -> assertThat(actual).containsExactly(expected1, expected2)
+                () -> assertThat(actual).containsExactlyElementsOf(expected)
         );
 
     }
