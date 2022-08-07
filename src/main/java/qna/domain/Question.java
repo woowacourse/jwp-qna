@@ -69,14 +69,23 @@ public class Question extends TimeStamped {
         return deleted;
     }
 
-    public void deleteBy(User user) throws CannotDeleteException {
+    public void deleteBy(User user) {
         checkIsWrittenBy(user);
 
-        answers.deleteAllBy(user);
+        deleteAnswersBy(user);
+
         this.deleted = true;
     }
 
-    private void checkIsWrittenBy(User user) throws CannotDeleteException {
+    private void deleteAnswersBy(final User user) {
+        try {
+            answers.deleteAllBy(user);
+        } catch (CannotDeleteException e) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
+    }
+
+    private void checkIsWrittenBy(User user) {
         if (!writer.equals(user)) {
             throw new CannotDeleteException("질문은 작성자 본인만 삭제할 수 있습니다.");
         }
