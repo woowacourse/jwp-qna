@@ -104,26 +104,30 @@ public class Question extends EntityHistory {
     }
 
     public List<DeleteHistory> deleteBy(User user) {
-        validateQuestionMaker(user);
-        if (deleted) {
-            throw new AlreadyDeletedException("이미 삭제된 질문입니다.");
-        }
-        this.deleted = true;
-        return generateDeleteHistories(user);
+        validateDeletableBy(user);
+        List<DeleteHistory> deleteHistories = deleteAnswersBy(user);
+        deleteHistories.add(deleteQuestion());
+        return deleteHistories;
     }
 
-    private void validateQuestionMaker(User user) {
+    private void validateDeletableBy(User user) {
         if (!isOwner(user)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
+        if (deleted) {
+            throw new AlreadyDeletedException("이미 삭제된 질문입니다.");
+        }
     }
 
-    private List<DeleteHistory> generateDeleteHistories(User user) {
-        List<DeleteHistory> deleteHistories = answers.stream()
+    private List<DeleteHistory> deleteAnswersBy(User user) {
+        return answers.stream()
                 .map(it -> it.deleteBy(user))
                 .collect(Collectors.toList());
-        deleteHistories.add(toDeleteHistory());
-        return deleteHistories;
+    }
+
+    private DeleteHistory deleteQuestion() {
+        this.deleted = true;
+        return toDeleteHistory();
     }
 
     public DeleteHistory toDeleteHistory() {
