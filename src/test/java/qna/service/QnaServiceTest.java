@@ -34,12 +34,9 @@ class QnaServiceTest {
     @Test
     public void delete_성공() throws Exception {
         User javajigi = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
-        User sanjigi = new User(2L, "sanjigi", "password", "name", "sanjigi@slipp.net");
-
         Question question = new Question(1L, "title", "contents").writeBy(javajigi);
-        Answer answer = new Answer(1L, sanjigi, question, "Answers Contents1");
+        Answer answer = new Answer(1L, javajigi, question, "Answers Contents1");
         question.addAnswer(answer);
-        answer.deleteBy(sanjigi);
 
         when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
         qnaService.deleteQuestion(javajigi, question.getId());
@@ -47,8 +44,8 @@ class QnaServiceTest {
         assertThat(question.isDeleted()).isTrue();
 
         List<DeleteHistory> deleteHistories = Arrays.asList(
-                new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriter()),
-                new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter())
+                new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter()),
+                new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriter())
         );
 
         verify(deleteHistoryService).saveAll(deleteHistories);

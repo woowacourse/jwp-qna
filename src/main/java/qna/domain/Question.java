@@ -69,17 +69,20 @@ public class Question extends TimeStamped {
         return deleted;
     }
 
-    public void deleteBy(User user) {
+    public List<DeleteHistory> deleteBy(User user) {
         checkIsWrittenBy(user);
 
-        deleteAnswersBy(user);
+        List<DeleteHistory> deleteHistories = deleteAnswersBy(user);
 
         this.deleted = true;
+        deleteHistories.add(DeleteHistory.from(this));
+
+        return deleteHistories;
     }
 
-    private void deleteAnswersBy(final User user) {
+    private List<DeleteHistory> deleteAnswersBy(final User user) {
         try {
-            answers.deleteAllBy(user);
+            return answers.deleteAllBy(user);
         } catch (CannotDeleteException e) {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }

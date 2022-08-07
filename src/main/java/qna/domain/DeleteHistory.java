@@ -1,9 +1,6 @@
 package qna.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,26 +50,7 @@ public class DeleteHistory {
                 answer.getWriter());
     }
 
-    public static List<DeleteHistory> of(Question question) {
-
-        if (!question.isDeleted()) {
-            return Collections.emptyList();
-        }
-
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-
-        deleteHistories.add(DeleteHistory.from(question));
-
-        for (Answer answer : question.getAnswers()) {
-            if (answer.isDeleted()) {
-                deleteHistories.add(DeleteHistory.from(answer));
-            }
-        }
-
-        return deleteHistories;
-    }
-
-    private static DeleteHistory from(Question question) {
+    public static DeleteHistory from(Question question) {
         return new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriter());
     }
 
