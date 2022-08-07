@@ -10,12 +10,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
+import qna.config.DatabaseConfig;
 import qna.domain.user.User;
 import qna.domain.user.UserRepository;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DataJpaTest
+@Import(DatabaseConfig.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class QuestionRepositoryTest {
 
