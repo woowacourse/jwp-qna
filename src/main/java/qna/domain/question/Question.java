@@ -105,12 +105,11 @@ public class Question extends EntityHistory {
 
     public List<DeleteHistory> deleteBy(User user) {
         validateQuestionMaker(user);
-        validateQuestionContainsOnlyAuthorAnswers(user);
         if (deleted) {
             throw new AlreadyDeletedException("이미 삭제된 질문입니다.");
         }
         this.deleted = true;
-        return generateDeleteHistories();
+        return generateDeleteHistories(user);
     }
 
     private void validateQuestionMaker(User user) {
@@ -119,15 +118,9 @@ public class Question extends EntityHistory {
         }
     }
 
-    private void validateQuestionContainsOnlyAuthorAnswers(User user) {
-        for (Answer answer : answers) {
-            answer.validateDeletableBy(user);
-        }
-    }
-
-    private List<DeleteHistory> generateDeleteHistories() {
+    private List<DeleteHistory> generateDeleteHistories(User user) {
         List<DeleteHistory> deleteHistories = answers.stream()
-                .map(Answer::delete)
+                .map(it -> it.deleteBy(user))
                 .collect(Collectors.toList());
         deleteHistories.add(toDeleteHistory());
         return deleteHistories;

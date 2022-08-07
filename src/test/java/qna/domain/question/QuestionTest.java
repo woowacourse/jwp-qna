@@ -93,7 +93,7 @@ class QuestionTest {
         @Test
         void question에서_연관된_answers_중_deleted_값이_false인_데이터는_조회대상에서_자동으로_누락() {
             Answer deletedAnswer = new Answer(user, newQuestion, "deleted content");
-            deletedAnswer.delete();
+            deletedAnswer.deleteBy(user);
             answers.save(new Answer(user, newQuestion, "contents"));
             answers.saveAndFlush(deletedAnswer);
             entityManager.clear();

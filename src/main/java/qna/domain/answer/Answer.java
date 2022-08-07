@@ -66,12 +66,6 @@ public class Answer extends EntityHistory {
         this.contents = contents;
     }
 
-    public void validateDeletableBy(User user) {
-        if (!writer.equals(user)) {
-            throw new CannotDeleteException("다른 사람이 쓴 답변은 삭제할 수 없습니다.");
-        }
-    }
-
     public Long getId() {
         return id;
     }
@@ -84,12 +78,19 @@ public class Answer extends EntityHistory {
         return deleted;
     }
 
-    public DeleteHistory delete() {
+    public DeleteHistory deleteBy(User user) {
+        validateDeletableBy(user);
+        this.deleted = true;
+        return toDeleteHistory();
+    }
+
+    private void validateDeletableBy(User user) {
+        if (!writer.equals(user)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변은 삭제할 수 없습니다.");
+        }
         if (deleted) {
             throw new AlreadyDeletedException("이미 삭제된 답입니다.");
         }
-        this.deleted = true;
-        return toDeleteHistory();
     }
 
     public DeleteHistory toDeleteHistory() {
