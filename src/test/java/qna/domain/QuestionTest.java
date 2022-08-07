@@ -9,13 +9,14 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import qna.CannotDeleteException;
+import qna.fixtures.UserFixture;
 
 class QuestionTest {
 
     @DisplayName("본인이 작성한 질문 삭제")
     @Test
     void deleteByWriter() {
-        User writer = new User(1L, "writer", "password", "작성자", "writer@gmail");
+        User writer = UserFixture.JAVAJIGI.generate(1L);
         Question question = new Question(1L, "게시글", "게시글 내용").writeBy(writer);
 
         DeleteHistory expected = new DeleteHistory(ContentType.QUESTION, question.getId(), writer);
@@ -30,8 +31,8 @@ class QuestionTest {
     @DisplayName("다른 사람이 쓴 질문은 삭제 시 예외")
     @Test
     void deleteByNotWriter_throwsException() {
-        User writer = new User(1L, "writer", "password", "작성자", "writer@gmail");
-        User other = new User(2L, "other", "password", "타인", "other@gmail");
+        User writer = UserFixture.JAVAJIGI.generate(1L);
+        User other = UserFixture.SANJIGI.generate(2L);
 
         Question question = new Question("게시글", "게시글 내용").writeBy(writer);
 
@@ -43,7 +44,7 @@ class QuestionTest {
     @DisplayName("본인이 작성한 답변만 있다면 질문 삭제 가능")
     @Test
     void containsAnswerWrittenByWriter_deleteByWriter() {
-        User writer = new User(1L, "writer", "password", "작성자", "writer@gmail");
+        User writer = UserFixture.JAVAJIGI.generate(1L);
         Question question = new Question(1L, "게시글", "게시글 내용").writeBy(writer);
         Answer answer = new Answer(1L, writer, question, "작성자가 작성한 답변입니다.");
         question.addAnswer(answer);
@@ -64,8 +65,8 @@ class QuestionTest {
     @DisplayName("다른 사람이 쓴 답변이 존재하면 삭제 시 예외")
     @Test
     void containsAnswerWrittenByOther_throwsException() {
-        User writer = new User(1L, "writer", "password", "작성자", "writer@gmail");
-        User other = new User(2L, "other", "password", "타인", "other@gmail");
+        User writer = UserFixture.JAVAJIGI.generate(1L);
+        User other = UserFixture.SANJIGI.generate(2L);
 
         Question question = new Question("게시글", "게시글 내용").writeBy(writer);
         question.addAnswer(new Answer(other, question, "다른 사람이 쓴 답변입니다."));
@@ -78,8 +79,8 @@ class QuestionTest {
     @DisplayName("다른 사람이 쓴 답변이 이미 삭제되었다면 삭제 가능")
     @Test
     void containsAnswerWrittenByOther_alreadyDeleted() {
-        User writer = new User(1L, "writer", "password", "작성자", "writer@gmail");
-        User other = new User(2L, "other", "password", "타인", "other@gmail");
+        User writer = UserFixture.JAVAJIGI.generate(1L);
+        User other = UserFixture.SANJIGI.generate(2L);
 
         Question question = new Question("게시글", "게시글 내용").writeBy(writer);
         Answer answer = new Answer(other, question, "다른 사람이 쓴 답변입니다.");

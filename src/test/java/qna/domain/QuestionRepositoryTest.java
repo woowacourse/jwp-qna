@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
+import qna.fixtures.UserFixture;
 
 @TestConstructor(autowireMode = AutowireMode.ALL)
 @DataJpaTest
@@ -47,7 +48,7 @@ class QuestionRepositoryTest {
     @DisplayName("id가 일치하고 삭제되지 않은 Question을 조회하고, 값이 존재")
     @Test
     void findByIdAndDeletedFalse_resultExist() {
-        User user = users.save((new User("user", "password", "사용자", "user@gmail.com")));
+        User user = users.save(UserFixture.JAVAJIGI.generate());
         Question expect = new Question("질문의 제목입니다.", "질문의 내용입니다.").writeBy(user);
         Question saved = questions.save(expect);
 
@@ -62,7 +63,7 @@ class QuestionRepositoryTest {
     @DisplayName("id가 일치하고 삭제되지 않은 Question을 조회하고, 값이 존재하지 않음")
     @Test
     void findByIdAndDeletedFalse_resultDoesNotExist() {
-        User user = users.save((new User("user", "password", "사용자", "user@gmail.com")));
+        User user = users.save(UserFixture.JAVAJIGI.generate());
         Question expect = new Question("질문의 제목입니다.", "질문의 내용입니다.").writeBy(user);
         expect.deleteBy(user);
         Question saved = questions.save(expect);

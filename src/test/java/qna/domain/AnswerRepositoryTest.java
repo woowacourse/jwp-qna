@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
+import qna.fixtures.UserFixture;
 
 @TestConstructor(autowireMode = AutowireMode.ALL)
 @DataJpaTest
@@ -28,7 +29,7 @@ class AnswerRepositoryTest {
     @DisplayName("Answer를 저장")
     @Test
     void save() {
-        User user = users.save((new User("user", "password", "사용자", "user@gmail.com")));
+        User user = users.save(UserFixture.JAVAJIGI.generate());
         Question question = questions.save(new Question("질문입니다.", "질문의 내용입니다.").writeBy(user));
 
         Answer expected = new Answer(user, question, "질문에 대한 답변입니다.");
@@ -41,7 +42,7 @@ class AnswerRepositoryTest {
     @DisplayName("Question Id가 알치하고 삭제되지 않은 모든 Answer 조회")
     @Test
     void findByQuestionIdAndDeletedFalse() {
-        User user = users.save((new User("user", "password", "사용자", "user@gmail.com")));
+        User user = users.save(UserFixture.JAVAJIGI.generate());
         Question question = questions.save(new Question("질문입니다.", "질문의 내용입니다.").writeBy(user));
 
         Answer expectedIncluded = new Answer(user, question, "질문에 대한 답변입니다.");
@@ -62,7 +63,7 @@ class AnswerRepositoryTest {
     @DisplayName("Id가 일치하고 삭제되지 않은 Answer를 조회하고, 값이 존재")
     @Test
     void findByIdAndDeletedFalse_resultExist() {
-        User user = users.save((new User("user", "password", "사용자", "user@gmail.com")));
+        User user = users.save(UserFixture.JAVAJIGI.generate());
         Question question = questions.save(new Question("질문입니다.", "질문의 내용입니다.").writeBy(user));
 
         Answer expect = new Answer(user, question, "질문에 대한 답변입니다.");
@@ -79,7 +80,7 @@ class AnswerRepositoryTest {
     @DisplayName("Id가 일치하고 삭제되지 않은 Answer를 조회하고, 값이 존재하지 않음")
     @Test
     void findByIdAndDeletedFalse_resultDoesNotExist() {
-        User user = users.save((new User("user", "password", "사용자", "user@gmail.com")));
+        User user = users.save(UserFixture.JAVAJIGI.generate());
         Question question = questions.save(new Question("질문입니다.", "질문의 내용입니다.").writeBy(user));
 
         Answer expectNotFound = new Answer(user, question, "질문에 대한 삭제 될 답변입니다.");

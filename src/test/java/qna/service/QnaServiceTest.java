@@ -20,6 +20,7 @@ import qna.domain.DeleteHistory;
 import qna.domain.Question;
 import qna.domain.QuestionRepository;
 import qna.domain.User;
+import qna.fixtures.UserFixture;
 
 @ExtendWith(MockitoExtension.class)
 class QnaServiceTest {
@@ -39,13 +40,13 @@ class QnaServiceTest {
     @DisplayName("질문 삭제")
     @Test
     void deleteQuestion() {
-        User javajigi = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
-        Question question = new Question(1L, "title", "contents").writeBy(javajigi);
-        Answer answer = new Answer(1L, javajigi, question, "Answers Contents1");
+        User user = UserFixture.JAVAJIGI.generate(1L);
+        Question question = new Question(1L, "title", "contents").writeBy(user);
+        Answer answer = new Answer(1L, user, question, "Answers Contents1");
         question.addAnswer(answer);
 
         when(questions.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
-        qnaService.deleteQuestion(javajigi, question.getId());
+        qnaService.deleteQuestion(user, question.getId());
 
         assertThat(question.isDeleted()).isTrue();
 
@@ -60,12 +61,12 @@ class QnaServiceTest {
     @DisplayName("답변 삭제")
     @Test
     void deleteAnswer() {
-        User javajigi = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
-        Question question = new Question(1L, "title", "contents").writeBy(javajigi);
-        Answer answer = new Answer(1L, javajigi, question, "Answers Contents1");
+        User user = UserFixture.JAVAJIGI.generate(1L);
+        Question question = new Question(1L, "title", "contents").writeBy(user);
+        Answer answer = new Answer(1L, user, question, "Answers Contents1");
 
         when(answers.findByIdAndDeletedFalse(answer.getId())).thenReturn(Optional.of(answer));
-        qnaService.deleteAnswer(javajigi, answer.getId());
+        qnaService.deleteAnswer(user, answer.getId());
 
         assertThat(answer.isDeleted()).isTrue();
 
