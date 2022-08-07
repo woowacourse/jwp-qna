@@ -10,10 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
-import qna.config.DatabaseConfig;
 import qna.domain.answer.Answer;
 import qna.domain.answer.AnswerRepository;
 import qna.domain.deletehistory.DeleteHistory;
@@ -21,11 +17,10 @@ import qna.domain.user.User;
 import qna.domain.user.UserRepository;
 import qna.exception.AlreadyDeletedException;
 import qna.exception.CannotDeleteException;
+import qna.annotation.DatabaseTest;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DataJpaTest
-@Import(DatabaseConfig.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@DatabaseTest
 class QuestionTest {
 
     @Autowired
