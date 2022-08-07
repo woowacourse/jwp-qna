@@ -20,6 +20,7 @@ import qna.domain.DeleteHistory;
 import qna.domain.Question;
 import qna.domain.QuestionRepository;
 import qna.domain.User;
+import qna.fixtures.QuestionFixture;
 import qna.fixtures.UserFixture;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,7 +42,7 @@ class QnaServiceTest {
     @Test
     void deleteQuestion() {
         User user = UserFixture.JAVAJIGI.generate(1L);
-        Question question = new Question(1L, "title", "contents").writeBy(user);
+        Question question = QuestionFixture.FIRST.generate().writeBy(user);
         Answer answer = new Answer(1L, user, question, "Answers Contents1");
         question.addAnswer(answer);
 
@@ -62,7 +63,7 @@ class QnaServiceTest {
     @Test
     void deleteAnswer() {
         User user = UserFixture.JAVAJIGI.generate(1L);
-        Question question = new Question(1L, "title", "contents").writeBy(user);
+        Question question = QuestionFixture.FIRST.generate().writeBy(user);
         Answer answer = new Answer(1L, user, question, "Answers Contents1");
 
         when(answers.findByIdAndDeletedFalse(answer.getId())).thenReturn(Optional.of(answer));

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
+import qna.fixtures.QuestionFixture;
 import qna.fixtures.UserFixture;
 
 @TestConstructor(autowireMode = AutowireMode.ALL)
@@ -29,11 +30,11 @@ class QuestionRepositoryTest {
     @DisplayName("삭제되지 않은 모든 Question 조회")
     @Test
     void findByDeletedFalse() {
-        User user = users.save((new User("user", "password", "사용자", "user@gmail.com")));
-        Question expectIncluded = new Question("질문의 제목입니다.", "질문의 내용입니다.").writeBy(user);
+        User user = users.save(UserFixture.JAVAJIGI.generate());
+        Question expectIncluded = questions.save(QuestionFixture.FIRST.generate().writeBy(user));
         questions.save(expectIncluded);
 
-        Question expectNotIncluded = new Question("질문의 제목입니다.", "질문의 내용입니다.").writeBy(user);
+        Question expectNotIncluded = QuestionFixture.SECOND.generate().writeBy(user);
         expectNotIncluded.deleteBy(user);
         questions.save(expectNotIncluded);
 
@@ -49,7 +50,7 @@ class QuestionRepositoryTest {
     @Test
     void findByIdAndDeletedFalse_resultExist() {
         User user = users.save(UserFixture.JAVAJIGI.generate());
-        Question expect = new Question("질문의 제목입니다.", "질문의 내용입니다.").writeBy(user);
+        Question expect = QuestionFixture.FIRST.generate().writeBy(user);
         Question saved = questions.save(expect);
 
         Optional<Question> actual = questions.findByIdAndDeletedFalse(saved.getId());
@@ -64,7 +65,7 @@ class QuestionRepositoryTest {
     @Test
     void findByIdAndDeletedFalse_resultDoesNotExist() {
         User user = users.save(UserFixture.JAVAJIGI.generate());
-        Question expect = new Question("질문의 제목입니다.", "질문의 내용입니다.").writeBy(user);
+        Question expect = QuestionFixture.FIRST.generate().writeBy(user);
         expect.deleteBy(user);
         Question saved = questions.save(expect);
 

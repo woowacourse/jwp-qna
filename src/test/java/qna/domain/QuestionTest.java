@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import qna.CannotDeleteException;
+import qna.fixtures.QuestionFixture;
 import qna.fixtures.UserFixture;
 
 class QuestionTest {
@@ -17,7 +18,7 @@ class QuestionTest {
     @Test
     void deleteByWriter() {
         User writer = UserFixture.JAVAJIGI.generate(1L);
-        Question question = new Question(1L, "게시글", "게시글 내용").writeBy(writer);
+        Question question = QuestionFixture.FIRST.generate().writeBy(writer);
 
         DeleteHistory expected = new DeleteHistory(ContentType.QUESTION, question.getId(), writer);
         List<DeleteHistory> actual = question.deleteBy(writer);
@@ -34,7 +35,7 @@ class QuestionTest {
         User writer = UserFixture.JAVAJIGI.generate(1L);
         User other = UserFixture.SANJIGI.generate(2L);
 
-        Question question = new Question("게시글", "게시글 내용").writeBy(writer);
+        Question question = QuestionFixture.FIRST.generate().writeBy(writer);
 
         assertThatThrownBy(() -> question.deleteBy(other))
                 .isInstanceOf(CannotDeleteException.class)
@@ -45,7 +46,7 @@ class QuestionTest {
     @Test
     void containsAnswerWrittenByWriter_deleteByWriter() {
         User writer = UserFixture.JAVAJIGI.generate(1L);
-        Question question = new Question(1L, "게시글", "게시글 내용").writeBy(writer);
+        Question question = QuestionFixture.FIRST.generate().writeBy(writer);
         Answer answer = new Answer(1L, writer, question, "작성자가 작성한 답변입니다.");
         question.addAnswer(answer);
 
@@ -68,7 +69,7 @@ class QuestionTest {
         User writer = UserFixture.JAVAJIGI.generate(1L);
         User other = UserFixture.SANJIGI.generate(2L);
 
-        Question question = new Question("게시글", "게시글 내용").writeBy(writer);
+        Question question = QuestionFixture.FIRST.generate().writeBy(writer);
         question.addAnswer(new Answer(other, question, "다른 사람이 쓴 답변입니다."));
 
         assertThatThrownBy(() -> question.deleteBy(writer))
@@ -82,7 +83,7 @@ class QuestionTest {
         User writer = UserFixture.JAVAJIGI.generate(1L);
         User other = UserFixture.SANJIGI.generate(2L);
 
-        Question question = new Question("게시글", "게시글 내용").writeBy(writer);
+        Question question = QuestionFixture.FIRST.generate().writeBy(writer);
         Answer answer = new Answer(other, question, "다른 사람이 쓴 답변입니다.");
         answer.deleteBy(other);
         question.addAnswer(answer);

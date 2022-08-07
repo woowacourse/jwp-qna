@@ -1,6 +1,5 @@
 package qna.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -12,8 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import lombok.Builder;
 import qna.CannotDeleteException;
 
+@Builder
 @Entity
 public class Question extends TimeStamped {
 
@@ -34,25 +35,33 @@ public class Question extends TimeStamped {
     @Embedded
     private Answers answers;
 
+    @Builder.Default
     @Column(nullable = false)
     private boolean deleted = false;
 
+    protected Question() {
+    }
+
     public Question(String title, String contents) {
-        this(null, title, contents, new ArrayList<>());
+        this(null, title, contents, null, new Answers(), false);
     }
 
     public Question(Long id, String title, String contents) {
-        this(id, title, contents, new ArrayList<>());
+        this(id, title, contents, null, new Answers(), false);
     }
 
-    public Question(Long id, String title, String contents, List<Answer> answers) {
+    public Question(final Long id,
+                    final String title,
+                    final String contents,
+                    final User writer,
+                    final Answers answers,
+                    final boolean deleted) {
         this.id = id;
         this.title = title;
         this.contents = contents;
-        this.answers = new Answers(answers);
-    }
-
-    protected Question() {
+        this.writer = writer;
+        this.answers = answers;
+        this.deleted = deleted;
     }
 
     public Question writeBy(User writer) {
