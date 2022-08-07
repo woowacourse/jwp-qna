@@ -11,9 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import qna.domain.user.User;
 
-@Table(name = "delete_history")
+@Table(name = "delete_history", uniqueConstraints = {@UniqueConstraint(columnNames = {"contentId", "contentType"})})
 @Entity
 public class DeleteHistory {
 
