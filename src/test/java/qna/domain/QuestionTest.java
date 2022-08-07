@@ -2,7 +2,9 @@ package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import qna.CannotDeleteException;
@@ -13,12 +15,15 @@ class QuestionTest {
     @Test
     void deleteByWriter() {
         User writer = new User(1L, "writer", "password", "작성자", "writer@gmail");
-        Question question = new Question("게시글", "게시글 내용").writeBy(writer);
+        Question question = new Question(1L, "게시글", "게시글 내용").writeBy(writer);
 
-        assertThat(question.isDeleted()).isFalse();
-        question.deleteBy(writer);
+        DeleteHistory expected = new DeleteHistory(ContentType.QUESTION, question.getId(), writer);
+        List<DeleteHistory> actual = question.deleteBy(writer);
 
-        assertThat(question.isDeleted()).isTrue();
+        assertAll(
+                () -> assertThat(question.isDeleted()).isTrue(),
+                () -> assertThat(actual).containsExactly(expected)
+        );
     }
 
     @DisplayName("다른 사람이 쓴 질문은 삭제 시 예외")
@@ -38,13 +43,19 @@ class QuestionTest {
     @Test
     void containsAnswerWrittenByWriter_deleteByWriter() {
         User writer = new User(1L, "writer", "password", "작성자", "writer@gmail");
-        Question question = new Question("게시글", "게시글 내용").writeBy(writer);
-        question.addAnswer(new Answer(writer, question, "작성자가 작성한 답변입니다."));
+        Question question = new Question(1L, "게시글", "게시글 내용").writeBy(writer);
+        Answer answer = new Answer(1L, writer, question, "작성자가 작성한 답변입니다.");
+        question.addAnswer(answer);
 
-        assertThat(question.isDeleted()).isFalse();
-        question.deleteBy(writer);
+        DeleteHistory expected1 = new DeleteHistory(ContentType.ANSWER, answer.getId(), writer);
+        DeleteHistory expected2 = new DeleteHistory(ContentType.QUESTION, question.getId(), writer);
+        List<DeleteHistory> actual = question.deleteBy(writer);
 
-        assertThat(question.isDeleted()).isTrue();
+        assertAll(
+                () -> assertThat(question.isDeleted()).isTrue(),
+                () -> assertThat(actual).containsExactly(expected1, expected2)
+        );
+
     }
 
     @DisplayName("다른 사람이 쓴 답변이 존재하면 삭제 시 예외")
@@ -72,9 +83,12 @@ class QuestionTest {
         answer.deleteBy(other);
         question.addAnswer(answer);
 
-        assertThat(question.isDeleted()).isFalse();
-        question.deleteBy(writer);
+        DeleteHistory expected = new DeleteHistory(ContentType.QUESTION, question.getId(), writer);
+        List<DeleteHistory> actual = question.deleteBy(writer);
 
-        assertThat(question.isDeleted()).isTrue();
+        assertAll(
+                () -> assertThat(question.isDeleted()).isTrue(),
+                () -> assertThat(actual).containsExactly(expected)
+        );
     }
 }
