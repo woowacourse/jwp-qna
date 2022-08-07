@@ -79,6 +79,7 @@ public class Question extends TimeStamped {
     }
 
     public List<DeleteHistory> deleteBy(User user) {
+        checkIsNotDeleted();
         checkIsWrittenBy(user);
 
         List<DeleteHistory> deleteHistories = deleteAnswersBy(user);
@@ -87,6 +88,12 @@ public class Question extends TimeStamped {
         deleteHistories.add(DeleteHistory.from(this));
 
         return deleteHistories;
+    }
+
+    private void checkIsNotDeleted() {
+        if (deleted) {
+            throw new CannotDeleteException("이미 삭제 된 질문입니다.");
+        }
     }
 
     private List<DeleteHistory> deleteAnswersBy(final User user) {

@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
+import qna.fixtures.AnswerFixture;
+import qna.fixtures.QuestionFixture;
 import qna.fixtures.UserFixture;
 
 @TestConstructor(autowireMode = AutowireMode.ALL)
@@ -32,7 +34,7 @@ class AnswerRepositoryTest {
         User user = users.save(UserFixture.JAVAJIGI.generate());
         Question question = questions.save(new Question("질문입니다.", "질문의 내용입니다.").writeBy(user));
 
-        Answer expected = new Answer(user, question, "질문에 대한 답변입니다.");
+        Answer expected = AnswerFixture.FIRST.generate(user, question);
 
         Answer actual = answers.save(expected);
 
@@ -45,10 +47,10 @@ class AnswerRepositoryTest {
         User user = users.save(UserFixture.JAVAJIGI.generate());
         Question question = questions.save(new Question("질문입니다.", "질문의 내용입니다.").writeBy(user));
 
-        Answer expectedIncluded = new Answer(user, question, "질문에 대한 답변입니다.");
+        Answer expectedIncluded = AnswerFixture.FIRST.generate(user, question);
         answers.save(expectedIncluded);
 
-        Answer expectedNotIncluded = new Answer(user, question, "질문에 대한 삭제 될 답변입니다.");
+        Answer expectedNotIncluded = AnswerFixture.SECOND.generate(user, question);
         expectedNotIncluded.deleteBy(user);
         answers.save(expectedNotIncluded);
 
@@ -64,9 +66,9 @@ class AnswerRepositoryTest {
     @Test
     void findByIdAndDeletedFalse_resultExist() {
         User user = users.save(UserFixture.JAVAJIGI.generate());
-        Question question = questions.save(new Question("질문입니다.", "질문의 내용입니다.").writeBy(user));
+        Question question = questions.save(QuestionFixture.FIRST.generate().writeBy(user));
 
-        Answer expect = new Answer(user, question, "질문에 대한 답변입니다.");
+        Answer expect = AnswerFixture.FIRST.generate(user, question);
         Answer saved = answers.save(expect);
 
         Optional<Answer> actual = answers.findByIdAndDeletedFalse(saved.getId());
@@ -81,9 +83,9 @@ class AnswerRepositoryTest {
     @Test
     void findByIdAndDeletedFalse_resultDoesNotExist() {
         User user = users.save(UserFixture.JAVAJIGI.generate());
-        Question question = questions.save(new Question("질문입니다.", "질문의 내용입니다.").writeBy(user));
+        Question question = questions.save(questions.save(QuestionFixture.FIRST.generate().writeBy(user)));
 
-        Answer expectNotFound = new Answer(user, question, "질문에 대한 삭제 될 답변입니다.");
+        Answer expectNotFound = AnswerFixture.FIRST.generate(user, question);
         expectNotFound.deleteBy(user);
         Answer savedAnswer = answers.save(expectNotFound);
 
