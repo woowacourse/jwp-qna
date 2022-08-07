@@ -17,7 +17,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import qna.domain.EntityHistory;
 import qna.domain.answer.Answer;
-import qna.domain.deletehistory.ContentType;
 import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.user.User;
 import qna.exception.AlreadyDeletedException;
@@ -127,11 +126,7 @@ public class Question extends EntityHistory {
 
     private DeleteHistory deleteQuestion() {
         this.deleted = true;
-        return toDeleteHistory();
-    }
-
-    public DeleteHistory toDeleteHistory() {
-        return new DeleteHistory(ContentType.QUESTION, id, writer);
+        return DeleteHistory.ofQuestion(id, writer);
     }
 
     @Override

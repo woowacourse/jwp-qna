@@ -81,7 +81,7 @@ public class Answer extends EntityHistory {
     public DeleteHistory deleteBy(User user) {
         validateDeletableBy(user);
         this.deleted = true;
-        return toDeleteHistory();
+        return DeleteHistory.ofAnswer(id, writer);
     }
 
     private void validateDeletableBy(User user) {

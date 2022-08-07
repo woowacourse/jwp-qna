@@ -58,6 +58,14 @@ public class DeleteHistory {
         return createDate;
     }
 
+    public static DeleteHistory ofQuestion(Long contentId, User deleter) {
+        return new DeleteHistory(ContentType.QUESTION, contentId, deleter);
+    }
+
+    public static DeleteHistory ofAnswer(Long contentId, User deleter) {
+        return new DeleteHistory(ContentType.ANSWER, contentId, deleter);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

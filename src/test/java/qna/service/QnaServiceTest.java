@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import qna.domain.answer.Answer;
+import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.question.Question;
 import qna.domain.question.QuestionRepository;
 import qna.domain.user.UserTest;
@@ -49,7 +50,9 @@ class QnaServiceTest {
         qnaService.deleteQuestion(UserTest.JAVAJIGI, question.getId());
 
         assertThat(question.isDeleted()).isTrue();
-        verify(deleteHistoryService).saveAll(List.of(answer.toDeleteHistory(), question.toDeleteHistory()));
+        verify(deleteHistoryService).saveAll(List.of(
+                DeleteHistory.ofAnswer(answer.getId(), answer.getWriter()),
+                DeleteHistory.ofQuestion(question.getId(), question.getWriter())));
     }
 
     @Test

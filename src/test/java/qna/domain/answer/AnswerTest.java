@@ -41,7 +41,7 @@ class AnswerTest {
     @Test
     void deleteBy_메서드는_현재_데이터에_대한_DeleteHistory_반환() {
         DeleteHistory actual = answer.deleteBy(user);
-        DeleteHistory expected = answer.toDeleteHistory();
+        DeleteHistory expected = DeleteHistory.ofAnswer(answer.getId(), answer.getWriter());
 
         assertThat(actual).isEqualTo(expected);
     }

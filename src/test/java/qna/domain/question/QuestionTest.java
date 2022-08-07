@@ -128,8 +128,10 @@ class QuestionTest {
             question.addAnswer(answer2);
 
             List<DeleteHistory> actual = question.deleteBy(user);
-            List<DeleteHistory> expected = List.of(answer1.toDeleteHistory(),
-                    answer2.toDeleteHistory(), question.toDeleteHistory());
+            List<DeleteHistory> expected = List.of(
+                    DeleteHistory.ofAnswer(answer1.getId(), answer1.getWriter()),
+                    DeleteHistory.ofAnswer(answer2.getId(), answer2.getWriter()),
+                    DeleteHistory.ofQuestion(question.getId(), question.getWriter()));
 
             assertThat(actual).isEqualTo(expected);
         }
@@ -148,7 +150,7 @@ class QuestionTest {
         void 답변_중_작성자_이외의_사람이_쓴_글이_포함된_경우_예외발생() {
             User pobi = new User(1L, "javajigi", "password", "pobi", "javajigi@slipp.net");
             User jason = new User(2L, "kotlinjigi", "password", "jason", "jason@slipp.net");
-            Question question = new Question(1L,"title2", "contents2", pobi);
+            Question question = new Question(1L, "title2", "contents2", pobi);
             Answer answer = new Answer(1L, jason, question, "Answers Contents1");
             question.addAnswer(answer);
 
