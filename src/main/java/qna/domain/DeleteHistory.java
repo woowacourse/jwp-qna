@@ -37,14 +37,20 @@ public class DeleteHistory {
     @CreationTimestamp
     private LocalDateTime createDate;
 
-    public DeleteHistory(ContentType contentType, Long contentId, User deletedBy, LocalDateTime createDate) {
+    public DeleteHistory() {
+    }
+
+    public DeleteHistory(ContentType contentType, Long contentId, User deletedBy) {
         this.contentType = contentType;
         this.contentId = contentId;
         this.deletedBy = deletedBy;
-        this.createDate = createDate;
     }
 
-    protected DeleteHistory() {
+    public static DeleteHistory from(Answer answer) {
+        return new DeleteHistory(
+                ContentType.ANSWER,
+                answer.getId(),
+                answer.getWriter());
     }
 
     public static List<DeleteHistory> of(Question question) {
@@ -67,11 +73,7 @@ public class DeleteHistory {
     }
 
     private static DeleteHistory from(Question question) {
-        return new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriter(), LocalDateTime.now());
-    }
-
-    private static DeleteHistory from(Answer answer) {
-        return new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now());
+        return new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriter());
     }
 
     @Override

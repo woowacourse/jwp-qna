@@ -66,14 +66,16 @@ public class Answer extends TimeStamped {
         return deleted;
     }
 
-    public void deleteBy(User user) throws CannotDeleteException {
+    public DeleteHistory deleteBy(User user) {
         if (!deleted) {
             checkIsWrittenBy(user);
             this.deleted = true;
+            return DeleteHistory.from(this);
         }
+        throw new CannotDeleteException("이미 삭제된 답변입니다.");
     }
 
-    private void checkIsWrittenBy(User user) throws CannotDeleteException {
+    private void checkIsWrittenBy(User user) {
         if (!this.writer.equals(user)) {
             throw new CannotDeleteException("답변은 작성자 본인만 삭제할 수 있습니다");
         }

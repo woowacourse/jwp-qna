@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
-import qna.CannotDeleteException;
 
 @TestConstructor(autowireMode = AutowireMode.ALL)
 @DataJpaTest
@@ -41,7 +40,7 @@ class AnswerRepositoryTest {
 
     @DisplayName("Question Id가 알치하고 삭제되지 않은 모든 Answer 조회")
     @Test
-    void findByQuestionIdAndDeletedFalse() throws CannotDeleteException {
+    void findByQuestionIdAndDeletedFalse() {
         User user = users.save((new User("user", "password", "사용자", "user@gmail.com")));
         Question question = questions.save(new Question("질문입니다.", "질문의 내용입니다.").writeBy(user));
 
@@ -79,7 +78,7 @@ class AnswerRepositoryTest {
 
     @DisplayName("Id가 일치하고 삭제되지 않은 Answer를 조회하고, 값이 존재하지 않음")
     @Test
-    void findByIdAndDeletedFalse_resultDoesNotExist() throws CannotDeleteException {
+    void findByIdAndDeletedFalse_resultDoesNotExist() {
         User user = users.save((new User("user", "password", "사용자", "user@gmail.com")));
         Question question = questions.save(new Question("질문입니다.", "질문의 내용입니다.").writeBy(user));
 

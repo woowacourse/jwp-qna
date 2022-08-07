@@ -11,7 +11,7 @@ class QuestionTest {
 
     @DisplayName("본인이 작성한 질문 삭제")
     @Test
-    void deleteByWriter() throws CannotDeleteException {
+    void deleteByWriter() {
         User writer = new User(1L, "writer", "password", "작성자", "writer@gmail");
         Question question = new Question("게시글", "게시글 내용").writeBy(writer);
 
@@ -36,7 +36,7 @@ class QuestionTest {
 
     @DisplayName("본인이 작성한 답변만 있다면 질문 삭제 가능")
     @Test
-    void containsAnswerWrittenByWriter_deleteByWriter() throws CannotDeleteException {
+    void containsAnswerWrittenByWriter_deleteByWriter() {
         User writer = new User(1L, "writer", "password", "작성자", "writer@gmail");
         Question question = new Question("게시글", "게시글 내용").writeBy(writer);
         question.addAnswer(new Answer(writer, question, "작성자가 작성한 답변입니다."));
@@ -63,14 +63,14 @@ class QuestionTest {
     
     @DisplayName("다른 사람이 쓴 답변이 이미 삭제되었다면 삭제 가능")
     @Test
-    void containsAnswerWrittenByOther_alreadyDeleted() throws CannotDeleteException {
+    void containsAnswerWrittenByOther_alreadyDeleted() {
         User writer = new User(1L, "writer", "password", "작성자", "writer@gmail");
         User other = new User(2L, "other", "password", "타인", "other@gmail");
 
         Question question = new Question("게시글", "게시글 내용").writeBy(writer);
         Answer answer = new Answer(other, question, "다른 사람이 쓴 답변입니다.");
-        question.addAnswer(answer);
         answer.deleteBy(other);
+        question.addAnswer(answer);
 
         assertThat(question.isDeleted()).isFalse();
         question.deleteBy(writer);

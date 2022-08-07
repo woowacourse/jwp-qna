@@ -2,9 +2,9 @@ package qna.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import qna.CannotDeleteException;
 
 @Embeddable
 public class Answers {
@@ -24,14 +24,11 @@ public class Answers {
         answers.add(answer);
     }
 
-    public void deleteAllBy(User user) throws CannotDeleteException {
-        try {
-            for (Answer answer : answers) {
-                answer.deleteBy(user);
-            }
-        } catch (CannotDeleteException e) {
-            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-        }
+    public List<DeleteHistory> deleteAllBy(User user) {
+        return answers.stream()
+                .filter(answer -> !answer.isDeleted())
+                .map(answer -> answer.deleteBy(user))
+                .collect(Collectors.toList());
     }
 
     public List<Answer> getAnswers() {
