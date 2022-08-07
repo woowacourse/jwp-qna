@@ -54,7 +54,7 @@ class AnswerRepositoryTest {
         Question savedQuestion = questions.save(question);
 
         Answer expected = new Answer(savedUser, savedQuestion, "Answers Contents1");
-        Answer saved = answers.save(expected);
+        answers.save(expected);
 
         Optional<Answer> found = answers.findByIdAndDeletedFalse(expected.getId());
 
@@ -73,7 +73,7 @@ class AnswerRepositoryTest {
         Answer expected = new Answer(savedUser, savedQuestion, "Answers Contents1");
         Answer saved = answers.save(expected);
 
-        saved.setDeleted(true);
+        saved.delete(savedUser);
 
         Optional<Answer> found = answers.findByIdAndDeletedFalse(expected.getId());
 

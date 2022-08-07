@@ -85,10 +85,6 @@ public class DeleteHistory {
     public String toString() {
         return "DeleteHistory{" +
                 "id=" + id +
-                ", contentType=" + contentType +
-                ", contentId=" + contentId +
-                ", user=" + user +
-                ", createDate=" + createDate +
                 '}';
     }
 }

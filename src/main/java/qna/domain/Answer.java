@@ -63,7 +63,7 @@ public class Answer extends BaseEntity {
         this.contents = contents;
     }
 
-    public DeleteHistory deleteSoft(User loginUser) {
+    public DeleteHistory delete(User loginUser) {
         validate(loginUser);
         this.deleted = true;
         return new DeleteHistory(ContentType.ANSWER, getId(), getWriter());
@@ -98,10 +98,6 @@ public class Answer extends BaseEntity {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
     public Question getQuestion() {
         return question;
     }
@@ -118,11 +114,6 @@ public class Answer extends BaseEntity {
     public String toString() {
         return "Answer{" +
                 "id=" + id +
-                ", deleted=" + deleted +
-                ", question=" + question +
-                ", updatedAt=" + updatedAt +
-                ", writer=" + writer +
-                ", createdAt=" + createdAt +
                 '}';
     }
 }

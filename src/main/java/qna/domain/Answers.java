@@ -6,7 +6,6 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import qna.CannotDeleteException;
 
 @Embeddable
 @Access(AccessType.FIELD)
@@ -26,18 +25,10 @@ public class Answers {
         values.add(answer);
     }
 
-    public void validateAnswerNotExists(User loginUser) {
+    public List<DeleteHistory> delete(User loginUser) {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
         for (Answer answer : values) {
-            if (!answer.isOwner(loginUser)) {
-                throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-            }
-        }
-    }
-
-    public DeleteHistories deleteSoft(User loginUser) {
-        DeleteHistories deleteHistories = new DeleteHistories();
-        for (Answer answer : values) {
-            DeleteHistory deleteHistory = answer.deleteSoft(loginUser);
+            DeleteHistory deleteHistory = answer.delete(loginUser);
             deleteHistories.add(deleteHistory);
         }
         return deleteHistories;

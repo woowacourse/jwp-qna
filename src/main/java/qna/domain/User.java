@@ -107,11 +107,6 @@ public class User extends BaseEntity {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
-                ", updatedAt=" + updatedAt +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
                 '}';
     }
 

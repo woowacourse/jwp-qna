@@ -60,10 +60,11 @@ public class Question extends BaseEntity {
         return this;
     }
 
-    public DeleteHistories deleteAndCreateDeleteHistories(User loginUser) throws CannotDeleteException {
-        DeleteHistory questionDeleteHistory = this.deleteSoft(loginUser);
-        DeleteHistories answersDeleteHistories = answers.deleteSoft(loginUser);
-        return DeleteHistories.from(questionDeleteHistory, answersDeleteHistories);
+    public List<DeleteHistory> deleteAndCreateDeleteHistories(User loginUser) {
+        DeleteHistory questionDeleteHistory = this.delete(loginUser);
+        List<DeleteHistory> deleteHistories = answers.delete(loginUser);
+        deleteHistories.add(questionDeleteHistory);
+        return deleteHistories;
     }
 
     public void addAnswer(Answer answer) {
@@ -71,7 +72,7 @@ public class Question extends BaseEntity {
         answer.toQuestion(this);
     }
 
-    public DeleteHistory deleteSoft(User loginUser) {
+    public DeleteHistory delete(User loginUser) {
         validate(loginUser);
         this.deleted = true;
         return new DeleteHistory(ContentType.QUESTION, getId(), getWriter());
@@ -84,7 +85,6 @@ public class Question extends BaseEntity {
         if (this.deleted) {
             throw new CannotDeleteException("이미 삭제된 질문입니다.");
         }
-        answers.validateAnswerNotExists(loginUser);
     }
 
     public boolean isOwner(User writer) {
@@ -111,10 +111,6 @@ public class Question extends BaseEntity {
         return deleted;
     }
 
-    public void delete(boolean deleted) {
-        this.deleted = deleted;
-    }
-
     public List<Answer> getAnswers() {
         return answers.getValues();
     }
@@ -123,12 +119,6 @@ public class Question extends BaseEntity {
     public String toString() {
         return "Question{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", updatedAt=" + updatedAt +
-                ", contents='" + contents + '\'' +
-                ", writer=" + writer +
-                ", answers=" + answers +
-                ", deleted=" + deleted +
                 '}';
     }
 }
