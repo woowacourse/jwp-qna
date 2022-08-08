@@ -1,5 +1,6 @@
 package qna.domain.answer;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,16 +10,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import qna.domain.EntityHistory;
+import qna.domain.deletehistory.ContentType;
+import qna.domain.deletehistory.DeleteHistory;
 import qna.domain.question.Question;
 import qna.domain.user.User;
+import qna.exception.AlreadyDeletedException;
+import qna.exception.CannotDeleteException;
 import qna.exception.NotFoundException;
 import qna.exception.UnAuthorizedException;
 
-import java.util.Objects;
-
 @Table(name = "answer")
 @Entity
+@SQLDelete(sql = "UPDATE answer SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 public class Answer extends EntityHistory {
 
     @Id
@@ -59,14 +66,6 @@ public class Answer extends EntityHistory {
         this.contents = contents;
     }
 
-    public boolean isOwner(User loginUser) {
-        return writer.equals(loginUser);
-    }
-
-    public void toQuestion(Question question) {
-        this.question = question;
-    }
-
     public Long getId() {
         return id;
     }
@@ -79,8 +78,23 @@ public class Answer extends EntityHistory {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public DeleteHistory deleteBy(User user) {
+        validateDeletableBy(user);
+        this.deleted = true;
+        return DeleteHistory.ofAnswer(id, writer);
+    }
+
+    private void validateDeletableBy(User user) {
+        if (!writer.equals(user)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변은 삭제할 수 없습니다.");
+        }
+        if (deleted) {
+            throw new AlreadyDeletedException("이미 삭제된 답입니다.");
+        }
+    }
+
+    public DeleteHistory toDeleteHistory() {
+        return new DeleteHistory(ContentType.ANSWER, id, writer);
     }
 
     public User getWriter() {
@@ -93,5 +107,18 @@ public class Answer extends EntityHistory {
 
     public Question getQuestion() {
         return question;
+    }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id=" + id +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", contents='" + contents + '\'' +
+                ", deleted=" + deleted +
+                ", questionId=" + question.getId() +
+                ", writerId=" + writer.getId() +
+                '}';
     }
 }
