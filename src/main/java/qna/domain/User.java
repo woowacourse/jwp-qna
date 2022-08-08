@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import qna.UnAuthorizedException;
 
 @Entity
@@ -23,6 +24,9 @@ public class User extends BaseEntity {
 
     @Column(nullable = false, length = 20)
     private String password;
+
+    @LastModifiedDate
+    protected LocalDateTime updatedAt;
 
     @Column(nullable = false, length = 20)
     private String name;
@@ -56,7 +60,6 @@ public class User extends BaseEntity {
 
         this.name = target.name;
         this.email = target.email;
-        this.updatedAt = LocalDateTime.now();
     }
 
     private boolean matchUserId(String userId) {
@@ -104,10 +107,6 @@ public class User extends BaseEntity {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
                 '}';
     }
 

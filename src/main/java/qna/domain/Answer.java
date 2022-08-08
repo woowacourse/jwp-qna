@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import org.springframework.data.annotation.LastModifiedDate;
+import qna.CannotDeleteException;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
@@ -30,6 +32,9 @@ public class Answer extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "question_id", foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
+
+    @LastModifiedDate
+    protected LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name = "fk_answer_writer"))
@@ -56,7 +61,21 @@ public class Answer extends BaseEntity {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
-        this.createdAt = LocalDateTime.now();
+    }
+
+    public DeleteHistory delete(User loginUser) {
+        validate(loginUser);
+        this.deleted = true;
+        return new DeleteHistory(ContentType.ANSWER, getId(), getWriter());
+    }
+
+    private void validate(User loginUser) {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+        if (this.deleted) {
+            throw new CannotDeleteException("이미 삭제된 질문입니다.");
+        }
     }
 
     public boolean isOwner(User writer) {
@@ -71,24 +90,12 @@ public class Answer extends BaseEntity {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getContents() {
         return contents;
     }
 
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
     public boolean isDeleted() {
         return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 
     public Question getQuestion() {
@@ -103,7 +110,10 @@ public class Answer extends BaseEntity {
         this.question = question;
     }
 
-    public void setWriter(User writer) {
-        this.writer = writer;
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id=" + id +
+                '}';
     }
 }

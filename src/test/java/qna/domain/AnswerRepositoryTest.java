@@ -54,7 +54,7 @@ class AnswerRepositoryTest {
         Question savedQuestion = questions.save(question);
 
         Answer expected = new Answer(savedUser, savedQuestion, "Answers Contents1");
-        Answer saved = answers.save(expected);
+        answers.save(expected);
 
         Optional<Answer> found = answers.findByIdAndDeletedFalse(expected.getId());
 
@@ -73,7 +73,7 @@ class AnswerRepositoryTest {
         Answer expected = new Answer(savedUser, savedQuestion, "Answers Contents1");
         Answer saved = answers.save(expected);
 
-        saved.setDeleted(true);
+        saved.delete(savedUser);
 
         Optional<Answer> found = answers.findByIdAndDeletedFalse(expected.getId());
 
@@ -86,10 +86,10 @@ class AnswerRepositoryTest {
         User user = UserFixture.JAVAJIGI;
         User savedUser = users.save(user);
 
-        Question question = new Question("title1", "contents1").writeBy(savedUser);
-        Question savedQuestion = questions.save(question);
-
-        Answer expected = new Answer(savedUser, savedQuestion, "Answers Contents1");
-        Answer actual = answers.save(expected);
+        assertAll(
+                () -> assertThat(savedUser.getId()).isNotNull(),
+                () -> assertThat(savedUser.getName()).isEqualTo(UserFixture.JAVAJIGI.getName()),
+                () -> assertThat(savedUser.getEmail()).isEqualTo(UserFixture.JAVAJIGI.getEmail())
+        );
     }
 }
