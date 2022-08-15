@@ -82,7 +82,7 @@ public class Question extends TimeStamped {
         List<DeleteHistory> deleteHistories = deleteAnswersBy(user);
 
         this.deleted = true;
-        deleteHistories.add(DeleteHistory.from(this));
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, this.id, this.writer));
 
         return deleteHistories;
     }

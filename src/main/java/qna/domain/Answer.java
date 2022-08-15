@@ -35,7 +35,7 @@ public class Answer extends TimeStamped {
     @Column(nullable = false)
     private boolean deleted = false;
 
-    public Answer(User writer, Question question, String contents) {
+    public Answer(User writer, Question question, String contents)  {
         this(null, writer, question, contents);
     }
 
@@ -83,7 +83,7 @@ public class Answer extends TimeStamped {
         checkIsWrittenBy(user);
 
         this.deleted = true;
-        return DeleteHistory.from(this);
+        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer);
     }
 
     private void checkIsNotDeleted() {

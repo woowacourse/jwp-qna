@@ -43,17 +43,6 @@ public class DeleteHistory {
         this.deletedBy = deletedBy;
     }
 
-    public static DeleteHistory from(Answer answer) {
-        return new DeleteHistory(
-                ContentType.ANSWER,
-                answer.getId(),
-                answer.getWriter());
-    }
-
-    public static DeleteHistory from(Question question) {
-        return new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriter());
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
