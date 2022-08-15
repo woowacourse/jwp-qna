@@ -21,11 +21,6 @@ public enum AnswerFixture {
     }
 
     public Answer generate(final Long id, final User writer, final Question question) {
-        return Answer.builder()
-                .id(id)
-                .contents(contents)
-                .writer(writer)
-                .question(question)
-                .build();
+        return new Answer(writer, question, this.contents);
     }
 }

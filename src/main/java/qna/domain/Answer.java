@@ -10,12 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import lombok.Builder;
 import qna.CannotDeleteException;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
-@Builder
 @Entity
 public class Answer extends TimeStamped {
 
@@ -34,7 +32,6 @@ public class Answer extends TimeStamped {
     @Lob
     private String contents;
 
-    @Builder.Default
     @Column(nullable = false)
     private boolean deleted = false;
 

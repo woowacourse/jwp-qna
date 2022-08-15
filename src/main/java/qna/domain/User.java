@@ -6,10 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import lombok.Builder;
 import qna.UnAuthorizedException;
 
-@Builder
 @Entity
 public class User extends TimeStamped {
     public static final GuestUser GUEST_USER = new GuestUser();

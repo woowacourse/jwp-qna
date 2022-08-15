@@ -1,6 +1,5 @@
 package qna.fixtures;
 
-import qna.domain.Answers;
 import qna.domain.Question;
 
 public enum QuestionFixture {
@@ -22,11 +21,6 @@ public enum QuestionFixture {
     }
 
     public Question generate(final Long id) {
-        return Question.builder()
-                .id(id)
-                .title(this.title)
-                .contents(this.content)
-                .answers(new Answers())
-                .build();
+        return new Question(id, this.title, this.content);
     }
 }

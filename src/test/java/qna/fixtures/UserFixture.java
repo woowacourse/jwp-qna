@@ -5,7 +5,7 @@ import qna.domain.User;
 public enum UserFixture {
 
     JAVAJIGI("javajigi", "password", "자바지기", "javajigi@slipp.net"),
-    SANJIGI("sanjigi", "password", "산지기", "sanjigi@slipp.net")
+    SANJIGI("sanjigi", "password", "산지기", "sanjigi@slipp.net"),
     ;
 
     private final String userId;
@@ -25,12 +25,6 @@ public enum UserFixture {
     }
 
     public User generate(final Long id) {
-        return User.builder()
-                .id(id)
-                .userId(this.userId)
-                .password(this.password)
-                .name(this.name)
-                .email(this.email)
-                .build();
+        return new User(id, this.userId, this.password, this.name, this.email);
     }
 }
