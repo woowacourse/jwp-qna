@@ -82,12 +82,17 @@ public class Answer extends TimeStamped {
     }
 
     public DeleteHistory deleteBy(User user) {
-        if (!deleted) {
-            checkIsWrittenBy(user);
-            this.deleted = true;
-            return DeleteHistory.from(this);
+        checkIsNotDeleted();
+        checkIsWrittenBy(user);
+
+        this.deleted = true;
+        return DeleteHistory.from(this);
+    }
+
+    private void checkIsNotDeleted() {
+        if (deleted) {
+            throw new CannotDeleteException("이미 삭제된 답변입니다.");
         }
-        throw new CannotDeleteException("이미 삭제된 답변입니다.");
     }
 
     private void checkIsWrittenBy(User user) {
