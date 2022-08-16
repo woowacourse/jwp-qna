@@ -78,4 +78,8 @@ public class User {
             return true;
         }
     }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
 }
