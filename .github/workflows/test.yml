@@ -37,7 +37,7 @@ jobs:
       SONARQUBE_URL: ${{ secrets.SONARQUBE_URL }}
       SONARQUBE_TOKEN : ${{ secrets.SONARQUBE_TOKEN }}
       PR_NUMBER: ${{ github.event.pull_request.number }}
-		# analysis job 의 세부 단계 설정
+    # analysis job 의 세부 단계 설정
     steps:
       # 소스코드 체크아웃 수행
       - name: Checkout source code
