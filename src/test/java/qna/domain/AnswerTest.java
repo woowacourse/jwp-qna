@@ -128,7 +128,7 @@ public class AnswerTest {
         Answer answer = new Answer(user, question, "Answers Contents1");
         answerRepository.save(answer);
 
-        assertThat(answer.isOwner(user)).isTrue();
+        assertThat(answer.getWriterId()).isEqualTo(user.getId());
     }
 
     @Test

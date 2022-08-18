@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import qna.CannotDeleteException;
+import qna.UnAuthorizedException;
 
 import java.util.List;
 
@@ -40,8 +41,8 @@ public class AnswersTest {
         ));
 
         assertThatThrownBy(() -> answers.delete(user1))
-                .isInstanceOf(CannotDeleteException.class)
-                .hasMessage("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+                .isInstanceOf(UnAuthorizedException.class)
+                .hasMessage("답변 작성자와 삭제 요청자가 다릅니다.");
     }
 
     @Test

@@ -18,21 +18,12 @@ public class Answers {
 
     public Answers() {}
 
-    public List<DeleteHistory> delete(User loginUser) throws CannotDeleteException {
-        validateOther(loginUser);
-        this.answers.forEach(answer -> answer.setDeleted(true));
+    public List<DeleteHistory> delete(User loginUser) {
+        this.answers.forEach(answer -> answer.unActivate(loginUser));
         return this.answers
                 .stream()
                 .map(answer -> new DeleteHistory(ContentType.ANSWER, answer.getId(), loginUser))
                 .collect(Collectors.toList());
-    }
-
-    private void validateOther(User user) throws CannotDeleteException {
-        boolean existsOtherUser = answers.stream()
-                .anyMatch(answer -> !answer.isOwner(user));
-        if (existsOtherUser) {
-            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-        }
     }
 
     public void addAnswer(Answer answer) {
