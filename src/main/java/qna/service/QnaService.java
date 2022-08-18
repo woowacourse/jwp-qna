@@ -1,60 +1,59 @@
 package qna.service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import qna.CannotDeleteException;
 import qna.NotFoundException;
 import qna.domain.Answer;
 import qna.domain.AnswerRepository;
-import qna.domain.ContentType;
 import qna.domain.DeleteHistory;
 import qna.domain.Question;
 import qna.domain.QuestionRepository;
 import qna.domain.User;
 
 @Service
+@Transactional(readOnly = true)
 public class QnaService {
     private static final Logger log = LoggerFactory.getLogger(QnaService.class);
 
-    private QuestionRepository questionRepository;
-    private AnswerRepository answerRepository;
-    private DeleteHistoryService deleteHistoryService;
+    private final AnswerRepository answers;
+    private final QuestionRepository questions;
+    private final DeleteHistoryService deleteHistoryService;
 
-    public QnaService(QuestionRepository questionRepository, AnswerRepository answerRepository, DeleteHistoryService deleteHistoryService) {
-        this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
+    public QnaService(final AnswerRepository answers, final QuestionRepository questions,
+                      final DeleteHistoryService deleteHistoryService) {
+        this.answers = answers;
+        this.questions = questions;
         this.deleteHistoryService = deleteHistoryService;
     }
 
-    @Transactional(readOnly = true)
+    public Answer findAnswerById(Long id) {
+        return answers.findByIdAndDeletedFalse(id)
+                .orElseThrow(NotFoundException::new);
+    }
+
     public Question findQuestionById(Long id) {
-        return questionRepository.findByIdAndDeletedFalse(id)
+        return questions.findByIdAndDeletedFalse(id)
                 .orElseThrow(NotFoundException::new);
     }
 
     @Transactional
-    public void deleteQuestion(User loginUser, Long questionId) throws CannotDeleteException {
+    public void deleteAnswer(User loginUser, Long answerId) {
+        Answer answer = findAnswerById(answerId);
+
+        DeleteHistory deleteHistory = answer.deleteBy(loginUser);
+
+        deleteHistoryService.save(deleteHistory);
+    }
+
+    @Transactional
+    public void deleteQuestion(User loginUser, Long questionId) {
         Question question = findQuestionById(questionId);
-        if (!question.isOwner(loginUser)) {
-            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
-        }
 
-        if (!question.isAnswersAllDeletable()) {
-            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-        }
+        List<DeleteHistory> deleteHistories = question.deleteBy(loginUser);
 
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-        question.delete();
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, questionId, question.getWriter(), LocalDateTime.now()));
-        for (Answer answer : question.getAnswers()) {
-            answer.delete();
-            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()));
-        }
         deleteHistoryService.saveAll(deleteHistories);
     }
 }

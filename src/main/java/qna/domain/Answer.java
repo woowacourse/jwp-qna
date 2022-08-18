@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import qna.CannotDeleteException;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
@@ -34,7 +35,7 @@ public class Answer extends TimeStamped {
     @Column(nullable = false)
     private boolean deleted = false;
 
-    public Answer(User writer, Question question, String contents) {
+    public Answer(User writer, Question question, String contents)  {
         this(null, writer, question, contents);
     }
 
@@ -54,11 +55,19 @@ public class Answer extends TimeStamped {
         this.contents = contents;
     }
 
-    protected Answer() {
+    public Answer(final Long id,
+                  final User writer,
+                  final Question question,
+                  final String contents,
+                  final boolean deleted) {
+        this.id = id;
+        this.writer = writer;
+        this.question = question;
+        this.contents = contents;
+        this.deleted = deleted;
     }
 
-    public boolean isOwner(User writer) {
-        return this.writer.equals(writer);
+    protected Answer() {
     }
 
     public void toQuestion(Question question) {
@@ -69,8 +78,24 @@ public class Answer extends TimeStamped {
         return deleted;
     }
 
-    public void delete() {
+    public DeleteHistory deleteBy(User user) {
+        checkIsNotDeleted();
+        checkIsWrittenBy(user);
+
         this.deleted = true;
+        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer);
+    }
+
+    private void checkIsNotDeleted() {
+        if (deleted) {
+            throw new CannotDeleteException("이미 삭제된 답변입니다.");
+        }
+    }
+
+    private void checkIsWrittenBy(User user) {
+        if (!this.writer.equals(user)) {
+            throw new CannotDeleteException("답변은 작성자 본인만 삭제할 수 있습니다");
+        }
     }
 
     public Long getId() {

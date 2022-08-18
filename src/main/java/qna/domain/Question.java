@@ -1,8 +1,8 @@
 package qna.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import qna.CannotDeleteException;
 
 @Entity
 public class Question extends TimeStamped {
@@ -30,32 +30,40 @@ public class Question extends TimeStamped {
     @JoinColumn(name = "writer_id", nullable = false, foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answers = new ArrayList<>();
+    @Embedded
+    private Answers answers;
 
     @Column(nullable = false)
     private boolean deleted = false;
 
+    protected Question() {
+    }
+
     public Question(String title, String contents) {
-        this(null, title, contents);
+        this(null, title, contents, null, new Answers(), false);
     }
 
     public Question(Long id, String title, String contents) {
+        this(id, title, contents, null, new Answers(), false);
+    }
+
+    public Question(final Long id,
+                    final String title,
+                    final String contents,
+                    final User writer,
+                    final Answers answers,
+                    final boolean deleted) {
         this.id = id;
         this.title = title;
         this.contents = contents;
-    }
-
-    protected Question() {
+        this.writer = writer;
+        this.answers = answers;
+        this.deleted = deleted;
     }
 
     public Question writeBy(User writer) {
         this.writer = writer;
         return this;
-    }
-
-    public boolean isOwner(User writer) {
-        return this.writer.equals(writer);
     }
 
     public void addAnswer(Answer answer) {
@@ -67,17 +75,36 @@ public class Question extends TimeStamped {
         return deleted;
     }
 
-    public void delete() {
+    public List<DeleteHistory> deleteBy(User user) {
+        checkIsNotDeleted();
+        checkIsWrittenBy(user);
+
+        List<DeleteHistory> deleteHistories = deleteAnswersBy(user);
+
         this.deleted = true;
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, this.id, this.writer));
+
+        return deleteHistories;
     }
 
-    public boolean isAnswersAllDeletable() {
-        for (Answer answer : answers) {
-            if (!answer.isOwner(writer)) {
-                return false;
-            }
+    private void checkIsNotDeleted() {
+        if (deleted) {
+            throw new CannotDeleteException("이미 삭제 된 질문입니다.");
         }
-        return true;
+    }
+
+    private List<DeleteHistory> deleteAnswersBy(final User user) {
+        try {
+            return answers.deleteAllBy(user);
+        } catch (CannotDeleteException e) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
+    }
+
+    private void checkIsWrittenBy(User user) {
+        if (!writer.equals(user)) {
+            throw new CannotDeleteException("질문은 작성자 본인만 삭제할 수 있습니다.");
+        }
     }
 
     public Long getId() {
@@ -97,6 +124,6 @@ public class Question extends TimeStamped {
     }
 
     public List<Answer> getAnswers() {
-        return answers;
+        return answers.getAnswers();
     }
 }
