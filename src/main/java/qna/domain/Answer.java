@@ -45,10 +45,6 @@ public class Answer extends TimeStampEntity {
         this.contents = contents;
     }
 
-    public boolean isOwner(User writer) {
-        return this.writer.getId().equals(writer.getId());
-    }
-
     public void toQuestion(Question question) {
         if (this.question != null || question.isDeleted()) {
             return;
@@ -80,6 +76,10 @@ public class Answer extends TimeStampEntity {
         this.contents = contents;
     }
 
+    public Question getQuestion() {
+        return question;
+    }
+
     public Long getQuestionId() {
         return this.question.getId();
     }
@@ -96,8 +96,17 @@ public class Answer extends TimeStampEntity {
         return writer;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void unActivate(User user) {
+        validateSameOwner(user);
+        if (!this.deleted) {
+            this.deleted = true;
+        }
+    }
+
+    private void validateSameOwner(User user) {
+        if (!this.writer.getId().equals(user.getId())) {
+            throw new UnAuthorizedException("답변 작성자와 삭제 요청자가 다릅니다.");
+        }
     }
 
     @Override
