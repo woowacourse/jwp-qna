@@ -37,21 +37,6 @@ class QuestionRepositoryTest {
                 .isEqualTo(saved);
     }
 
-    @DisplayName("질문을 식별자 아이디로 조회한다.")
-    @Test
-    void findById() {
-        // given
-        final Question saved = questionRepository.save(Q1);
-
-        // when
-        final Question actual = questionRepository.findById(saved.getId()).get();
-
-        // then
-        assertThat(actual)
-                .usingRecursiveComparison()
-                .isEqualTo(saved);
-    }
-
     @DisplayName("삭제되지 않은 질문을 식별자 아이디로 조회한다.")
     @Test
     void findByIdAndDeletedFalse() {

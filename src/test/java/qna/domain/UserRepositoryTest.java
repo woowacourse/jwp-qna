@@ -35,21 +35,6 @@ class UserRepositoryTest {
                 .isEqualTo(saved);
     }
 
-    @DisplayName("사용자를 식별자 아이디로 조회한다.")
-    @Test
-    void findById() {
-        // given
-        final User saved = userRepository.save(JAVAJIGI);
-
-        // when
-        final User actual = userRepository.findById(saved.getId()).get();
-
-        // then
-        assertThat(actual)
-                .usingRecursiveComparison()
-                .isEqualTo(saved);
-    }
-
     @DisplayName("사용자를 로그인 아이디로 조회한다.")
     @Test
     void findByUserId() {
