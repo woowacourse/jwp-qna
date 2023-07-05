@@ -18,7 +18,7 @@ public class Answer {
     private String contents;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     private boolean deleted = false;
 
