@@ -1,7 +1,7 @@
 package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static qna.domain.UserTest.JAVAJIGI;
+import static qna.domain.UserFixture.JAVAJIGI;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

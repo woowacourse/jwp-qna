@@ -1,8 +1,8 @@
 package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static qna.domain.QuestionTest.Q1;
-import static qna.domain.QuestionTest.Q2;
+import static qna.domain.QuestionFixture.Q1;
+import static qna.domain.QuestionFixture.Q2;
 
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
