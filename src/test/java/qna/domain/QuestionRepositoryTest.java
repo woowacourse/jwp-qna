@@ -15,7 +15,7 @@ class QuestionRepositoryTest {
     @Test
     void findByDeletedFalse() {
         Question question = new Question("제목", "내용");
-        Question savedQuestion = questionRepository.save(question);
+        questionRepository.save(question);
         List<Question> questions = questionRepository.findByDeletedFalse();
 
         assertThat(questions).isNotEmpty();
