@@ -16,7 +16,7 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(length = 50)
     private String email;
