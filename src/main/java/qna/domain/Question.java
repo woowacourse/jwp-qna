@@ -1,9 +1,7 @@
 package qna.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Question {
@@ -11,10 +9,22 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
+
+    @Lob
     private String contents;
-    private Long writerId;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
     private boolean deleted = false;
+
+    @Column(length = 100, nullable = false)
+    private String title;
+
+    private LocalDateTime updatedAt;
+
+    private Long writerId;
 
     protected Question() {
     }
