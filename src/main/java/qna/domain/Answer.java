@@ -1,16 +1,33 @@
 package qna.domain;
 
+import org.springframework.data.annotation.LastModifiedDate;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Answer {
+@Entity
+public class Answer extends BaseEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long writerId;
     private Long questionId;
+    @Lob
     private String contents;
+    @Column(nullable = false)
     private boolean deleted = false;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     public Answer(User writer, Question question, String contents) {
         this(null, writer, question, contents);
