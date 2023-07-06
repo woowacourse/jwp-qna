@@ -1,16 +1,18 @@
 package qna.domain;
 
-import jdk.internal.logger.LocalizedLoggerWrapper;
-import org.springframework.transaction.annotation.Transactional;
-import qna.UnAuthorizedException;
-
-import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import qna.UnAuthorizedException;
+
 @Entity
 @Table(name = "user")
-public class User extends QnaEntity{
+public class User extends QnaEntity {
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @Id
@@ -20,12 +22,12 @@ public class User extends QnaEntity{
     private LocalDateTime createdAt = LocalDateTime.now();
     @Column(length = 50)
     private String email;
-    @Column(nullable = false,length = 20)
+    @Column(nullable = false, length = 20)
     private String name;
-    @Column(nullable = false,length = 20)
+    @Column(nullable = false, length = 20)
     private String password;
     private LocalDateTime updatedAt = LocalDateTime.now();
-    @Column(nullable = false,length = 20)
+    @Column(nullable = false, length = 20)
     private String userId;
 
     public User() {

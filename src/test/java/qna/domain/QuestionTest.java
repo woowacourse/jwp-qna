@@ -3,7 +3,6 @@ package qna.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -49,15 +48,15 @@ public class QuestionTest {
 
         //then
         assertAll(
-                ()->assertThat(actual1).isEqualTo(question1),
-                ()->assertThat(actual2).isEqualTo(question2)
+                () -> assertThat(actual1).isEqualTo(question1),
+                () -> assertThat(actual2).isEqualTo(question2)
         );
     }
 
     @Test
     void delete() {
         // given
-        final Question expected =questions.save(Q1);
+        final Question expected = questions.save(Q1);
 
         // when
         questions.delete(expected);
