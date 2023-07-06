@@ -25,7 +25,7 @@ public class Answer extends QnaEntity {
     private Long questionId;
     private Long writerId;
 
-    public Answer() {
+    protected Answer() {
     }
 
     public Answer(User writer, Question question, String contents) {
