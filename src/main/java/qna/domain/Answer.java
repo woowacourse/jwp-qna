@@ -1,16 +1,47 @@
 package qna.domain;
 
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
 import java.util.Objects;
 
+@Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Answer {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long writerId;
     private Long questionId;
+    @Lob
     private String contents;
+    @Column(nullable = false)
     private boolean deleted = false;
+    @Column(nullable = false)
+    @CreatedDate
+    private LocalDateTime createdAt;
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    protected Answer() {
+    }
+
+    public Answer(Long writerId, Long questionId, String contents) {
+        this.writerId = writerId;
+        this.questionId = questionId;
+        this.contents = contents;
+    }
 
     public Answer(User writer, Question question, String contents) {
         this(null, writer, question, contents);
