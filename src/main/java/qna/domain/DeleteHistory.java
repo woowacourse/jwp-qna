@@ -12,7 +12,8 @@ import javax.persistence.Id;
 @Entity
 public class DeleteHistory extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Enumerated(value = EnumType.STRING)
     private ContentType contentType;
