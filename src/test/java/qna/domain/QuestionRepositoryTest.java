@@ -5,18 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.TestConstructor;
-import org.springframework.test.context.TestConstructor.AutowireMode;
 
-@TestConstructor(autowireMode = AutowireMode.ALL)
-@DataJpaTest
-@DisplayNameGeneration(ReplaceUnderscores.class)
-@SuppressWarnings("NonAsciiCharacters")
-class QuestionRepositoryTest {
+
+class QuestionRepositoryTest extends RepositoryTest {
 
     private final QuestionRepository questionRepository;
 
