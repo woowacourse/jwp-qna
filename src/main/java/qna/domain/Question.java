@@ -13,12 +13,13 @@ public class Question extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column(length = 100, nullable = false)
     private String title;
     @Lob
     @Column(nullable = false)
     private String contents;
     private Long writerId;
+    @Column(nullable = false)
     private boolean deleted = false;
 
     protected Question() {

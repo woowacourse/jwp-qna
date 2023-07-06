@@ -1,6 +1,7 @@
 package qna.domain;
 
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +20,7 @@ public class Answer extends BaseEntity {
     private Long questionId;
     @Lob
     private String contents;
+    @Column(nullable = false)
     private boolean deleted = false;
 
     protected Answer() {
