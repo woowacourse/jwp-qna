@@ -23,15 +23,15 @@ public class Station {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public void updatName(final String name) {
+    public void updateName(final String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

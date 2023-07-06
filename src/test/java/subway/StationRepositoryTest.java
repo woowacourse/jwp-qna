@@ -87,7 +87,7 @@ class StationRepositoryTest {
     void 변경_감지() {
         // given
         final Station before = stationRepository.save(new Station("잠실역"));
-        before.updatName("선릉역");
+        before.updateName("선릉역");
 
         // when
         final Station after = stationRepository.findByName("선릉역");
