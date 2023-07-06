@@ -1,16 +1,28 @@
 package qna.domain;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
-public class Answer {
+@Entity
+@Table(name ="answer")
+public class Answer extends QnaEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long writerId;
-    private Long questionId;
+    @Lob
     private String contents;
+    @Column(name = "deleted",nullable = false)
     private boolean deleted = false;
+
+    private Long questionId;
+    private Long writerId;
+    public Answer(){}
 
     public Answer(User writer, Question question, String contents) {
         this(null, writer, question, contents);
@@ -41,7 +53,7 @@ public class Answer {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -83,7 +95,7 @@ public class Answer {
     @Override
     public String toString() {
         return "Answer{" +
-                "id=" + id +
+                "id=" + this.id +
                 ", writerId=" + writerId +
                 ", questionId=" + questionId +
                 ", contents='" + contents + '\'' +

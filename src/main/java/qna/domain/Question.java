@@ -1,12 +1,25 @@
 package qna.domain;
 
-public class Question {
-    private Long id;
-    private String title;
-    private String contents;
-    private Long writerId;
-    private boolean deleted = false;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "question")
+public class Question extends QnaEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Lob
+    private String contents;
+    @Column(nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(nullable = false)
+    private boolean deleted = false;
+    @Column(nullable = false,length = 100)
+    private String title;
+    private LocalDateTime updatedAt = LocalDateTime.now();
+    private Long writerId;
+    public Question(){}
     public Question(String title, String contents) {
         this(null, title, contents);
     }
@@ -35,7 +48,7 @@ public class Question {
     }
 
     public void setId(Long id) {
-        this.id = id;
+         this.id = id;
     }
 
     public String getTitle() {
