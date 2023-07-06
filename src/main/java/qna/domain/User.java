@@ -1,20 +1,42 @@
 package qna.domain;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import qna.UnAuthorizedException;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     public static final GuestUser GUEST_USER = new GuestUser();
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true, length = 20)
     private String userId;
+
+    @Column(nullable = false, length = 20)
     private String password;
+
+    @Column(nullable = false, length = 20)
     private String name;
+
+    @Column(length = 50)
     private String email;
 
-    private User() {
-    }
+    @Column(nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
     public User(String userId, String password, String name, String email) {
         this(null, userId, password, name, email);
