@@ -5,21 +5,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity // (1)
-@Table(name = "station") // (2)
+@Entity
 public class Station {
 
-
-    @Id // (3)
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // (4)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", unique = true, nullable = false) // (5)
+    @Column(unique = true, nullable = false)
     private String name;
 
-    protected Station() { // (6)
+    protected Station() {
     }
 
     public Station(final String name) {
