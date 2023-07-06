@@ -31,24 +31,24 @@ class QuestionRepositoryTest {
         questionRepository.save(QuestionTest.Q2);
 
         // when
-        final List<Question> result = questionRepository.findByDeletedFalse();
+        final List<Question> actual = questionRepository.findByDeletedFalse();
 
         // then
-        assertThat(result).hasSize(2);
+        assertThat(actual).hasSize(2);
     }
 
     @Test
     void id로_질문을_찾을_수_있다() {
         // given
-        final Question question = questionRepository.save(QuestionTest.Q2);
+        final Question expected = questionRepository.save(QuestionTest.Q2);
 
         // when
-        final Optional<Question> result = questionRepository.findByIdAndDeletedFalse(question.getId());
+        final Optional<Question> actual = questionRepository.findByIdAndDeletedFalse(expected.getId());
 
         // then
         Assertions.assertAll(
-                () -> assertThat(result).isPresent(),
-                () -> assertThat(result.get()).isEqualTo(question)
+                () -> assertThat(actual).isPresent(),
+                () -> assertThat(actual.get()).isEqualTo(expected)
         );
     }
 }

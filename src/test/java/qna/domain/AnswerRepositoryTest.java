@@ -28,27 +28,26 @@ class AnswerRepositoryTest {
     void 질문_id로_답변들을_찾을_수_있다() {
         // given
         final Answer answer = answerRepository.save(AnswerTest.A1);
-        final Long questionId = answer.getQuestionId();
 
         // when
-        final List<Answer> result = answerRepository.findByQuestionIdAndDeletedFalse(questionId);
+        final List<Answer> actual = answerRepository.findByQuestionIdAndDeletedFalse(answer.getQuestionId());
 
         // then
-        assertThat(result).contains(answer);
+        assertThat(actual).contains(answer);
     }
 
     @Test
     void id로_답변을_찾을_수_있다() {
         // given
-        final Answer answer = answerRepository.save(AnswerTest.A1);
+        final Answer expected = answerRepository.save(AnswerTest.A1);
 
         // when
-        final Optional<Answer> result = answerRepository.findByIdAndDeletedFalse(answer.getId());
+        final Optional<Answer> actual = answerRepository.findByIdAndDeletedFalse(expected.getId());
 
         // then
         assertAll(
-                () -> assertThat(result).isPresent(),
-                () -> assertThat(result.get()).isEqualTo(answer)
+                () -> assertThat(actual).isPresent(),
+                () -> assertThat(actual.get()).isEqualTo(expected)
         );
     }
 }

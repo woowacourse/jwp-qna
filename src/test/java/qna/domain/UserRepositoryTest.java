@@ -26,15 +26,15 @@ class UserRepositoryTest {
     @Test
     void 아이디로_사용자를_찾을_수_있다() {
         // given
-        final User user = userRepository.save(UserTest.JAVAJIGI);
+        final User expected = userRepository.save(UserTest.JAVAJIGI);
 
         // when
-        final Optional<User> result = userRepository.findByUserId(user.getUserId());
+        final Optional<User> actual = userRepository.findByUserId(expected.getUserId());
 
         // then
         Assertions.assertAll(
-                () -> assertThat(result).isPresent(),
-                () -> assertThat(result.get()).usingRecursiveComparison().isEqualTo(user)
+                () -> assertThat(actual).isPresent(),
+                () -> assertThat(actual.get()).usingRecursiveComparison().isEqualTo(expected)
         );
     }
 }
