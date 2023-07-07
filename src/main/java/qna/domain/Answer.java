@@ -16,6 +16,7 @@ public class Answer extends BaseDate {
     @Lob
     private String contents;
 
+    @Column(nullable = false)
     private boolean deleted = false;
 
     private Long questionId;
@@ -44,7 +45,6 @@ public class Answer extends BaseDate {
         this.questionId = question.getId();
         this.contents = contents;
     }
-
 
     public boolean isOwner(User writer) {
         return this.writerId.equals(writer.getId());
