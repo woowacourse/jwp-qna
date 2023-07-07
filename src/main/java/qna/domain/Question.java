@@ -41,6 +41,12 @@ public class Question extends BaseDate {
         this.contents = contents;
     }
 
+    public Question(String contents, String title, User writer) {
+        this.contents = contents;
+        this.title = title;
+        this.writer = writer;
+    }
+
     public Question writeBy(User writer) {
         this.writer = writer;
         return this;

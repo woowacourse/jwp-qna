@@ -15,21 +15,21 @@ import static qna.fixture.UserFixture.SANJIGI;
 @DataJpaTest
 public class QuestionTest {
 
-    public static final Question Q1 = new Question("title1", "contents1");
-    public static final Question Q2 = new Question("title2", "contents2");
-
     @Autowired
     private QuestionRepository questionRepository;
 
     @Autowired
     private UserRepository userRepository;
 
+    private Question Q1;
+    private Question Q2;
+
     @BeforeEach
     void setUp() {
         User user1 = userRepository.save(JAVAJIGI);
-        Q1.writeBy(user1);
+        Q1 = new Question("title1", "contents1", user1);
         User user2 = userRepository.save(SANJIGI);
-        Q2.writeBy(user2);
+        Q2 = new Question("title2", "contents2", user2);
     }
 
     @Test

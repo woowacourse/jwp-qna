@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static qna.domain.QuestionTest.Q1;
 import static qna.fixture.UserFixture.JAVAJIGI;
 import static qna.fixture.UserFixture.SANJIGI;
 
@@ -32,7 +31,7 @@ public class AnswerTest {
         User user1 = userRepository.save(JAVAJIGI);
         User user2 = userRepository.save(SANJIGI);
 
-        Question question = questionRepository.save(Q1.writeBy(user1));
+        Question question = questionRepository.save(new Question("title1", "contents1").writeBy(user1));
 
         A1 = new Answer(user1, question, "Answers Contents1");
         A2 = new Answer(user2, question, "Answers Contents2");
