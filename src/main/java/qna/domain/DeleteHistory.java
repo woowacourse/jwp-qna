@@ -2,7 +2,6 @@ package qna.domain;
 
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
