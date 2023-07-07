@@ -1,6 +1,7 @@
 package qna.domain;
 
 import org.assertj.core.api.AssertionsForClassTypes;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -12,11 +13,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 public class QuestionTest {
 
-    public static final Question Q1 = new Question("title1", "contents1").writeBy(UserTest.JAVAJIGI);
-    public static final Question Q2 = new Question("title2", "contents2").writeBy(UserTest.SANJIGI);
+    public static final Question Q1 = new Question("title1", "contents1");
+    public static final Question Q2 = new Question("title2", "contents2");
 
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @BeforeEach
+    void setUp() {
+        User user1 = userRepository.save(UserTest.JAVAJIGI);
+        Q1.writeBy(user1);
+        User user2 = userRepository.save(UserTest.SANJIGI);
+        Q2.writeBy(user2);
+    }
 
     @Test
     void 질문을_저장한다() {
@@ -48,5 +60,4 @@ public class QuestionTest {
         // then
         AssertionsForClassTypes.assertThat(savedQuestion).isEqualTo(findQuestion);
     }
-
 }
