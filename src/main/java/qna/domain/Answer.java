@@ -1,16 +1,54 @@
 package qna.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
 import java.util.Objects;
 
-public class Answer {
+@Entity
+@Table(name = "answer")
+public class Answer extends AuditingEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false)
     private Long id;
+
+    @NotNull
+    @Column(name = "writer_id", updatable = false)
     private Long writerId;
+
+    @NotNull
+    @Column(name = "question_id", updatable = false)
     private Long questionId;
+
+    @Lob
+    @NotNull
+    @NotBlank
+    @Column(name = "contents")
     private String contents;
+
+    @NotNull
+    @Column(name = "deleted")
     private boolean deleted = false;
+
+    protected Answer() {
+    }
+
+    public Answer(Long writerId, Long questionId, String contents) {
+        this.writerId = writerId;
+        this.questionId = questionId;
+        this.contents = contents;
+    }
 
     public Answer(User writer, Question question, String contents) {
         this(null, writer, question, contents);
@@ -89,5 +127,22 @@ public class Answer {
                 ", contents='" + contents + '\'' +
                 ", deleted=" + deleted +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Answer answer = (Answer) o;
+        return Objects.equals(getId(), answer.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
