@@ -4,11 +4,10 @@ import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class Answer {
+public class Answer extends BaseDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,14 +16,9 @@ public class Answer {
     @Lob
     private String contents;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
     private boolean deleted = false;
 
     private Long questionId;
-
-    private LocalDateTime updatedAt;
 
     private Long writerId;
 

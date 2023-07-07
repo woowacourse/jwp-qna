@@ -1,10 +1,9 @@
 package qna.domain;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-public class Question {
+public class Question extends BaseDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,15 +13,10 @@ public class Question {
     private String contents;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column(nullable = false)
     private boolean deleted = false;
 
     @Column(length = 100, nullable = false)
     private String title;
-
-    private LocalDateTime updatedAt;
 
     private Long writerId;
 
