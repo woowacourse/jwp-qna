@@ -15,15 +15,23 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public abstract class BaseEntity {
 
     @CreatedBy
-    private Long createdBy;
+    private String createdBy;
     @LastModifiedBy
-    private Long updatedBy;
+    private String updatedBy;
     @CreatedDate
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
