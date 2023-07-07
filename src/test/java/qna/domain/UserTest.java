@@ -7,12 +7,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static qna.fixture.UserFixture.JAVAJIGI;
+import static qna.fixture.UserFixture.SANJIGI;
 
 @DataJpaTest
 public class UserTest {
-
-    public static final User JAVAJIGI = new User("javajigi", "password", "name", "javajigi@slipp.net");
-    public static final User SANJIGI = new User("sanjigi", "password", "name", "sanjigi@slipp.net");
 
     @Autowired
     private UserRepository userRepository;

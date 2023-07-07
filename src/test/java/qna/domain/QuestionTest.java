@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static qna.fixture.UserFixture.JAVAJIGI;
+import static qna.fixture.UserFixture.SANJIGI;
 
 @DataJpaTest
 public class QuestionTest {
@@ -24,9 +26,9 @@ public class QuestionTest {
 
     @BeforeEach
     void setUp() {
-        User user1 = userRepository.save(UserTest.JAVAJIGI);
+        User user1 = userRepository.save(JAVAJIGI);
         Q1.writeBy(user1);
-        User user2 = userRepository.save(UserTest.SANJIGI);
+        User user2 = userRepository.save(SANJIGI);
         Q2.writeBy(user2);
     }
 

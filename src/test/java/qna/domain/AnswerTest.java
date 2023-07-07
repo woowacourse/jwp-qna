@@ -9,8 +9,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static qna.domain.QuestionTest.Q1;
-import static qna.domain.UserTest.JAVAJIGI;
-import static qna.domain.UserTest.SANJIGI;
+import static qna.fixture.UserFixture.JAVAJIGI;
+import static qna.fixture.UserFixture.SANJIGI;
 
 @DataJpaTest
 public class AnswerTest {
