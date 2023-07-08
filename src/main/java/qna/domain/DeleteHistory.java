@@ -8,6 +8,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
@@ -19,49 +21,37 @@ public class DeleteHistory {
   @Enumerated(value = EnumType.STRING)
   private ContentType contentType;
   private Long contentId;
-  private Long deletedById;
+  @ManyToOne
+  @JoinColumn(name = "deleted_by_id")
+  private User deleteUser;
   @CreatedDate
   private LocalDateTime createDate;
 
   protected DeleteHistory() {
   }
 
-  public DeleteHistory(ContentType contentType, Long contentId, Long deletedById,
-      LocalDateTime createDate) {
+  public DeleteHistory(final ContentType contentType, final Long contentId, final User deleteUser,
+      final LocalDateTime createDate) {
     this.contentType = contentType;
     this.contentId = contentId;
-    this.deletedById = deletedById;
+    this.deleteUser = deleteUser;
     this.createDate = createDate;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DeleteHistory that = (DeleteHistory) o;
-    return Objects.equals(id, that.id) &&
-        contentType == that.contentType &&
-        Objects.equals(contentId, that.contentId) &&
-        Objects.equals(deletedById, that.deletedById);
+    final DeleteHistory that = (DeleteHistory) o;
+    return Objects.equals(id, that.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, contentType, contentId, deletedById);
-  }
-
-  @Override
-  public String toString() {
-    return "DeleteHistory{" +
-        "id=" + id +
-        ", contentType=" + contentType +
-        ", contentId=" + contentId +
-        ", deletedById=" + deletedById +
-        ", createDate=" + createDate +
-        '}';
+    return Objects.hash(id);
   }
 }
