@@ -92,6 +92,23 @@ public class Answer extends  BaseEntity {
     }
 
     @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+        Answer answer = (Answer) other;
+        return Objects.equals(id, answer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
     public String toString() {
         return "Answer{" +
                 "id=" + id +
