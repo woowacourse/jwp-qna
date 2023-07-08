@@ -1,10 +1,10 @@
 package qna.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 class UserRepositoryTest extends RepositoryTest {
@@ -24,9 +24,6 @@ class UserRepositoryTest extends RepositoryTest {
         final Optional<User> actual = userRepository.findByUserId(expected.getUserId());
 
         // then
-        Assertions.assertAll(
-                () -> assertThat(actual).isPresent(),
-                () -> assertThat(actual.get()).usingRecursiveComparison().isEqualTo(expected)
-        );
+        assertThat(actual).contains(expected);
     }
 }

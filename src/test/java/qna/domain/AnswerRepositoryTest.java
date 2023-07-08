@@ -1,14 +1,12 @@
 package qna.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 class AnswerRepositoryTest extends RepositoryTest {
@@ -52,9 +50,6 @@ class AnswerRepositoryTest extends RepositoryTest {
         final Optional<Answer> actual = answerRepository.findByIdAndDeletedFalse(expected.getId());
 
         // then
-        assertAll(
-                () -> assertThat(actual).isPresent(),
-                () -> assertThat(actual.get()).isEqualTo(expected)
-        );
+        assertThat(actual).contains(expected);
     }
 }
