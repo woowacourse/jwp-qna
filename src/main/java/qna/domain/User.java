@@ -38,6 +38,10 @@ public class User extends BaseEntity {
     protected User() {
     }
 
+    public User(String userId) {
+        this(userId, null, null, null);
+    }
+
     public User(String userId, String password, String name, String email) {
         this(null, userId, password, name, email);
     }
@@ -67,7 +71,7 @@ public class User extends BaseEntity {
         return this.userId.equals(userId);
     }
 
-    public boolean matchPassword(String targetPassword) {
+    private boolean matchPassword(String targetPassword) {
         return this.password.equals(targetPassword);
     }
 
