@@ -11,7 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
-public class Question {
+public class Question extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +23,6 @@ public class Question {
   private Long writerId;
   @Column(nullable = false)
   private boolean deleted;
-  @CreatedDate
-  @Column(nullable = false)
-  private LocalDateTime createdAt;
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
 
   protected Question() {
   }

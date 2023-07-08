@@ -14,7 +14,7 @@ import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
 @Entity
-public class Answer {
+public class Answer extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +25,6 @@ public class Answer {
   private String contents;
   @Column(nullable = false)
   private boolean deleted;
-  @CreatedDate
-  @Column(nullable = false)
-  private LocalDateTime createdAt;
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
 
   protected Answer() {
   }
