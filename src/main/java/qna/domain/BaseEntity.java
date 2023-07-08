@@ -16,11 +16,14 @@ public abstract class BaseEntity {
 
     @CreatedBy
     private String createdBy;
+
     @LastModifiedBy
     private String updatedBy;
+
     @CreatedDate
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();

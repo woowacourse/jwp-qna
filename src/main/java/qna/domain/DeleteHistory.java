@@ -17,9 +17,12 @@ public class DeleteHistory extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Enumerated(value = EnumType.STRING)
     private ContentType contentType;
+
     private Long contentId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deleted_by_id")
     private User deletedBy;

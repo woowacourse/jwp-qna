@@ -1,13 +1,13 @@
 package qna.domain;
 
-import java.util.Objects;
+import qna.UnAuthorizedException;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import qna.UnAuthorizedException;
+import java.util.Objects;
 
 @Entity
 public class User extends BaseEntity {
@@ -16,12 +16,16 @@ public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(length = 20, unique = true, nullable = false)
     private String userId;
+
     @Column(length = 20, nullable = false)
     private String password;
+
     @Column(length = 20, nullable = false)
     private String name;
+
     @Column(length = 50, nullable = false)
     private String email;
 

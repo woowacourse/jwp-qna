@@ -10,14 +10,18 @@ public class Question extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(length = 100, nullable = false)
     private String title;
+
     @Lob
     @Column(nullable = false)
     private String contents;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")
     private User writer;
+
     @Column(nullable = false)
     private boolean deleted = false;
 
