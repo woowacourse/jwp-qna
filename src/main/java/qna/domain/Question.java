@@ -1,17 +1,16 @@
 package qna.domain;
 
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class Question {
+public class Question extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,14 +19,11 @@ public class Question {
   private String title;
   @Lob
   private String contents;
-  private Long writerId;
+  @ManyToOne
+  @JoinColumn(name = "writer_id")
+  private User writer;
   @Column(nullable = false)
   private boolean deleted;
-  @CreatedDate
-  @Column(nullable = false)
-  private LocalDateTime createdAt;
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
 
   protected Question() {
   }
@@ -43,12 +39,12 @@ public class Question {
   }
 
   public Question writeBy(User writer) {
-    this.writerId = writer.getId();
+    this.writer = writer;
     return this;
   }
 
   public boolean isOwner(User writer) {
-    return this.writerId.equals(writer.getId());
+    return this.writer.equals(writer);
   }
 
   public void addAnswer(Answer answer) {
@@ -79,12 +75,12 @@ public class Question {
     this.contents = contents;
   }
 
-  public Long getWriterId() {
-    return writerId;
+  public User getWriter() {
+    return writer;
   }
 
-  public void setWriterId(Long writerId) {
-    this.writerId = writerId;
+  public void setWriter(final User writer) {
+    this.writer = writer;
   }
 
   public boolean isDeleted() {
@@ -101,7 +97,7 @@ public class Question {
         "id=" + id +
         ", title='" + title + '\'' +
         ", contents='" + contents + '\'' +
-        ", writerId=" + writerId +
+        ", writer=" + writer +
         ", deleted=" + deleted +
         '}';
   }

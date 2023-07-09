@@ -12,7 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import qna.UnAuthorizedException;
 
 @Entity
-public class User {
+public class User extends BaseEntity {
 
   public static final GuestUser GUEST_USER = new GuestUser();
 
@@ -27,11 +27,6 @@ public class User {
   private String name;
   @Column(length = 50)
   private String email;
-  @CreatedDate
-  @Column(nullable = false)
-  private LocalDateTime createdAt;
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
 
   protected User() {
   }
