@@ -24,7 +24,7 @@ public class User extends AuditingEntity {
 
     @NotNull
     @NotBlank
-    @Column(name = "user_id", updatable = false, length = 20)
+    @Column(name = "user_id", updatable = false, length = 20, unique = true)
     private String userId;
 
     @NotNull
