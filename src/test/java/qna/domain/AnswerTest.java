@@ -1,14 +1,14 @@
 package qna.domain;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static qna.fixtures.AnswerFixture.A1;
 import static qna.fixtures.QuestionFixture.Q1;
 import static qna.fixtures.UserFixture.JAVAJIGI;
 import static qna.fixtures.UserFixture.SANJIGI;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 public class AnswerTest {
 
@@ -18,8 +18,8 @@ public class AnswerTest {
 
         // when, then
         assertAll(
-            () -> assertThat(A1.isOwner(JAVAJIGI)).isTrue(),
-            () -> assertThat(A1.isOwner(SANJIGI)).isFalse()
+                () -> assertThat(A1.isOwner(JAVAJIGI)).isTrue(),
+                () -> assertThat(A1.isOwner(SANJIGI)).isFalse()
         );
     }
 

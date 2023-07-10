@@ -1,6 +1,7 @@
 package qna.domain;
 
-import java.util.Objects;
+import qna.UnAuthorizedException;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,16 +9,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import qna.UnAuthorizedException;
+import java.util.Objects;
 
 @Entity
 @Table(uniqueConstraints =
-    {
-        @UniqueConstraint(
-            name = "USER_ID_UNIQUE",
-            columnNames = {"userId"}
-        )
-    }
+        {
+                @UniqueConstraint(
+                        name = "USER_ID_UNIQUE",
+                        columnNames = {"userId"}
+                )
+        }
 )
 public class User extends BaseEntity {
 
@@ -81,7 +82,7 @@ public class User extends BaseEntity {
         }
 
         return name.equals(target.name) &&
-            email.equals(target.email);
+                email.equals(target.email);
     }
 
     public boolean isGuestUser() {
@@ -148,12 +149,12 @@ public class User extends BaseEntity {
     @Override
     public String toString() {
         return "User{" +
-            "id=" + id +
-            ", userId='" + userId + '\'' +
-            ", password='" + password + '\'' +
-            ", name='" + name + '\'' +
-            ", email='" + email + '\'' +
-            '}';
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 
     private static class GuestUser extends User {

@@ -1,12 +1,12 @@
 package qna.domain;
 
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import java.util.Objects;
 
 @Entity
 public class Question extends BaseEntity {
@@ -108,11 +108,11 @@ public class Question extends BaseEntity {
     @Override
     public String toString() {
         return "Question{" +
-            "id=" + id +
-            ", title='" + title + '\'' +
-            ", contents='" + contents + '\'' +
-            ", writerId=" + writerId +
-            ", deleted=" + deleted +
-            '}';
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                ", writerId=" + writerId +
+                ", deleted=" + deleted +
+                '}';
     }
 }

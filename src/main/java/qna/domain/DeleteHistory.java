@@ -1,20 +1,17 @@
 package qna.domain;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import javax.persistence.PrePersist;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 public class DeleteHistory {
 
     @Id
@@ -24,7 +21,6 @@ public class DeleteHistory {
     private ContentType contentType;
     private Long contentId;
     private Long deletedById;
-    @CreatedDate
     @Column(updatable = false, nullable = false)
     private LocalDateTime createDate;
 
@@ -36,6 +32,11 @@ public class DeleteHistory {
         this.contentId = contentId;
         this.deletedById = deletedById;
         this.createDate = createDate;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.createDate = LocalDateTime.now();
     }
 
     @Override
@@ -58,11 +59,11 @@ public class DeleteHistory {
     @Override
     public String toString() {
         return "DeleteHistory{" +
-            "id=" + id +
-            ", contentType=" + contentType +
-            ", contentId=" + contentId +
-            ", deletedById=" + deletedById +
-            ", createDate=" + createDate +
-            '}';
+                "id=" + id +
+                ", contentType=" + contentType +
+                ", contentId=" + contentId +
+                ", deletedById=" + deletedById +
+                ", createDate=" + createDate +
+                '}';
     }
 }

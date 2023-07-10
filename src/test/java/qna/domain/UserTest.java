@@ -1,14 +1,14 @@
 package qna.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static qna.fixtures.UserFixture.JAVAJIGI;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import qna.UnAuthorizedException;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static qna.fixtures.UserFixture.JAVAJIGI;
 
 @DataJpaTest
 public class UserTest {
@@ -26,8 +26,8 @@ public class UserTest {
 
         // then
         assertAll(
-            () -> assertThat(JAVAJIGI.getName()).isEqualTo("updatedName"),
-            () -> assertThat(JAVAJIGI.getEmail()).isEqualTo("update@slipp.net")
+                () -> assertThat(JAVAJIGI.getName()).isEqualTo("updatedName"),
+                () -> assertThat(JAVAJIGI.getEmail()).isEqualTo("update@slipp.net")
         );
     }
 
@@ -40,7 +40,7 @@ public class UserTest {
 
         // when, then
         assertThatThrownBy(() -> JAVAJIGI.update(loginUser, target))
-            .isInstanceOf(UnAuthorizedException.class);
+                .isInstanceOf(UnAuthorizedException.class);
     }
 
     @DisplayName("바꾸려고 하는 사용자의 password가 다르면 예외가 발생한다.")
@@ -52,7 +52,7 @@ public class UserTest {
 
         // when, then
         assertThatThrownBy(() -> JAVAJIGI.update(loginUser, target))
-            .isInstanceOf(UnAuthorizedException.class);
+                .isInstanceOf(UnAuthorizedException.class);
     }
 
     @DisplayName("대상 유저의 이름과 이메일이 같으면 true를 반환한다.")
@@ -74,8 +74,8 @@ public class UserTest {
 
         // when, then
         assertAll(
-            () -> assertThat(JAVAJIGI.equalsNameAndEmail(target1)).isFalse(),
-            () -> assertThat(JAVAJIGI.equalsNameAndEmail(target2)).isFalse()
+                () -> assertThat(JAVAJIGI.equalsNameAndEmail(target1)).isFalse(),
+                () -> assertThat(JAVAJIGI.equalsNameAndEmail(target2)).isFalse()
         );
     }
 
@@ -87,8 +87,8 @@ public class UserTest {
 
         // when, then
         assertAll(
-            () -> assertThat(guestUser.isGuestUser()).isTrue(),
-            () -> assertThat(JAVAJIGI.isGuestUser()).isFalse()
+                () -> assertThat(guestUser.isGuestUser()).isTrue(),
+                () -> assertThat(JAVAJIGI.isGuestUser()).isFalse()
         );
     }
 }
