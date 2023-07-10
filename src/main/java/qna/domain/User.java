@@ -133,6 +133,10 @@ public class User {
         this.email = email;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
     private static class GuestUser extends User {
         @Override
         public boolean isGuestUser() {
