@@ -1,6 +1,37 @@
 package qna.domain;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import qna.fixture.QuestionFixture;
+import qna.fixture.UserFixture;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class QuestionTest {
-    public static final Question Q1 = new Question("title1", "contents1").writeBy(UserTest.JAVAJIGI);
-    public static final Question Q2 = new Question("title2", "contents2").writeBy(UserTest.SANJIGI);
+
+    @Test
+    @DisplayName("질문한 사용자가 맞음을 확인한다.")
+    void isOwnerTrue() {
+        // given
+        final Question question = QuestionFixture.Q1();
+
+        // when
+        final boolean actual = question.isOwner(UserFixture.JAVAJIGI());
+
+        //then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    @DisplayName("질문한 사용자가 아님을 확인한다.")
+    void isOwnerFalse() {
+        // given
+        final Question question = QuestionFixture.Q1();
+
+        // when
+        final boolean actual = question.isOwner(UserFixture.SANJIGI());
+
+        //then
+        assertThat(actual).isFalse();
+    }
 }
