@@ -28,21 +28,21 @@ class AnswerRepositoryTest {
     @Test
     void findById() {
         // given
-        Answer saved = answerRepository.save(AnswerFixture.A1);
+        Answer saved = answerRepository.save(AnswerFixture.a1());
         // when
         Optional<Answer> found = answerRepository.findById(saved.getId());
         // then
         assertAll(
                 () -> assertThat(found).isPresent(),
-                () -> assertThat(found.get().getContents()).isEqualTo(AnswerFixture.A1.getContents())
+                () -> assertThat(found.get().getContents()).isEqualTo(AnswerFixture.a1().getContents())
         );
     }
 
     @Test
     void findAll() {
         // given
-        answerRepository.save(AnswerFixture.A1);
-        answerRepository.save(AnswerFixture.A2);
+        answerRepository.save(AnswerFixture.a1());
+        answerRepository.save(AnswerFixture.a2());
         // when
         List<Answer> answers = answerRepository.findAll();
         // then
@@ -52,8 +52,8 @@ class AnswerRepositoryTest {
     @Test
     void countTest() {
         // given
-        answerRepository.save(AnswerFixture.A1);
-        answerRepository.save(AnswerFixture.A2);
+        answerRepository.save(AnswerFixture.a1());
+        answerRepository.save(AnswerFixture.a2());
         // when
         long count = answerRepository.count();
         // then
@@ -63,7 +63,7 @@ class AnswerRepositoryTest {
     @Test
     void deleteTest() {
         // given
-        Answer saved = answerRepository.save(AnswerFixture.A1);
+        Answer saved = answerRepository.save(AnswerFixture.a1());
         // when
         answerRepository.delete(saved);
         Optional<Answer> found = answerRepository.findById(saved.getId());
@@ -74,7 +74,7 @@ class AnswerRepositoryTest {
     @Test
     void deleteByIdTest() {
         // given
-        Answer saved = answerRepository.save(AnswerFixture.A1);
+        Answer saved = answerRepository.save(AnswerFixture.a1());
         // when
         answerRepository.deleteById(saved.getId());
         Optional<Answer> found = answerRepository.findById(saved.getId());
@@ -86,7 +86,7 @@ class AnswerRepositoryTest {
     @Test
     void existsTest() {
         // given
-        Answer saved = answerRepository.save(AnswerFixture.A1);
+        Answer saved = answerRepository.save(AnswerFixture.a1());
         // when
         boolean isExists = answerRepository.existsById(saved.getId());
         // then
@@ -96,9 +96,9 @@ class AnswerRepositoryTest {
     @Test
     void findByQuestionIdAndDeletedFalse() {
         // given
-        Answer saved = answerRepository.save(AnswerFixture.A1);
+        Answer saved = answerRepository.save(AnswerFixture.a1());
         // when
-        List<Answer> answers = answerRepository.findByQuestionIdAndDeletedFalse(AnswerFixture.A1.getQuestionId());
+        List<Answer> answers = answerRepository.findByQuestionIdAndDeletedFalse(AnswerFixture.a1().getQuestionId());
         // then
         assertAll(
                 () -> assertThat(answers.size()).isEqualTo(1),
@@ -109,7 +109,7 @@ class AnswerRepositoryTest {
     @Test
     void findByIdAndDeletedFalse() {
         // given
-        Answer saved = answerRepository.save(AnswerFixture.A1);
+        Answer saved = answerRepository.save(AnswerFixture.a1());
         // when
         Optional<Answer> found = answerRepository.findByIdAndDeletedFalse(saved.getId());
         // then

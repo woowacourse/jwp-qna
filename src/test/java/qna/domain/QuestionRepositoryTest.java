@@ -24,21 +24,21 @@ class QuestionRepositoryTest {
     @Test
     void findById() {
         // given
-        Question saved = questionRepository.save(QuestionFixture.Q1);
+        Question saved = questionRepository.save(QuestionFixture.q1());
         // when
         Optional<Question> found = questionRepository.findById(saved.getId());
         // then
         assertAll(
                 () -> assertThat(found).isPresent(),
-                () -> assertThat(found.get().getContents()).isEqualTo(QuestionFixture.Q1.getContents())
+                () -> assertThat(found.get().getContents()).isEqualTo(QuestionFixture.q1().getContents())
         );
     }
 
     @Test
     void findAll() {
         // given
-        questionRepository.save(QuestionFixture.Q1);
-        questionRepository.save(QuestionFixture.Q2);
+        questionRepository.save(QuestionFixture.q1());
+        questionRepository.save(QuestionFixture.q2());
         // when
         List<Question> questions = questionRepository.findAll();
         // then
@@ -48,8 +48,8 @@ class QuestionRepositoryTest {
     @Test
     void countTest() {
         // given
-        questionRepository.save(QuestionFixture.Q1);
-        questionRepository.save(QuestionFixture.Q2);
+        questionRepository.save(QuestionFixture.q1());
+        questionRepository.save(QuestionFixture.q2());
         // when
         long count = questionRepository.count();
         // then
@@ -60,7 +60,7 @@ class QuestionRepositoryTest {
     @Test
     void deleteTest() {
         // given
-        Question saved = questionRepository.save(QuestionFixture.Q1);
+        Question saved = questionRepository.save(QuestionFixture.q1());
         // when
         questionRepository.delete(saved);
         Optional<Question> found = questionRepository.findById(saved.getId());
@@ -71,7 +71,7 @@ class QuestionRepositoryTest {
     @Test
     void deleteByIdTest() {
         // given
-        Question saved = questionRepository.save(QuestionFixture.Q1);
+        Question saved = questionRepository.save(QuestionFixture.q1());
         // when
         questionRepository.deleteById(saved.getId());
         Optional<Question> found = questionRepository.findById(saved.getId());
@@ -82,7 +82,7 @@ class QuestionRepositoryTest {
     @Test
     void existsTest() {
         // given
-        Question saved = questionRepository.save(QuestionFixture.Q1);
+        Question saved = questionRepository.save(QuestionFixture.q1());
         // when
         boolean isExists = questionRepository.existsById(saved.getId());
         // then
@@ -92,8 +92,8 @@ class QuestionRepositoryTest {
     @Test
     void findByDeletedFalse() {
         // given
-        questionRepository.save(QuestionFixture.Q1);
-        questionRepository.save(QuestionFixture.Q2);
+        questionRepository.save(QuestionFixture.q1());
+        questionRepository.save(QuestionFixture.q2());
         // when
         List<Question> found = questionRepository.findByDeletedFalse();
         // then
@@ -103,8 +103,8 @@ class QuestionRepositoryTest {
     @Test
     void findByIdAndDeletedFalse() {
         // given
-        Question saved = questionRepository.save(QuestionFixture.Q1);
-        questionRepository.save(QuestionFixture.Q2);
+        Question saved = questionRepository.save(QuestionFixture.q1());
+        questionRepository.save(QuestionFixture.q2());
         // when
         Optional<Question> found = questionRepository.findByIdAndDeletedFalse(saved.getId());
         // then

@@ -24,7 +24,7 @@ class DeleteHistoryRepositoryTest {
     @Test
     void findById() {
         // given
-        DeleteHistory saved = deleteHistoryRepository.save(DeleteHistoryFixture.D1);
+        DeleteHistory saved = deleteHistoryRepository.save(DeleteHistoryFixture.d1());
         // when
         Optional<DeleteHistory> found = deleteHistoryRepository.findById(saved.getId());
         // then
@@ -37,8 +37,8 @@ class DeleteHistoryRepositoryTest {
     @Test
     void findAll() {
         // given
-        deleteHistoryRepository.save(DeleteHistoryFixture.D1);
-        deleteHistoryRepository.save(DeleteHistoryFixture.D2);
+        deleteHistoryRepository.save(DeleteHistoryFixture.d1());
+        deleteHistoryRepository.save(DeleteHistoryFixture.d2());
         // when
         List<DeleteHistory> deleteHistories = deleteHistoryRepository.findAll();
         // then
@@ -48,8 +48,8 @@ class DeleteHistoryRepositoryTest {
     @Test
     void countTest() {
         // given
-        deleteHistoryRepository.save(DeleteHistoryFixture.D1);
-        deleteHistoryRepository.save(DeleteHistoryFixture.D2);
+        deleteHistoryRepository.save(DeleteHistoryFixture.d1());
+        deleteHistoryRepository.save(DeleteHistoryFixture.d2());
         // when
         long count = deleteHistoryRepository.count();
         // then
@@ -59,7 +59,7 @@ class DeleteHistoryRepositoryTest {
     @Test
     void deleteTest() {
         // given
-        DeleteHistory saved = deleteHistoryRepository.save(DeleteHistoryFixture.D1);
+        DeleteHistory saved = deleteHistoryRepository.save(DeleteHistoryFixture.d1());
         // when
         deleteHistoryRepository.delete(saved);
         Optional<DeleteHistory> found = deleteHistoryRepository.findById(saved.getId());
@@ -70,7 +70,7 @@ class DeleteHistoryRepositoryTest {
     @Test
     void deleteByIdTest() {
         // given
-        DeleteHistory saved = deleteHistoryRepository.save(DeleteHistoryFixture.D1);
+        DeleteHistory saved = deleteHistoryRepository.save(DeleteHistoryFixture.d1());
         // when
         deleteHistoryRepository.deleteById(saved.getId());
         Optional<DeleteHistory> found = deleteHistoryRepository.findById(saved.getId());
@@ -82,7 +82,7 @@ class DeleteHistoryRepositoryTest {
     @Test
     void existsTest() {
         // given
-        DeleteHistory saved = deleteHistoryRepository.save(DeleteHistoryFixture.D1);
+        DeleteHistory saved = deleteHistoryRepository.save(DeleteHistoryFixture.d1());
         // when
         boolean isExists = deleteHistoryRepository.existsById(saved.getId());
         // then

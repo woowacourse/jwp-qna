@@ -24,21 +24,21 @@ class UserRepositoryTest {
     @Test
     void findById() {
         // given
-        User saved = userRepository.save(UserFixture.JAVAJIGI);
+        User saved = userRepository.save(UserFixture.javajigi());
         // when
         Optional<User> found = userRepository.findById(saved.getId());
         // then
         assertAll(
                 () -> assertThat(found).isPresent(),
-                () -> assertThat(found.get().getUserId()).isEqualTo(UserFixture.JAVAJIGI.getUserId())
+                () -> assertThat(found.get().getUserId()).isEqualTo(UserFixture.javajigi().getUserId())
         );
     }
 
     @Test
     void findAll() {
         // given
-        userRepository.save(UserFixture.JAVAJIGI);
-        userRepository.save(UserFixture.SANJIGI);
+        userRepository.save(UserFixture.javajigi());
+        userRepository.save(UserFixture.sanjigi());
         // when
         List<User> users = userRepository.findAll();
         // then
@@ -48,8 +48,8 @@ class UserRepositoryTest {
     @Test
     void countTest() {
         // given
-        userRepository.save(UserFixture.JAVAJIGI);
-        userRepository.save(UserFixture.SANJIGI);
+        userRepository.save(UserFixture.javajigi());
+        userRepository.save(UserFixture.sanjigi());
         // when
         long count = userRepository.count();
         // then
@@ -60,7 +60,7 @@ class UserRepositoryTest {
     @Test
     void deleteTest() {
         // given
-        User saved = userRepository.save(UserFixture.JAVAJIGI);
+        User saved = userRepository.save(UserFixture.javajigi());
         // when
         userRepository.delete(saved);
         Optional<User> found = userRepository.findById(saved.getId());
@@ -71,7 +71,7 @@ class UserRepositoryTest {
     @Test
     void deleteByIdTest() {
         // given
-        User saved = userRepository.save(UserFixture.JAVAJIGI);
+        User saved = userRepository.save(UserFixture.javajigi());
         // when
         userRepository.deleteById(saved.getId());
         Optional<User> found = userRepository.findById(saved.getId());
@@ -82,7 +82,7 @@ class UserRepositoryTest {
     @Test
     void existsTest() {
         // given
-        User saved = userRepository.save(UserFixture.JAVAJIGI);
+        User saved = userRepository.save(UserFixture.javajigi());
         // when
         boolean isExists = userRepository.existsById(saved.getId());
         // then
@@ -92,13 +92,13 @@ class UserRepositoryTest {
     @Test
     void findByUserId() {
         // given
-        User saved = userRepository.save(UserFixture.JAVAJIGI);
+        User saved = userRepository.save(UserFixture.javajigi());
         // when
         Optional<User> found = userRepository.findByUserId(saved.getUserId());
         // then
         assertAll(
                 () -> assertThat(found).isPresent(),
-                () -> assertThat(found.get().getUserId()).isEqualTo(UserFixture.JAVAJIGI.getUserId())
+                () -> assertThat(found.get().getUserId()).isEqualTo(UserFixture.javajigi().getUserId())
         );
     }
 }
