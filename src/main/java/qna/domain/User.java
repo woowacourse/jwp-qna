@@ -12,14 +12,7 @@ import javax.persistence.UniqueConstraint;
 import java.util.Objects;
 
 @Entity
-@Table(uniqueConstraints =
-        {
-                @UniqueConstraint(
-                        name = "USER_ID_UNIQUE",
-                        columnNames = {"userId"}
-                )
-        }
-)
+@Table(uniqueConstraints = @UniqueConstraint(name = "USER_ID_UNIQUE", columnNames = {"userId"}))
 public class User extends BaseEntity {
 
     public static final GuestUser GUEST_USER = new GuestUser();
@@ -37,10 +30,6 @@ public class User extends BaseEntity {
     private String email;
 
     protected User() {
-    }
-
-    public User(String userId) {
-        this(userId, null, null, null);
     }
 
     public User(String userId, String password, String name, String email) {

@@ -18,7 +18,7 @@ public class UserTest {
     @Test
     void update_success() {
         // given
-        final User loginUser = new User("javajigi");
+        final User loginUser = new User("javajigi", JAVAJIGI.getPassword(), JAVAJIGI.getName(), JAVAJIGI.getEmail());
         final User target = new User(1L, "javajigi", "password", "updatedName", "update@slipp.net");
 
         // when
@@ -35,7 +35,7 @@ public class UserTest {
     @Test
     void update_fail_userId() {
         // given
-        final User loginUser = new User("javajigiiiii");
+        final User loginUser = new User("javajigiiiii", JAVAJIGI.getPassword(), JAVAJIGI.getName(), JAVAJIGI.getEmail());
         final User target = new User(1L, JAVAJIGI.getUserId(), JAVAJIGI.getPassword(), "updatedName", "update@slipp.net");
 
         // when, then
@@ -47,7 +47,7 @@ public class UserTest {
     @Test
     void update_fail_password() {
         // given
-        final User loginUser = new User(JAVAJIGI.getUserId());
+        final User loginUser = new User(JAVAJIGI.getUserId(), JAVAJIGI.getPassword(), JAVAJIGI.getName(), JAVAJIGI.getEmail());
         final User target = new User(1L, JAVAJIGI.getUserId(), "password!!", "updatedName", "update@slipp.net");
 
         // when, then
