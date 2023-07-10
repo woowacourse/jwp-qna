@@ -1,19 +1,50 @@
 package qna.domain;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.UnAuthorizedException;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+
+@EntityListeners(AuditingEntityListener.class)
+@Entity
 public class User {
     public static final GuestUser GUEST_USER = new GuestUser();
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
-    private String userId;
-    private String password;
-    private String name;
+
+    @CreatedDate
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(length = 50)
     private String email;
 
-    private User() {
+    @Column(length = 20, nullable = false)
+    private String name;
+
+    @Column(length = 20, nullable = false)
+    private String password;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    @Column(length = 20, nullable = false, unique = true)
+    private String userId;
+
+    protected User() {
     }
 
     public User(String userId, String password, String name, String email) {
@@ -102,21 +133,23 @@ public class User {
         this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
-
     private static class GuestUser extends User {
         @Override
         public boolean isGuestUser() {
             return true;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", createdAt=" + createdAt +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", updatedAt=" + updatedAt +
+                ", userId='" + userId + '\'' +
+                '}';
     }
 }
