@@ -35,19 +35,20 @@ public class Answer extends BaseEntity {
     }
 
     public Answer(Long id, User writer, Question question, String contents) {
+        validate(writer, question);
         this.id = id;
-
-        if (Objects.isNull(writer)) {
-            throw new UnAuthorizedException();
-        }
-
-        if (Objects.isNull(question)) {
-            throw new NotFoundException();
-        }
-
         this.writer = writer;
         this.question = question;
         this.contents = contents;
+    }
+
+    private void validate(User writer, Question question) {
+        if (Objects.isNull(writer)) {
+            throw new UnAuthorizedException();
+        }
+        if (Objects.isNull(question)) {
+            throw new NotFoundException();
+        }
     }
 
     public boolean isOwner(User writer) {
