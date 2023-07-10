@@ -20,7 +20,7 @@ public class Question extends AuditingEntity {
     private String title;
     private Long writerId;
 
-    public Question() {
+    protected Question() {
     }
 
     public Question(String title, String contents) {
