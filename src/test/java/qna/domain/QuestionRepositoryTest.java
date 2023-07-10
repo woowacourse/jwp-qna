@@ -12,30 +12,30 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DataJpaTest
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-public class AnswerRepositoryTest {
+public class QuestionRepositoryTest {
+
+    public static final Question Q1 = new Question("title1", "contents1").writeBy(UserTest.JAVAJIGI);
+    public static final Question Q2 = new Question("title2", "contents2").writeBy(UserTest.SANJIGI);
 
     @Autowired
-    AnswerRepository answerRepository;
-
-    public static final Answer A1 = new Answer(UserTest.JAVAJIGI, QuestionRepositoryTest.Q1, "Answers Contents1");
-    public static final Answer A2 = new Answer(UserTest.SANJIGI, QuestionRepositoryTest.Q1, "Answers Contents2");
+    QuestionRepository questionRepository;
 
     @Test
-    void save_메서드로_A1을_저장한다() {
+    void save_메서드로_Q1을_저장한다() {
         // when
-        final Answer actual = answerRepository.save(A1);
+        final Question actual = questionRepository.save(Q1);
 
         // then
         assertThat(actual.getId()).isPositive();
     }
 
     @Test
-    void findById_메서드로_A1을_조회한다() {
+    void findById_메서드로_Q1을_조회한다() {
         // given
-        final Answer a1 = answerRepository.save(A1);
+        final Question q1 = questionRepository.save(Q1);
 
         // when
-        final Optional<Answer> actual = answerRepository.findById(a1.getId());
+        final Optional<Question> actual = questionRepository.findById(q1.getId());
 
         // then
         assertThat(actual).isPresent();
