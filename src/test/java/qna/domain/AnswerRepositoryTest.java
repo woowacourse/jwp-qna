@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @RepositoryTest
@@ -13,10 +12,6 @@ class AnswerRepositoryTest {
     private UserRepository userRepository;
     private QuestionRepository questionRepository;
     private AnswerRepository answerRepository;
-
-    private User savedWriter;
-    private Question savedQuestion;
-    private Answer answer;
 
     public AnswerRepositoryTest(
             UserRepository userRepository,
@@ -28,17 +23,15 @@ class AnswerRepositoryTest {
         this.answerRepository = answerRepository;
     }
 
-    @BeforeEach
-    void setUp() {
-        User writer = new User("tjdtls690", "abc1234@", "아벨", "tjdtls690@gmail.com");
-        savedWriter = userRepository.save(writer);
-        Question question = new Question("투표해야하는가?", "투표하세요");
-        savedQuestion = questionRepository.save(question);
-        answer = new Answer(savedWriter, savedQuestion, "투표했습니다");
-    }
-
     @Test
     void save() {
+        // given
+        User writer = new User("tjdtls690", "abc1234@", "아벨", "tjdtls690@gmail.com");
+        User savedWriter = userRepository.save(writer);
+        Question question = new Question("투표해야하는가?", "투표하세요");
+        Question savedQuestion = questionRepository.save(question);
+        Answer answer = new Answer(savedWriter, savedQuestion, "투표했습니다");
+
         // when
         Answer savedAnswer = answerRepository.save(answer);
 
@@ -53,11 +46,17 @@ class AnswerRepositoryTest {
     @Test
     void findByQuestionIdAndDeletedFalse() {
         // given
-        User writer = new User("tjdtls6901", "abc1234@", "아벨", "tjdtls690@gmail.com");
+        User writer = new User("tjdtls690", "abc1234@", "아벨", "tjdtls690@gmail.com");
         User savedWriter = userRepository.save(writer);
         Question question = new Question("투표해야하는가?", "투표하세요");
         Question savedQuestion = questionRepository.save(question);
-        Answer newAnswer = new Answer(savedWriter, savedQuestion, "투표했습니다");
+        Answer answer = new Answer(savedWriter, savedQuestion, "투표했습니다");
+
+        User writer1 = new User("aiaiai1", "abc1234123", "루쿠", "aiaiaia1@gmail.com");
+        User savedWriter1 = userRepository.save(writer1);
+        Question question1 = new Question("머먹지?", "밥");
+        Question savedQuestion1 = questionRepository.save(question1);
+        Answer newAnswer = new Answer(savedWriter1, savedQuestion1, "투표했습니다");
         newAnswer.setDeleted(true);
 
         answerRepository.save(answer);
@@ -76,11 +75,17 @@ class AnswerRepositoryTest {
     @Test
     void findAll() {
         // given
-        User writer = new User("tjdtls6901", "abc1234@", "아벨", "tjdtls690@gmail.com");
+        User writer = new User("tjdtls690", "abc1234@", "아벨", "tjdtls690@gmail.com");
         User savedWriter = userRepository.save(writer);
         Question question = new Question("투표해야하는가?", "투표하세요");
         Question savedQuestion = questionRepository.save(question);
-        Answer newAnswer = new Answer(savedWriter, savedQuestion, "투표했습니다");
+        Answer answer = new Answer(savedWriter, savedQuestion, "투표했습니다");
+
+        User writer1 = new User("aiaiai1", "abc1234123", "루쿠", "aiaiaia1@gmail.com");
+        User savedWriter1 = userRepository.save(writer1);
+        Question question1 = new Question("머먹지?", "밥");
+        Question savedQuestion1 = questionRepository.save(question1);
+        Answer newAnswer = new Answer(savedWriter1, savedQuestion1, "투표했습니다");
 
         answerRepository.save(answer);
         answerRepository.save(newAnswer);
