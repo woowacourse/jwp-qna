@@ -6,13 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @RepositoryTest
 class DeleteHistoryRepositoryTest {
 
-    @Autowired
     private DeleteHistoryRepository deleteHistoryRepository;
+
+    public DeleteHistoryRepositoryTest(DeleteHistoryRepository deleteHistoryRepository) {
+        this.deleteHistoryRepository = deleteHistoryRepository;
+    }
 
     @Test
     void save() {

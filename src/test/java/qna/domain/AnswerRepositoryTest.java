@@ -6,23 +6,27 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @RepositoryTest
 class AnswerRepositoryTest {
 
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
     private QuestionRepository questionRepository;
-
-    @Autowired
     private AnswerRepository answerRepository;
 
     private User savedWriter;
     private Question savedQuestion;
     private Answer answer;
+
+    public AnswerRepositoryTest(
+            UserRepository userRepository,
+            QuestionRepository questionRepository,
+            AnswerRepository answerRepository
+    ) {
+        this.userRepository = userRepository;
+        this.questionRepository = questionRepository;
+        this.answerRepository = answerRepository;
+    }
 
     @BeforeEach
     void setUp() {

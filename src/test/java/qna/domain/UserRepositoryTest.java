@@ -5,13 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @RepositoryTest
 class UserRepositoryTest {
 
-    @Autowired
     private UserRepository userRepository;
+
+    public UserRepositoryTest(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Test
     void save() {
