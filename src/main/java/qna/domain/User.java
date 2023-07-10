@@ -2,11 +2,15 @@ package qna.domain;
 
 import qna.UnAuthorizedException;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -16,14 +20,27 @@ public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(length = 20, nullable = false, unique = true)
     private String userId;
+
     @Column(length = 20, nullable = false)
     private String password;
+
     @Column(length = 20, nullable = false)
     private String name;
+
     @Column(length = 50)
     private String email;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<Answer> answers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<DeleteHistory> deleteHistories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<Question> questions = new ArrayList<>();
 
     protected User() {
     }
@@ -112,6 +129,33 @@ public class User extends BaseTimeEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+        answer.setUser(this);
+    }
+
+    public void addQuestion(Question question) {
+        questions.add(question);
+        question.setUser(this);
+    }
+
+    public void addDeleteHistory(DeleteHistory deleteHistory) {
+        deleteHistories.add(deleteHistory);
+        deleteHistory.setUser(this);
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public List<DeleteHistory> getDeleteHistories() {
+        return deleteHistories;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
     }
 
     @Override

@@ -1,11 +1,18 @@
 package qna.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -13,15 +20,24 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(length = 100, nullable = false)
     private String title;
+
     @Lob
     private String contents;
-    private Long writerId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id")
+    private User user;
+
     @Column(nullable = false)
     private boolean deleted = false;
 
-    private Question() {
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers = new ArrayList<>();
+
+    protected Question() {
     }
 
     public Question(String title, String contents) {
@@ -34,16 +50,17 @@ public class Question {
         this.contents = contents;
     }
 
-    public Question writeBy(User writer) {
-        this.writerId = writer.getId();
+    public Question writeBy(User user) {
+        this.user = user;
         return this;
     }
 
-    public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+    public boolean isOwner(User user) {
+        return this.user.equals(user);
     }
 
     public void addAnswer(Answer answer) {
+        this.answers.add(answer);
         answer.toQuestion(this);
     }
 
@@ -71,12 +88,12 @@ public class Question {
         this.contents = contents;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public User getUser() {
+        return user;
     }
 
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
+    public void setUser(final User user) {
+        this.user = user;
     }
 
     public boolean isDeleted() {
@@ -87,13 +104,21 @@ public class Question {
         this.deleted = deleted;
     }
 
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(final List<Answer> answers) {
+        this.answers = answers;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", writerId=" + writerId +
+                ", user=" + user +
                 ", deleted=" + deleted +
                 '}';
     }
