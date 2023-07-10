@@ -1,6 +1,5 @@
 package qna.domain;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,39 +11,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 class QuestionRepositoryTest extends RepositoryTest {
 
     private final QuestionRepository questionRepository;
-    private final UserRepository userRepository;
-    private Question question1;
-    private Question question2;
 
     QuestionRepositoryTest(final QuestionRepository questionRepository, UserRepository userRepository) {
         this.questionRepository = questionRepository;
-        this.userRepository = userRepository;
-    }
-
-    @BeforeEach
-    void setUp() {
-        final User user = userRepository.save(UserTest.JAVAJIGI);
-        question1 = new Question("title1", "contents1").writeBy(user);
-        question2 = new Question("title2", "contents2").writeBy(user);
     }
 
     @Test
     void 삭제되지_않은_질문들을_찾을_수_있다() {
         // given
-        questionRepository.save(question1);
-        questionRepository.save(question2);
+        final User user = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        final Question question = new Question("question", "content").writeBy(user);
+        questionRepository.save(question);
 
         // when
         final List<Question> actual = questionRepository.findByDeletedFalse();
 
         // then
-        assertThat(actual).hasSize(2);
+        assertThat(actual).hasSize(1);
     }
 
     @Test
     void id로_질문을_찾을_수_있다() {
         // given
-        final Question expected = questionRepository.save(question1);
+        final User user = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        final Question expected = questionRepository.save(new Question("question", "content").writeBy(user));
 
         // when
         final Optional<Question> actual = questionRepository.findByIdAndDeletedFalse(expected.getId());
