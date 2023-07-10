@@ -1,6 +1,7 @@
 package qna.domain;
 
 import org.junit.jupiter.api.Test;
+import qna.fixture.UserTest;
 
 import java.util.Optional;
 
