@@ -2,11 +2,7 @@ package qna.domain;
 
 import qna.UnAuthorizedException;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -26,7 +22,7 @@ public class User extends BaseEntity {
     @Column(length = 20, nullable = false)
     private String name;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 50)
     private String email;
 
     protected User() {
