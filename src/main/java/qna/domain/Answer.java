@@ -1,6 +1,6 @@
 package qna.domain;
 
-import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,11 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
-
-import java.util.Objects;
+import qna.domain.common.BaseTimeEntity;
 
 @Entity
-public class Answer {
+public class Answer extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,12 +27,6 @@ public class Answer {
     @Column(nullable = false)
     private boolean deleted = false;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column
-    private LocalDateTime updatedAt;
-    
     protected Answer() {
     }
 

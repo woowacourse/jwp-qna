@@ -1,17 +1,16 @@
 package qna.domain;
 
-import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import qna.UnAuthorizedException;
-
-import java.util.Objects;
+import qna.domain.common.BaseTimeEntity;
 
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
 
     public static final GuestUser GUEST_USER = new GuestUser();
 
@@ -30,12 +29,6 @@ public class User {
 
     @Column(length = 50)
     private String email;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column
-    private LocalDateTime updatedAt;
 
     protected User() {
     }
