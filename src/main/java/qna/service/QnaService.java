@@ -46,10 +46,10 @@ public class QnaService {
         }
 
         List<DeleteHistory> deleteHistories = new ArrayList<>();
-        question.setDeleted(true);
+        question.delete();
         deleteHistories.add(new DeleteHistory(ContentType.QUESTION, questionId, loginUser));
         for (Answer answer : answers) {
-            answer.setDeleted(true);
+            answer.delete();
             deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), loginUser));
         }
         deleteHistoryService.saveAll(deleteHistories);
