@@ -9,6 +9,7 @@ import javax.persistence.Lob;
 
 @Entity
 public class Question extends AuditingEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

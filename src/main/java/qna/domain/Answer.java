@@ -12,16 +12,15 @@ import qna.UnAuthorizedException;
 
 @Entity
 public class Answer extends AuditingEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Lob
     private String contents;
-
     @Column(nullable = false)
     private Boolean deleted = false;
     private Long questionId;
-
     private Long writerId;
 
     protected Answer() {

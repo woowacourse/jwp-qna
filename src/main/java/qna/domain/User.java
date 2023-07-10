@@ -10,6 +10,7 @@ import qna.UnAuthorizedException;
 
 @Entity
 public class User extends AuditingEntity {
+
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @Id

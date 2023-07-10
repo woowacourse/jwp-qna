@@ -9,6 +9,7 @@ import qna.domain.DeleteHistoryRepository;
 
 @Service
 public class DeleteHistoryService {
+
     private DeleteHistoryRepository deleteHistoryRepository;
 
     public DeleteHistoryService(DeleteHistoryRepository deleteHistoryRepository) {
