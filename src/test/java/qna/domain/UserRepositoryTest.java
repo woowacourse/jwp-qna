@@ -18,19 +18,18 @@ class UserRepositoryTest {
 	void save() {
 		// given
 		// when
-		final User actualUser = userRepository.save(UserTest.JAVAJIGI);
+		final User actualUser = userRepository.save(UserTest.VEROJIGI);
 
 		// then
 		assertThat(actualUser).usingRecursiveComparison()
 			.ignoringFields("id")
-			.isEqualTo(UserTest.JAVAJIGI);
+			.isEqualTo(UserTest.VEROJIGI);
 	}
 
 	@Test
 	void findByUserId() {
-		final User user = new User("vero", "1234", "베로", "vero@email.com");
-		final User savedUser = userRepository.save(user);
-		final User actualUser = userRepository.findByUserId(user.getUserId()).get();
+		final User savedUser = userRepository.save(UserTest.VEROJIGI);
+		final User actualUser = userRepository.findByUserId(savedUser.getUserId()).get();
 
 		assertThat(savedUser == actualUser).isTrue();
 	}
