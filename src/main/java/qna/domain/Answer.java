@@ -1,27 +1,31 @@
 package qna.domain;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class Answer extends BaseEntity {
+public class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long writerId;
-
     private Long questionId;
-
     @Lob
     private String contents;
-
-    @Column(nullable = false) // ddl 관련
-    private boolean deleted = false; // 이건 객체 관점
+    @Column(nullable = false)
+    private boolean deleted = false;
+    @CreationTimestamp
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     protected Answer() {
     }
