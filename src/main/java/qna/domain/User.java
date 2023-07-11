@@ -7,10 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import qna.UnAuthorizedException;
 
-@Table(name = "user", uniqueConstraints = @UniqueConstraint(name = "UK_a3imlf41l37utmxiquukk8ajc", columnNames = "user_id"))
+@Table(name = "user")
 @Entity
 public class User extends BaseEntity {
 
@@ -29,7 +28,7 @@ public class User extends BaseEntity {
     @Column(name = "password", nullable = false, length = 20)
     private String password;
 
-    @Column(name = "user_id", nullable = false, length = 20)
+    @Column(name = "user_id", nullable = false, length = 20, unique = true)
     private String userId;
 
     protected User() {
