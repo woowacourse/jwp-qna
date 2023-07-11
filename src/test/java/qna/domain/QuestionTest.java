@@ -21,14 +21,20 @@ public class QuestionTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AnswerRepository answerRepository;
+
     private Question Q1;
     private Question Q2;
 
+    private User user1;
+    private User user2;
+
     @BeforeEach
     void setUp() {
-        User user1 = userRepository.save(JAVAJIGI);
+        user1 = userRepository.save(JAVAJIGI);
         Q1 = new Question("title1", "contents1", user1);
-        User user2 = userRepository.save(SANJIGI);
+        user2 = userRepository.save(SANJIGI);
         Q2 = new Question("title2", "contents2", user2);
     }
 
@@ -61,5 +67,21 @@ public class QuestionTest {
 
         // then
         AssertionsForClassTypes.assertThat(savedQuestion).isEqualTo(findQuestion);
+    }
+
+    @Test
+    void Answer_목록을_조회한다() {
+        // given, when
+        Question question = questionRepository.save(Q1);
+        Answer A1 = new Answer(user1, question, "Answers Contents1");
+        Answer A2 = new Answer(user2, question, "Answers Contents2");
+        Answer savedA1 = answerRepository.save(A1);
+        Answer savedA2 = answerRepository.save(A2);
+
+        question.addAnswer(savedA1);
+        question.addAnswer(savedA2);
+
+        // then
+        assertThat(question.getAnswers()).containsExactlyInAnyOrder(savedA1, savedA2);
     }
 }

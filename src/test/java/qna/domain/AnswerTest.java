@@ -65,4 +65,15 @@ public class AnswerTest {
         // then
         assertThat(findAnswer).isEqualTo(savedAnswer);
     }
+
+    @Test
+    void Question을_조회한다() {
+        // given, when
+        Answer savedAnswer = answerRepository.save(A1);
+
+        Question question = savedAnswer.getQuestion();
+
+        // then
+        assertThat(question.getTitle()).isEqualTo("title1");
+    }
 }
