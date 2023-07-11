@@ -119,7 +119,6 @@ public class User extends BaseEntity {
         return "User{" +
                 "id=" + id +
                 ", userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
