@@ -60,11 +60,6 @@ public class DeleteHistory {
         return createDate;
     }
 
-    @PrePersist
-    public void prePersist() {
-        this.createDate = LocalDateTime.now();
-    }
-
     @Override
     public boolean equals(Object other) {
         if (this == other) {
