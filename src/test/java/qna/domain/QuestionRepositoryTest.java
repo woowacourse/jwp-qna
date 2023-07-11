@@ -16,7 +16,7 @@ import qna.configuration.JpaConfiguration;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @Import(JpaConfiguration.class)
-public class QuestionRepositoryTest {
+class QuestionRepositoryTest {
 
     @Autowired
     QuestionRepository questionRepository;
