@@ -1,5 +1,8 @@
 package qna.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,17 +17,13 @@ import qna.domain.Question;
 import qna.domain.QuestionRepository;
 import qna.domain.User;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class QnaService {
     private static final Logger log = LoggerFactory.getLogger(QnaService.class);
 
-    private QuestionRepository questionRepository;
-    private AnswerRepository answerRepository;
-    private DeleteHistoryService deleteHistoryService;
+    private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
+    private final DeleteHistoryService deleteHistoryService;
 
     public QnaService(QuestionRepository questionRepository, AnswerRepository answerRepository, DeleteHistoryService deleteHistoryService) {
         this.questionRepository = questionRepository;
