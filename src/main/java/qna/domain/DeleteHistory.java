@@ -1,20 +1,51 @@
 package qna.domain;
 
+import org.springframework.context.event.EventListener;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@EntityListeners(AuditingEntityListener.class)
+@Entity
 public class DeleteHistory {
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
-    private ContentType contentType;
+
     private Long contentId;
+
+    @Enumerated(value = EnumType.STRING)
+    private ContentType contentType;
+
+    @CreatedDate
+    private LocalDateTime createDate;
+
     private Long deletedById;
-    private LocalDateTime createDate = LocalDateTime.now();
+
+    protected DeleteHistory() {
+    }
 
     public DeleteHistory(ContentType contentType, Long contentId, Long deletedById, LocalDateTime createDate) {
         this.contentType = contentType;
         this.contentId = contentId;
         this.deletedById = deletedById;
         this.createDate = createDate;
+    }
+
+    public DeleteHistory(ContentType contentType, Long contentId, Long deletedById) {
+        this.contentType = contentType;
+        this.contentId = contentId;
+        this.deletedById = deletedById;
     }
 
     @Override
@@ -37,10 +68,10 @@ public class DeleteHistory {
     public String toString() {
         return "DeleteHistory{" +
                 "id=" + id +
-                ", contentType=" + contentType +
                 ", contentId=" + contentId +
-                ", deletedById=" + deletedById +
+                ", contentType=" + contentType +
                 ", createDate=" + createDate +
+                ", deletedById=" + deletedById +
                 '}';
     }
 }
