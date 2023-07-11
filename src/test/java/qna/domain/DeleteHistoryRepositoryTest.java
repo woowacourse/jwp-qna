@@ -11,15 +11,19 @@ import org.junit.jupiter.api.Test;
 class DeleteHistoryRepositoryTest {
 
     private DeleteHistoryRepository deleteHistoryRepository;
+    private UserRepository userRepository;
 
-    public DeleteHistoryRepositoryTest(DeleteHistoryRepository deleteHistoryRepository) {
+    public DeleteHistoryRepositoryTest(DeleteHistoryRepository deleteHistoryRepository, UserRepository userRepository) {
         this.deleteHistoryRepository = deleteHistoryRepository;
+        this.userRepository = userRepository;
     }
 
     @Test
     void save() {
         // given
-        DeleteHistory deleteHistory = new DeleteHistory(ContentType.QUESTION, 1L, 1L, LocalDateTime.now());
+        final User user = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        userRepository.save(user);
+        DeleteHistory deleteHistory = new DeleteHistory(ContentType.QUESTION, 1L, user, LocalDateTime.now());
 
         // when
         DeleteHistory savedDeleteHistory = deleteHistoryRepository.save(deleteHistory);
@@ -29,15 +33,19 @@ class DeleteHistoryRepositoryTest {
                 () -> assertThat(savedDeleteHistory).isNotNull(),
                 () -> assertThat(savedDeleteHistory.getContentType()).isEqualTo(ContentType.QUESTION),
                 () -> assertThat(savedDeleteHistory.getContentId()).isEqualTo(1L),
-                () -> assertThat(savedDeleteHistory.getDeletedById()).isEqualTo(1L)
+                () -> assertThat(savedDeleteHistory.getDeletedBy()).isEqualTo(user)
         );
     }
 
     @Test
     void findAll() {
         // given
-        DeleteHistory deleteHistory1 = new DeleteHistory(ContentType.QUESTION, 1L, 1L, LocalDateTime.now());
-        DeleteHistory deleteHistory2 = new DeleteHistory(ContentType.ANSWER, 2L, 2L, LocalDateTime.now());
+        final User user1 = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        final User user2 = new User("sanjigi", "password", "name", "sanjigi@slipp.net");
+        userRepository.save(user1);
+        userRepository.save(user2);
+        DeleteHistory deleteHistory1 = new DeleteHistory(ContentType.QUESTION, 1L, user1, LocalDateTime.now());
+        DeleteHistory deleteHistory2 = new DeleteHistory(ContentType.ANSWER, 2L, user2, LocalDateTime.now());
 
         deleteHistoryRepository.save(deleteHistory1);
         deleteHistoryRepository.save(deleteHistory2);
@@ -56,7 +64,9 @@ class DeleteHistoryRepositoryTest {
     @Test
     void delete() {
         // given
-        DeleteHistory deleteHistory = new DeleteHistory(ContentType.QUESTION, 1L, 1L, LocalDateTime.now());
+        final User user = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        userRepository.save(user);
+        DeleteHistory deleteHistory = new DeleteHistory(ContentType.QUESTION, 1L, user, LocalDateTime.now());
         deleteHistoryRepository.save(deleteHistory);
 
         // when

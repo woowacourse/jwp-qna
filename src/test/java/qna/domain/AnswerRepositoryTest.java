@@ -38,8 +38,8 @@ class AnswerRepositoryTest {
         // then
         assertAll(
                 () -> assertThat(savedAnswer).isNotNull(),
-                () -> assertThat(savedAnswer.getWriterId()).isEqualTo(savedWriter.getId()),
-                () -> assertThat(savedAnswer.getQuestionId()).isEqualTo(savedQuestion.getId())
+                () -> assertThat(savedAnswer.getWriter()).isEqualTo(savedWriter),
+                () -> assertThat(savedAnswer.getQuestion()).isEqualTo(savedQuestion)
         );
     }
 
@@ -63,7 +63,7 @@ class AnswerRepositoryTest {
         answerRepository.save(newAnswer);
 
         // when
-        List<Answer> findAnswers = answerRepository.findByQuestionIdAndDeletedFalse(answer.getQuestionId());
+        List<Answer> findAnswers = answerRepository.findByQuestionIdAndDeletedFalse(answer.getQuestion().getId());
 
         // then
         assertAll(
