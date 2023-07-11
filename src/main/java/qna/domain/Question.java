@@ -9,7 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class Question extends BaseEntity {
     @Lob
     private String contents;
     @ManyToOne
-    @JoinColumn(name = "writer_id")
+    @JoinColumn(name = "writer_id", updatable = false)
     private User writer;
     @Column(nullable = false)
     private boolean deleted;
