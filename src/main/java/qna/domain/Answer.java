@@ -6,7 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import qna.exception.NotFoundException;
 import qna.exception.UnAuthorizedException;
 
@@ -20,9 +22,13 @@ public class Answer extends BaseEntity {
     @Lob
     private String contents;
 
-    private Long writerId;
+    @JoinColumn(name = "writer_id")
+    @ManyToOne
+    private User writer;
 
-    private Long questionId;
+    @JoinColumn(name = "question_id")
+    @ManyToOne
+    private Question question;
 
     @Column(nullable = false)
     private boolean deleted = false;
@@ -45,17 +51,17 @@ public class Answer extends BaseEntity {
             throw new NotFoundException();
         }
 
-        this.writerId = writer.getId();
-        this.questionId = question.getId();
+        this.writer = writer;
+        this.question = question;
         this.contents = contents;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.equals(writer);
     }
 
     public void toQuestion(Question question) {
-        this.questionId = question.getId();
+        this.question = question;
     }
 
     public void changeDeleted(boolean deleted) {
@@ -70,12 +76,12 @@ public class Answer extends BaseEntity {
         return contents;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public User getWriter() {
+        return writer;
     }
 
-    public Long getQuestionId() {
-        return questionId;
+    public Question getQuestion() {
+        return question;
     }
 
     public boolean isDeleted() {
@@ -86,8 +92,8 @@ public class Answer extends BaseEntity {
     public String toString() {
         return "Answer{" +
                 "id=" + id +
-                ", writerId=" + writerId +
-                ", questionId=" + questionId +
+                ", writer=" + writer +
+                ", question=" + question +
                 ", contents='" + contents + '\'' +
                 ", deleted=" + deleted +
                 '}';

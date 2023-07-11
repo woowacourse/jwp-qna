@@ -31,7 +31,7 @@ public class AnswerTest {
         answer.toQuestion(question);
 
         // then
-        assertThat(answer.getQuestionId()).isEqualTo(1L);
+        assertThat(answer.getQuestion()).isEqualTo(question);
     }
 
     @Test
