@@ -1,6 +1,23 @@
 package qna.domain;
 
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import static qna.fixtures.QuestionFixture.Q1;
+import static qna.fixtures.UserFixture.JAVAJIGI;
+
+@DataJpaTest
 public class QuestionTest {
-    public static final Question Q1 = new Question("title1", "contents1").writeBy(UserTest.JAVAJIGI);
-    public static final Question Q2 = new Question("title2", "contents2").writeBy(UserTest.SANJIGI);
+
+    @DisplayName("어떤 사용자의 질문인지 확인할 수 있다.")
+    @Test
+    void isOwner() {
+        // given
+        final User user = JAVAJIGI;
+
+        // when, then
+        Assertions.assertThat(Q1.isOwner(user)).isTrue();
+    }
 }
