@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
@@ -23,10 +21,10 @@ public class Answer extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer") )
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
     private User writer;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question") )
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
     @Lob
     @Column(nullable = false)

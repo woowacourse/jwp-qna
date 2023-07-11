@@ -1,9 +1,9 @@
 package qna.fixtures;
 
-import qna.domain.Question;
-
 import static qna.fixtures.UserFixture.JAVAJIGI;
 import static qna.fixtures.UserFixture.SANJIGI;
+
+import qna.domain.Question;
 
 public class QuestionFixture {
 

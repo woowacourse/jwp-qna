@@ -1,12 +1,12 @@
 package qna.domain;
 
+import static qna.fixtures.QuestionFixture.Q1;
+import static qna.fixtures.UserFixture.JAVAJIGI;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-import static qna.fixtures.QuestionFixture.Q1;
-import static qna.fixtures.UserFixture.JAVAJIGI;
 
 @DataJpaTest
 public class QuestionTest {

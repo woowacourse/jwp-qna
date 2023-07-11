@@ -70,7 +70,7 @@ public class User extends BaseEntity {
         }
 
         return name.equals(target.name) &&
-                email.equals(target.email);
+            email.equals(target.email);
     }
 
     public boolean isGuestUser() {
@@ -117,11 +117,11 @@ public class User extends BaseEntity {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", userId='" + userId + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+            "id=" + id +
+            ", userId='" + userId + '\'' +
+            ", name='" + name + '\'' +
+            ", email='" + email + '\'' +
+            '}';
     }
 
     private static class GuestUser extends User {

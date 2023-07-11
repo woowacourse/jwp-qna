@@ -19,6 +19,7 @@ import qna.domain.User;
 
 @Service
 public class QnaService {
+
     private static final Logger log = LoggerFactory.getLogger(QnaService.class);
 
     private final QuestionRepository questionRepository;
@@ -34,7 +35,7 @@ public class QnaService {
     @Transactional(readOnly = true)
     public Question findQuestionById(Long id) {
         return questionRepository.findByIdAndDeletedFalse(id)
-                .orElseThrow(NotFoundException::new);
+            .orElseThrow(NotFoundException::new);
     }
 
     @Transactional
