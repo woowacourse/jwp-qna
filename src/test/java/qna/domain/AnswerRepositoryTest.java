@@ -8,22 +8,44 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import qna.configuration.JpaConfiguration;
 
 @DataJpaTest
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-public class AnswerRepositoryTest {
+@Import(JpaConfiguration.class)
+class AnswerRepositoryTest {
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    QuestionRepository questionRepository;
 
     @Autowired
     AnswerRepository answerRepository;
 
-    public static final Answer A1 = new Answer(UserRepositoryTest.JAVAJIGI, QuestionRepositoryTest.Q1, "Answers Contents1");
-    public static final Answer A2 = new Answer(UserRepositoryTest.SANJIGI, QuestionRepositoryTest.Q1, "Answers Contents2");
-
     @Test
     void save_메서드로_A1을_저장한다() {
+        // given
+        final User javajigi = new User(
+                "javajigi",
+                "password",
+                "name",
+                "javajigi@slipp.net"
+        );
+
+        userRepository.save(javajigi);
+
+        final Question q1 = new Question("title1", "contents1").writeBy(javajigi);
+
+        questionRepository.save(q1);
+
+        final Answer a1 = new Answer(javajigi, q1, "Answers Contents1");
+
         // when
-        final Answer actual = answerRepository.save(A1);
+        final Answer actual = answerRepository.save(a1);
 
         // then
         assertThat(actual.getId()).isPositive();
@@ -32,7 +54,22 @@ public class AnswerRepositoryTest {
     @Test
     void findById_메서드로_A1을_조회한다() {
         // given
-        final Answer a1 = answerRepository.save(A1);
+        final User javajigi = new User(
+                "javajigi",
+                "password",
+                "name",
+                "javajigi@slipp.net"
+        );
+
+        userRepository.save(javajigi);
+
+        final Question q1 = new Question("title1", "contents1").writeBy(javajigi);
+
+        questionRepository.save(q1);
+
+        final Answer a1 = new Answer(javajigi, q1, "Answers Contents1");
+
+        answerRepository.save(a1);
 
         // when
         final Optional<Answer> actual = answerRepository.findById(a1.getId());

@@ -8,22 +8,30 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import qna.configuration.JpaConfiguration;
 
 @DataJpaTest
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-public class UserRepositoryTest {
-
-    public static final User JAVAJIGI = new User(1L, "javajigi", "password", "name", "javajigi@slipp.net");
-    public static final User SANJIGI = new User(2L, "sanjigi", "password", "name", "sanjigi@slipp.net");
+@Import(JpaConfiguration.class)
+class UserRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
 
     @Test
     void save_메서드로_JAVAJIGI을_저장한다() {
+        // given
+        final User javajigi = new User(
+                "javajigi",
+                "password",
+                "name",
+                "javajigi@slipp.net"
+        );
+
         // when
-        final User actual = userRepository.save(JAVAJIGI);
+        final User actual = userRepository.save(javajigi);
 
         // then
         assertThat(actual.getId()).isPositive();
@@ -32,7 +40,14 @@ public class UserRepositoryTest {
     @Test
     void findById_메서드로_JAVAJIGI을_조회한다() {
         // given
-        final User javajigi = userRepository.save(JAVAJIGI);
+        final User javajigi = new User(
+                "javajigi",
+                "password",
+                "name",
+                "javajigi@slipp.net"
+        );
+
+        userRepository.save(javajigi);
 
         // when
         final Optional<User> actual = userRepository.findById(javajigi.getId());
