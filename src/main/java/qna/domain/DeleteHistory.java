@@ -1,10 +1,14 @@
 package qna.domain;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class DeleteHistory {
 
     @Id
@@ -16,7 +20,9 @@ public class DeleteHistory {
     @Enumerated(EnumType.STRING)
     private ContentType contentType;
 
-    private LocalDateTime createDate = LocalDateTime.now();
+    @Column(nullable = false)
+    @CreatedDate
+    private LocalDateTime createDate;
 
     @ManyToOne
     @JoinColumn(name = "deleted_by_id",
