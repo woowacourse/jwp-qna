@@ -23,14 +23,14 @@ public class Answer extends BaseEntity {
     @Lob
     private String contents;
 
-    @Column(name = "deleted")
-    private boolean deleted = false;
-
     @Column(name = "question_id")
     private Long questionId;
 
     @Column(name = "writer_id")
     private Long writerId;
+
+    @Column(name = "deleted")
+    private boolean deleted = false;
 
     protected Answer() {
     }

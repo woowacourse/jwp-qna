@@ -19,11 +19,11 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "email", length = 50)
-    private String email;
-
     @Column(name = "name", nullable = false, length = 20)
     private String name;
+
+    @Column(name = "email", length = 50)
+    private String email;
 
     @Column(name = "password", nullable = false, length = 20)
     private String password;

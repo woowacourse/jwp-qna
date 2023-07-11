@@ -16,18 +16,18 @@ public class Question extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "title", nullable = false, length = 100)
+    private String title;
+
     @Column(name = "contents")
     @Lob
     private String contents;
 
-    @Column(name = "deleted", nullable = false)
-    private boolean deleted = false;
-
-    @Column(name = "title", nullable = false, length = 100)
-    private String title;
-
     @Column(name = "writer_id")
     private Long writerId;
+
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
 
     protected Question() {
     }

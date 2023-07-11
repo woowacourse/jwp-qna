@@ -26,11 +26,11 @@ public class DeleteHistory {
     @Enumerated(EnumType.STRING)
     private ContentType contentType;
 
-    @Column(name = "create_date")
-    private Date createDate;
-
     @Column(name = "deleted_by_id")
     private Long deletedById;
+
+    @Column(name = "create_date")
+    private Date createDate;
 
     protected DeleteHistory() {
     }
