@@ -1,34 +1,24 @@
 package qna.domain;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.UnAuthorizedException;
 
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(name = "UK_a3imlf41l37utmxiquukk8ajc", columnNames = "user_id"))
 @Entity
-public class User {
+public class User extends BaseEntity {
 
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "created_at", nullable = false)
-    @CreatedDate
-    private LocalDateTime createdAt;
 
     @Column(name = "email", length = 50)
     private String email;
@@ -38,10 +28,6 @@ public class User {
 
     @Column(name = "password", nullable = false, length = 20)
     private String password;
-
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     @Column(name = "user_id", nullable = false, length = 20)
     private String userId;
@@ -133,14 +119,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
     }
 
     @Override

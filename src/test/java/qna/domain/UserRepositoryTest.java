@@ -2,6 +2,7 @@ package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Date;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,14 @@ class UserRepositoryTest {
         final User actualUser = userRepository.findByUserId(savedUser.getUserId()).get();
 
         assertThat(savedUser == actualUser).isTrue();
+    }
+
+    @Test
+    void sameCreated() {
+        final User vero = new User("vero", "pass", "name", "email");
+        final Date prevTime = new Date();
+        final User actualUser = userRepository.save(vero);
+
+        assertThat(prevTime).isBefore(actualUser.getCreatedAt());
     }
 }
