@@ -1,7 +1,6 @@
 package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static qna.fixture.UserFixture.JAVAJIGI;
 
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -23,8 +22,16 @@ public class UserRepositoryTest {
 
     @Test
     void save_메서드로_JAVAJIGI을_저장한다() {
+        // given
+        final User javajigi = new User(
+                "javajigi",
+                "password",
+                "name",
+                "javajigi@slipp.net"
+        );
+
         // when
-        final User actual = userRepository.save(JAVAJIGI);
+        final User actual = userRepository.save(javajigi);
 
         // then
         assertThat(actual.getId()).isPositive();
@@ -33,7 +40,14 @@ public class UserRepositoryTest {
     @Test
     void findById_메서드로_JAVAJIGI을_조회한다() {
         // given
-        final User javajigi = userRepository.save(JAVAJIGI);
+        final User javajigi = new User(
+                "javajigi",
+                "password",
+                "name",
+                "javajigi@slipp.net"
+        );
+
+        userRepository.save(javajigi);
 
         // when
         final Optional<User> actual = userRepository.findById(javajigi.getId());

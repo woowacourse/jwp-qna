@@ -1,7 +1,6 @@
 package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static qna.fixture.QuestionFixture.Q1;
 
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -19,12 +18,27 @@ import qna.configuration.JpaConfiguration;
 public class QuestionRepositoryTest {
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     QuestionRepository questionRepository;
 
     @Test
     void save_메서드로_Q1을_저장한다() {
+        // given
+        final User javajigi = new User(
+                "javajigi",
+                "password",
+                "name",
+                "javajigi@slipp.net"
+        );
+
+        userRepository.save(javajigi);
+
+        final Question q1 = new Question("title1", "contents1").writeBy(javajigi);
+
         // when
-        final Question actual = questionRepository.save(Q1);
+        final Question actual = questionRepository.save(q1);
 
         // then
         assertThat(actual.getId()).isPositive();
@@ -33,7 +47,18 @@ public class QuestionRepositoryTest {
     @Test
     void findById_메서드로_Q1을_조회한다() {
         // given
-        final Question q1 = questionRepository.save(Q1);
+        final User javajigi = new User(
+                "javajigi",
+                "password",
+                "name",
+                "javajigi@slipp.net"
+        );
+
+        userRepository.save(javajigi);
+
+        final Question q1 = new Question("title1", "contents1").writeBy(javajigi);
+
+        questionRepository.save(q1);
 
         // when
         final Optional<Question> actual = questionRepository.findById(q1.getId());
