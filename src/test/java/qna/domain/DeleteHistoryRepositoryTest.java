@@ -58,7 +58,7 @@ class DeleteHistoryRepositoryTest {
         final DeleteHistory actual = deleteHistoryRepository.findById(saved.getId()).get();
 
         // then
-        assertThat(saved == actual).isTrue();
+        assertThat(saved).isSameAs(actual);
     }
 }
 

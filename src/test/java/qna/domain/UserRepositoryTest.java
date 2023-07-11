@@ -90,7 +90,7 @@ class UserRepositoryTest {
 
         // when
         // then
-        assertThat(saved == actual).isTrue();
-        assertThat(actual == actual2).isTrue();
+        assertThat(saved).isSameAs(actual);
+        assertThat(actual).isSameAs(actual2);
     }
 }
