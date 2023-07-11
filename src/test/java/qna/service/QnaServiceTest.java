@@ -27,6 +27,7 @@ import qna.fixtures.UserFixture;
 
 @ExtendWith(MockitoExtension.class)
 class QnaServiceTest {
+
     @Mock
     private QuestionRepository questionRepository;
 
