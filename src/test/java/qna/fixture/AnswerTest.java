@@ -1,4 +1,6 @@
-package qna.domain;
+package qna.fixture;
+
+import qna.domain.Answer;
 
 public class AnswerTest {
     public static final Answer A1 = new Answer(UserTest.JAVAJIGI, QuestionTest.Q1, "Answers Contents1");

@@ -1,46 +1,45 @@
 package qna.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 class QuestionRepositoryTest extends RepositoryTest {
 
     private final QuestionRepository questionRepository;
 
-    QuestionRepositoryTest(final QuestionRepository questionRepository) {
+    QuestionRepositoryTest(final QuestionRepository questionRepository, UserRepository userRepository) {
         this.questionRepository = questionRepository;
     }
 
     @Test
     void 삭제되지_않은_질문들을_찾을_수_있다() {
         // given
-        questionRepository.save(QuestionTest.Q1);
-        questionRepository.save(QuestionTest.Q2);
+        final User user = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        final Question question = new Question("question", "content").writeBy(user);
+        questionRepository.save(question);
 
         // when
         final List<Question> actual = questionRepository.findByDeletedFalse();
 
         // then
-        assertThat(actual).hasSize(2);
+        assertThat(actual).hasSize(1);
     }
 
     @Test
     void id로_질문을_찾을_수_있다() {
         // given
-        final Question expected = questionRepository.save(QuestionTest.Q2);
+        final User user = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        final Question expected = questionRepository.save(new Question("question", "content").writeBy(user));
 
         // when
         final Optional<Question> actual = questionRepository.findByIdAndDeletedFalse(expected.getId());
 
         // then
-        Assertions.assertAll(
-                () -> assertThat(actual).isPresent(),
-                () -> assertThat(actual.get()).isEqualTo(expected)
-        );
+        assertThat(actual).contains(expected);
     }
 }
