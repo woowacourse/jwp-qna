@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class User extends BaseEntity {
+public class User extends BaseEntityWithUpdated {
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @Id
@@ -23,6 +23,7 @@ public class User extends BaseEntity {
 
     protected User() {
     }
+
 
     public User(String userId, String password, String name, String email) {
         this(null, userId, password, name, email);
