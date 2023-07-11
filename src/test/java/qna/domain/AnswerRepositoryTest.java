@@ -13,49 +13,49 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DataJpaTest
 class AnswerRepositoryTest {
 
-	@Autowired
-	private AnswerRepository answerRepository;
+    @Autowired
+    private AnswerRepository answerRepository;
 
-	@Test
-	@DisplayName("답변을 저장한다.")
-	void save() {
-		// given
-		// when
-		final Answer savedAnswer = answerRepository.save(AnswerTest.A1);
+    @Test
+    @DisplayName("답변을 저장한다.")
+    void save() {
+        // given
+        // when
+        final Answer savedAnswer = answerRepository.save(AnswerTest.A1);
 
-		// then
-		assertThat(savedAnswer.getId()).isNotNull();
-	}
+        // then
+        assertThat(savedAnswer.getId()).isNotNull();
+    }
 
-	@Test
-	@DisplayName("질문과 삭제 여부로 답변을 조회한다.")
-	void findByQuestionIdAndDeletedFalse() {
-		// given
-		final Answer savedAnswer = answerRepository.save(AnswerTest.A1);
+    @Test
+    @DisplayName("질문과 삭제 여부로 답변을 조회한다.")
+    void findByQuestionIdAndDeletedFalse() {
+        // given
+        final Answer savedAnswer = answerRepository.save(AnswerTest.A1);
 
-		// when
-		final List<Answer> foundResult =
-			answerRepository.findByQuestionIdAndDeletedFalse(savedAnswer.getQuestionId());
+        // when
+        final List<Answer> foundResult =
+            answerRepository.findByQuestionIdAndDeletedFalse(savedAnswer.getQuestionId());
 
-		// then
-		assertThat(foundResult).usingRecursiveComparison()
-			.isEqualTo(Collections.singletonList(savedAnswer));
-	}
+        // then
+        assertThat(foundResult).usingRecursiveComparison()
+            .isEqualTo(Collections.singletonList(savedAnswer));
+    }
 
 
-	@Test
-	@DisplayName("답변의 id와 삭제 여부로 답변을 조회한다.")
-	void findByIdAndDeletedFalse() {
-		// given
-		final Answer savedAnswer = answerRepository.save(AnswerTest.A1);
+    @Test
+    @DisplayName("답변의 id와 삭제 여부로 답변을 조회한다.")
+    void findByIdAndDeletedFalse() {
+        // given
+        final Answer savedAnswer = answerRepository.save(AnswerTest.A1);
 
-		// when
-		final Optional<Answer> foundAnswer =
-			answerRepository.findByIdAndDeletedFalse(savedAnswer.getId());
+        // when
+        final Optional<Answer> foundAnswer =
+            answerRepository.findByIdAndDeletedFalse(savedAnswer.getId());
 
-		// then
-		assertThat(foundAnswer).isPresent()
-			.get()
-			.isEqualTo(savedAnswer);
-	}
+        // then
+        assertThat(foundAnswer).isPresent()
+            .get()
+            .isEqualTo(savedAnswer);
+    }
 }
