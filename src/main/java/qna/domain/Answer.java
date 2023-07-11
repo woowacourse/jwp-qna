@@ -15,7 +15,7 @@ import javax.persistence.OneToOne;
 import java.util.Objects;
 
 @Entity
-public class Answer extends DateHistory {
+public class Answer extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
