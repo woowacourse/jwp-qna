@@ -1,10 +1,9 @@
 package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static qna.domain.QuestionFixture.Q1;
-import static qna.domain.QuestionFixture.Q2;
 
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -18,10 +17,22 @@ import org.springframework.test.context.TestConstructor.AutowireMode;
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 class QuestionRepositoryTest {
 
+    private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
+    private Question QUESTION_1;
+    private Question QUESTION_2;
 
-    public QuestionRepositoryTest(final QuestionRepository questionRepository) {
+    public QuestionRepositoryTest(final UserRepository userRepository, final QuestionRepository questionRepository) {
+        this.userRepository = userRepository;
         this.questionRepository = questionRepository;
+    }
+
+    @BeforeEach
+    void setUp() {
+        final User user = userRepository.save(UserFixture.JAVAJIGI);
+        final User user2 = userRepository.save(UserFixture.SANJIGI);
+        QUESTION_1 = questionRepository.save(new Question("title", "contents").writeBy(user));
+        QUESTION_2 = questionRepository.save(new Question("title2", "contents2").writeBy(user2));
     }
 
     @DisplayName("질문을 저장한다.")
@@ -29,7 +40,7 @@ class QuestionRepositoryTest {
     void save() {
         // given
         // when
-        final Question saved = questionRepository.save(Q1);
+        final Question saved = questionRepository.save(QUESTION_1);
 
         // then
         assertThat(questionRepository.findById(saved.getId()).get())
@@ -41,7 +52,7 @@ class QuestionRepositoryTest {
     @Test
     void findByIdAndDeletedFalse() {
         // given
-        final Question saved = questionRepository.save(Q1);
+        final Question saved = questionRepository.save(QUESTION_1);
 
         // when
         final Question actual = questionRepository.findByIdAndDeletedFalse(saved.getId()).get();
@@ -56,8 +67,8 @@ class QuestionRepositoryTest {
     @Test
     void findByDeletedFalse() {
         // given
-        final Question saved = questionRepository.save(Q1);
-        final Question saved2 = questionRepository.save(Q2);
+        final Question saved = questionRepository.save(QUESTION_1);
+        final Question saved2 = questionRepository.save(QUESTION_2);
 
         // when
         final List<Question> deletedFalse = questionRepository.findByDeletedFalse();
@@ -71,7 +82,7 @@ class QuestionRepositoryTest {
     @Test
     void updateDeleted() {
         // given
-        final Question saved = questionRepository.save(Q1);
+        final Question saved = questionRepository.save(QUESTION_1);
 
         // when
         saved.setDeleted(true);
@@ -86,7 +97,7 @@ class QuestionRepositoryTest {
     @Test
     void identity() {
         // given
-        final Question saved = questionRepository.save(Q1);
+        final Question saved = questionRepository.save(QUESTION_1);
         final Question actual = questionRepository.findById(saved.getId()).get();
         final Question actual2 = questionRepository.findByIdAndDeletedFalse(saved.getId()).get();
 
