@@ -1,12 +1,16 @@
 package qna.domain;
 
 import java.util.Objects;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import org.springframework.lang.Nullable;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
@@ -16,10 +20,14 @@ public class Answer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long writerId;
-    private Long questionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    private User writer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id", foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    private Question question;
     @Lob
-    @Column(nullable = false)
+    @Nullable
     private String contents;
     private boolean deleted = false;
 
@@ -41,29 +49,34 @@ public class Answer extends BaseEntity {
             throw new NotFoundException();
         }
 
-        this.writerId = writer.getId();
-        this.questionId = question.getId();
+        this.writer = writer;
+        this.question = question;
         this.contents = contents;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.equals(writer);
     }
 
     public void toQuestion(Question question) {
-        this.questionId = question.getId();
+        this.question = question;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public User getWriter() {
+        return writer;
     }
 
-    public Long getQuestionId() {
-        return questionId;
+    public Question getQuestion() {
+        return question;
+    }
+
+    @Nullable
+    public String getContents() {
+        return contents;
     }
 
     public boolean isDeleted() {
@@ -94,11 +107,11 @@ public class Answer extends BaseEntity {
     @Override
     public String toString() {
         return "Answer{" +
-                "id=" + id +
-                ", writerId=" + writerId +
-                ", questionId=" + questionId +
-                ", contents='" + contents + '\'' +
-                ", deleted=" + deleted +
-                '}';
+            "id=" + id +
+            ", writer=" + writer +
+            ", question=" + question +
+            ", contents='" + contents + '\'' +
+            ", deleted=" + deleted +
+            '}';
     }
 }
