@@ -1,22 +1,16 @@
 package qna.domain;
 
-import org.springframework.context.event.EventListener;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
+import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-public class DeleteHistory {
+public class DeleteHistory extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -27,9 +21,6 @@ public class DeleteHistory {
     @Enumerated(value = EnumType.STRING)
     private ContentType contentType;
 
-    @CreatedDate
-    private LocalDateTime createDate;
-
     private Long deletedById;
 
     protected DeleteHistory() {
@@ -39,7 +30,7 @@ public class DeleteHistory {
         this.contentType = contentType;
         this.contentId = contentId;
         this.deletedById = deletedById;
-        this.createDate = createDate;
+        this.createdAt = createDate;
     }
 
     public DeleteHistory(ContentType contentType, Long contentId, Long deletedById) {
@@ -50,8 +41,12 @@ public class DeleteHistory {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         DeleteHistory that = (DeleteHistory) o;
         return Objects.equals(id, that.id) &&
                 contentType == that.contentType &&
@@ -70,7 +65,7 @@ public class DeleteHistory {
                 "id=" + id +
                 ", contentId=" + contentId +
                 ", contentType=" + contentType +
-                ", createDate=" + createDate +
+                ", createDate=" + createdAt +
                 ", deletedById=" + deletedById +
                 '}';
     }

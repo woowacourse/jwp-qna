@@ -1,21 +1,16 @@
 package qna.domain;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import java.time.LocalDateTime;
+import org.springframework.data.annotation.LastModifiedDate;
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Question {
+public class Question extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -23,10 +18,6 @@ public class Question {
 
     @Lob
     private String contents;
-
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private boolean deleted = false;

@@ -4,30 +4,23 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Answer {
+public class Answer extends BaseEntity {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
+    protected Long id;
 
     @Lob
     private String contents;
-
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private boolean deleted = false;
