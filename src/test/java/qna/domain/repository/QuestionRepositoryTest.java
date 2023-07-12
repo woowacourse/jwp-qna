@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import qna.domain.Question;
 import qna.domain.QuestionRepository;
 import qna.domain.User;
-import qna.domain.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +15,7 @@ class QuestionRepositoryTest extends RepositoryTest {
 
     private final QuestionRepository questionRepository;
 
-    QuestionRepositoryTest(final QuestionRepository questionRepository, UserRepository userRepository) {
+    QuestionRepositoryTest(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 

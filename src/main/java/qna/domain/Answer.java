@@ -52,11 +52,12 @@ public class Answer extends BaseEntity {
         }
     }
 
-    public void deleteBy(User user) throws CannotDeleteException {
+    public DeleteHistory deleteBy(User user) throws CannotDeleteException {
         if (!this.isOwner(user)) {
             throw new CannotDeleteException("답변을 삭제할 권한이 없습니다.");
         }
         this.deleted = true;
+        return new DeleteHistory(ContentType.ANSWER, id, user);
     }
 
     private boolean isOwner(User writer) {
