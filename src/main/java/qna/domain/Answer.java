@@ -52,7 +52,7 @@ public class Answer extends BaseEntity {
         }
     }
 
-    public DeleteHistory deleteBy(User user) throws CannotDeleteException {
+    public DeleteHistory deleteBy(User user) {
         if (!this.isOwner(user)) {
             throw new CannotDeleteException("답변을 삭제할 권한이 없습니다.");
         }
