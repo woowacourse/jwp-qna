@@ -7,7 +7,7 @@ import qna.config.JpaAuditingConfig;
 
 @Import(JpaAuditingConfig.class)
 @DataJpaTest
-public class RepositoryTest {
+abstract class RepositoryTest {
     @Autowired
     protected AnswerRepository answerRepository;
 
