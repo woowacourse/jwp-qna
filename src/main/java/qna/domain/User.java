@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import qna.UnAuthorizedException;
 
 @Entity
@@ -19,11 +20,14 @@ public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 20, nullable = false)
+    @NotNull
+    @Column(length = 20)
     private String userId;
-    @Column(length = 20, nullable = false)
+    @NotNull
+    @Column(length = 20)
     private String password;
-    @Column(length = 20, nullable = false)
+    @NotNull
+    @Column(length = 20)
     private String name;
     @Column(length = 50)
     private String email;

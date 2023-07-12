@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 
 public class AnswerTest {
 
-    @DisplayName("답변의 소유자를 확인할 수 있다.")
     @Test
+    @DisplayName("답변의 소유자를 확인할 수 있다.")
     void isOwner() {
 
         // when, then
@@ -23,14 +23,14 @@ public class AnswerTest {
         );
     }
 
-    @DisplayName("Question에 Answer를 추가할 수 있다.")
     @Test
+    @DisplayName("Question에 Answer를 추가할 수 있다.")
     void toQuestion() {
 
         // when
         Q1.addAnswer(A1);
 
         // then
-        assertThat(A1.getQuestionId()).isEqualTo(Q1.getId());
+        assertThat(A1.getQuestion()).isEqualTo(Q1);
     }
 }

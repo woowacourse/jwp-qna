@@ -19,7 +19,7 @@ import qna.domain.User;
 
 @Service
 public class QnaService {
-
+    
     private static final Logger log = LoggerFactory.getLogger(QnaService.class);
 
     private final QuestionRepository questionRepository;

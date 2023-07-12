@@ -11,8 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DataJpaTest
 public class QuestionTest {
 
-    @DisplayName("어떤 사용자의 질문인지 확인할 수 있다.")
     @Test
+    @DisplayName("어떤 사용자의 질문인지 확인할 수 있다.")
     void isOwner() {
         // given
         final User user = JAVAJIGI;

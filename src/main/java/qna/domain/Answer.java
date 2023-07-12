@@ -21,10 +21,10 @@ public class Answer extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name = "fk_answer_writer"))
     private User writer;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    @JoinColumn(name = "question_id", foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
     @Lob
     @NotNull
@@ -35,12 +35,10 @@ public class Answer extends BaseEntity {
     }
 
     public Answer(final User writer, final Question question, final String contents) {
-        this.writer = writer;
-        this.question = question;
-        this.contents = contents;
+        this(null, writer, question, contents);
     }
 
-    public Answer(final long id, final User writer, final Question question, final String contents) {
+    public Answer(final Long id, final User writer, final Question question, final String contents) {
         this.id = id;
         if (Objects.isNull(writer)) {
             throw new UnAuthorizedException();

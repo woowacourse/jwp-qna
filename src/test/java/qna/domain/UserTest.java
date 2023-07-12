@@ -14,8 +14,8 @@ import qna.UnAuthorizedException;
 public class UserTest {
 
 
-    @DisplayName("기존 사용자의 name과 email을 수정할 수 있다.")
     @Test
+    @DisplayName("기존 사용자의 name과 email을 수정할 수 있다.")
     void update_success() {
         // given
         final User loginUser = new User("javajigi", JAVAJIGI.getPassword(), JAVAJIGI.getName(), JAVAJIGI.getEmail());
@@ -31,8 +31,8 @@ public class UserTest {
         );
     }
 
-    @DisplayName("로그인된 사용자의 userId가 다르면 예외가 발생한다.")
     @Test
+    @DisplayName("로그인된 사용자의 userId가 다르면 예외가 발생한다.")
     void update_fail_userId() {
         // given
         final User loginUser = new User("javajigiiiii", JAVAJIGI.getPassword(), JAVAJIGI.getName(), JAVAJIGI.getEmail());
@@ -43,8 +43,8 @@ public class UserTest {
             .isInstanceOf(UnAuthorizedException.class);
     }
 
-    @DisplayName("바꾸려고 하는 사용자의 password가 다르면 예외가 발생한다.")
     @Test
+    @DisplayName("바꾸려고 하는 사용자의 password가 다르면 예외가 발생한다.")
     void update_fail_password() {
         // given
         final User loginUser = new User(JAVAJIGI.getUserId(), JAVAJIGI.getPassword(), JAVAJIGI.getName(), JAVAJIGI.getEmail());
@@ -55,8 +55,8 @@ public class UserTest {
             .isInstanceOf(UnAuthorizedException.class);
     }
 
-    @DisplayName("대상 유저의 이름과 이메일이 같으면 true를 반환한다.")
     @Test
+    @DisplayName("대상 유저의 이름과 이메일이 같으면 true를 반환한다.")
     void equalsNameAndEmail_success() {
         // given
         final User target = new User(1L, JAVAJIGI.getUserId(), JAVAJIGI.getPassword(), JAVAJIGI.getName(), JAVAJIGI.getEmail());
@@ -65,8 +65,8 @@ public class UserTest {
         assertThat(JAVAJIGI.equalsNameAndEmail(target)).isTrue();
     }
 
-    @DisplayName("대상 유저의 이름과 이메일이 다르면 false를 반환한다.")
     @Test
+    @DisplayName("대상 유저의 이름과 이메일이 다르면 false를 반환한다.")
     void equalsNameAndEmail_fail() {
         // given
         final User target1 = new User(1L, JAVAJIGI.getUserId(), JAVAJIGI.getPassword(), "hubcreator", JAVAJIGI.getEmail());
@@ -79,8 +79,8 @@ public class UserTest {
         );
     }
 
-    @DisplayName("게스트 유저인지 확인할 수 있다.")
     @Test
+    @DisplayName("게스트 유저인지 확인할 수 있다.")
     void isGuestUser() {
         // given
         final User guestUser = User.GUEST_USER;

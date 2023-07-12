@@ -13,7 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class DeleteHistory {
@@ -25,9 +25,10 @@ public class DeleteHistory {
     private ContentType contentType;
     private Long contentId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_delete_history_to_user"))
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_delete_history_to_user"))
     private User user;
-    @Column(updatable = false, nullable = false)
+    @NotNull
+    @Column(updatable = false)
     private LocalDateTime createDate;
 
     protected DeleteHistory() {
