@@ -4,14 +4,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
 
 @DataJpaTest
+@TestConstructor(autowireMode = AutowireMode.ALL)
 class AnswerRepositoryTest {
 
-    @Autowired
-    private AnswerRepository answerRepository;
+    private final AnswerRepository answerRepository;
+
+    public AnswerRepositoryTest(final AnswerRepository answerRepository) {
+        this.answerRepository = answerRepository;
+    }
 
     @Test
     void findByQuestionIdAndDeletedFalse() {

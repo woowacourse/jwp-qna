@@ -4,14 +4,20 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestConstructor.AutowireMode;
 
 @DataJpaTest
+@TestConstructor(autowireMode = AutowireMode.ALL)
 class QuestionRepositoryTest {
 
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
+
+    public QuestionRepositoryTest(final QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
+
     @Test
     void findByDeletedFalse() {
         Question question = new Question("제목", "내용");

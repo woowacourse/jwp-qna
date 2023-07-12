@@ -1,26 +1,18 @@
 package qna.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import qna.UnAuthorizedException;
 
-import java.util.Objects;
-
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-public class User {
+public class User extends BaseEntity {
+
     public static final GuestUser GUEST_USER = new GuestUser();
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
     @Column(nullable = false, length = 20)
@@ -77,7 +69,7 @@ public class User {
         }
 
         return name.equals(target.name) &&
-                email.equals(target.email);
+            email.equals(target.email);
     }
 
     public boolean isGuestUser() {
@@ -127,15 +119,16 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+            "id=" + id +
+            ", userId='" + userId + '\'' +
+            ", password='" + password + '\'' +
+            ", name='" + name + '\'' +
+            ", email='" + email + '\'' +
+            '}';
     }
 
     private static class GuestUser extends User {
+
         @Override
         public boolean isGuestUser() {
             return true;
