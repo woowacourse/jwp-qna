@@ -1,4 +1,4 @@
-package qna.domain;
+package qna.domain.repository;
 
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

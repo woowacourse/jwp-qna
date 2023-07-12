@@ -1,6 +1,10 @@
-package qna.domain;
+package qna.domain.repository;
 
 import org.junit.jupiter.api.Test;
+import qna.domain.Answer;
+import qna.domain.AnswerRepository;
+import qna.domain.Question;
+import qna.domain.User;
 
 import java.util.List;
 import java.util.Optional;

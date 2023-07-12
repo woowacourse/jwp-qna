@@ -1,4 +1,4 @@
-package qna.fixture;
+package qna.domain;
 
 import qna.domain.User;
 
