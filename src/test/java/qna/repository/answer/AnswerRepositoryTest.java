@@ -89,4 +89,23 @@ class AnswerRepositoryTest extends RepositoryTestConfig {
         // then
         assertThat(actual).contains(expected);
     }
+
+    @Test
+    @DisplayName("답변의 식별자로 답변을 검색할 때, 삭제된 경우 검색되지 않는다.")
+    void findByIdAndDeletedFalse_isNotPresent() {
+        // given
+        User user = new User("hyena", "1234", "헤나", "example@example.com");
+        Question question = new Question("질문이 뭐에요?", "저도 모르겠어요.");
+        userRepositoryFixture.save(user);
+        questionRepositoryFixture.save(question);
+        Answer expected = new Answer(user, question, "내용내용");
+        expected.setDeleted(true);
+        answerRepository.save(expected);
+
+        // when
+        Optional<Answer> actual = answerRepository.findByIdAndDeletedFalse(expected.getId());
+
+        // then
+        assertThat(actual).isNotPresent();
+    }
 }
