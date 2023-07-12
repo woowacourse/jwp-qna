@@ -1,33 +1,23 @@
 package qna.domain;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import qna.UnAuthorizedException;
-
+import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.UniqueConstraint;
-import java.time.LocalDateTime;
-import java.util.Objects;
+import org.springframework.data.annotation.LastModifiedDate;
+import qna.UnAuthorizedException;
 
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-public class User {
+public class User extends BaseEntity {
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
 
     @Column(length = 50)
     private String email;

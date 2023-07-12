@@ -1,46 +1,43 @@
 package qna.domain;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import qna.NotFoundException;
-import qna.UnAuthorizedException;
-
+import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.Objects;
+import javax.persistence.ManyToOne;
+import org.springframework.data.annotation.LastModifiedDate;
+import qna.NotFoundException;
+import qna.UnAuthorizedException;
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Answer {
+public class Answer extends BaseEntity {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
+    protected Long id;
 
     @Lob
     private String contents;
 
-    @CreatedDate
     @Column(nullable = false)
-    private LocalDateTime createdAt;
-
     private boolean deleted = false;
 
-    private Long questionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id")
+    private Question question;
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    private Long writerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id")
+    private User writer;
 
     protected Answer() {
     }
@@ -60,17 +57,17 @@ public class Answer {
             throw new NotFoundException();
         }
 
-        this.writerId = writer.getId();
-        this.questionId = question.getId();
+        this.writer = writer;
+        this.question = question;
         this.contents = contents;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.equals(writer);
     }
 
     public void toQuestion(Question question) {
-        this.questionId = question.getId();
+        this.question = question;
     }
 
     public Long getId() {
@@ -81,20 +78,20 @@ public class Answer {
         this.id = id;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public User getWriter() {
+        return writer;
     }
 
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
+    public void setWriter(User writer) {
+        this.writer = writer;
     }
 
-    public Long getQuestionId() {
-        return questionId;
+    public Question getQuestion() {
+        return question;
     }
 
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
+    public void setQuestion(final Question question) {
+        this.question = question;
     }
 
     public String getContents() {
@@ -120,9 +117,9 @@ public class Answer {
                 ", contents='" + contents + '\'' +
                 ", createdAt=" + createdAt +
                 ", deleted=" + deleted +
-                ", questionId=" + questionId +
+                ", questionId=" + question +
                 ", updatedAt=" + updatedAt +
-                ", writerId=" + writerId +
+                ", writerId=" + writer +
                 '}';
     }
 }

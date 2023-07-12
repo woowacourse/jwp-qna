@@ -8,10 +8,11 @@ class DeleteHistoryRepositoryTest extends RepositoryTest {
 
     @Test
     void deleteHistory를_저장한다() {
+        final User savedUser = userRepository.save(UserTest.JAVAJIGI);
         DeleteHistory deleteHistory = new DeleteHistory(
                 ContentType.ANSWER,
                 1L,
-                2L
+                savedUser
         );
         deleteHistoryRepository.save(deleteHistory);
 
