@@ -17,8 +17,7 @@ public abstract class BaseEntity {
     @NotNull
     private LocalDateTime updatedAt;
 
-    @PrePersist
-    public void prePersist() {
+    public BaseEntity() {
         final LocalDateTime now = LocalDateTime.now();
         this.createdAt = now;
         this.updatedAt = now;
