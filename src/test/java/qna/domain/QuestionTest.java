@@ -20,7 +20,7 @@ public class QuestionTest {
         question.writeBy(JAVAJIGI);
 
         // then
-        assertThat(question.getWriterId()).isEqualTo(JAVAJIGI.getId());
+        assertThat(question.getWriter()).isEqualTo(JAVAJIGI);
     }
 
     @Test
