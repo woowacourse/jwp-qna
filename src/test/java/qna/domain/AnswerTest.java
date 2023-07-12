@@ -45,7 +45,6 @@ public class AnswerTest {
         void fail_question_notFound() {
             // given
             User answerWriter = new User("ethan", "1234", "김석호", "test@test.com");
-            User questionWriter = new User("D2", "1234", "박정훈", "test1@test.com");
 
             // when, then
             assertThatThrownBy(() -> new Answer(answerWriter, null, "내용"))
