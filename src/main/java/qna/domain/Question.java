@@ -3,10 +3,13 @@ package qna.domain;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
@@ -28,7 +31,9 @@ public class Question extends BaseEntity {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    private Long writerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id")
+    private User writer;
 
     protected Question() {
     }
@@ -43,13 +48,19 @@ public class Question extends BaseEntity {
         this.contents = contents;
     }
 
+    public Question(final String contents, final String title, final User writer) {
+        this.contents = contents;
+        this.title = title;
+        this.writer = writer;
+    }
+
     public Question writeBy(User writer) {
-        this.writerId = writer.getId();
+        this.writer = writer;
         return this;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.equals(writer);
     }
 
     public void addAnswer(Answer answer) {
@@ -80,12 +91,12 @@ public class Question extends BaseEntity {
         this.contents = contents;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public User getWriter() {
+        return writer;
     }
 
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
+    public void setWriter(User writer) {
+        this.writer = writer;
     }
 
     public boolean isDeleted() {
@@ -105,7 +116,7 @@ public class Question extends BaseEntity {
                 ", deleted=" + deleted +
                 ", title='" + title + '\'' +
                 ", updatedAt=" + updatedAt +
-                ", writerId=" + writerId +
+                ", writerId=" + writer +
                 '}';
     }
 }
