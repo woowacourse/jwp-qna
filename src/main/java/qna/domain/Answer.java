@@ -1,6 +1,5 @@
 package qna.domain;
 
-import org.springframework.data.annotation.LastModifiedDate;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
@@ -10,12 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.Table;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class Answer extends BaseEntity{
+public class Answer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,9 +22,6 @@ public class Answer extends BaseEntity{
     private String contents;
     @Column(nullable = false)
     private boolean deleted = false;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     public Answer(User writer, Question question, String contents) {
         this(null, writer, question, contents);
