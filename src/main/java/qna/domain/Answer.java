@@ -1,7 +1,6 @@
 package qna.domain;
 
 import java.util.Objects;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -11,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
@@ -27,7 +27,7 @@ public class Answer extends BaseEntity {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
     @Lob
-    @Column(nullable = false)
+    @NotNull
     private String contents;
     private boolean deleted = false;
 

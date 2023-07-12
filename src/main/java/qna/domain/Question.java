@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Question extends BaseEntity {
@@ -21,7 +22,7 @@ public class Question extends BaseEntity {
     @Column(length = 100, nullable = false)
     private String title;
     @Lob
-    @Column(nullable = false)
+    @NotNull
     private String contents;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))

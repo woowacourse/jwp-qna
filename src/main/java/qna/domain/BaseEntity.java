@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PreUpdate;
+import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
 public abstract class BaseEntity {
@@ -11,7 +12,7 @@ public abstract class BaseEntity {
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @NotNull
     private LocalDateTime updatedAt;
 
     public BaseEntity() {
