@@ -1,4 +1,4 @@
-package qna.repository.answer;
+package qna.repository;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import qna.domain.Answer;
 import qna.domain.Question;
 import qna.domain.User;
-import qna.repository.AnswerRepository;
 import qna.repository.config.RepositoryTestConfig;
 
 import java.util.List;
