@@ -3,6 +3,8 @@ package qna.domain;
 import qna.exception.CannotDeleteException;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question extends BaseEntity {
@@ -21,6 +23,9 @@ public class Question extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "writer_id", nullable = false)
     private User writer;
+
+    @Embedded
+    private Answers answers = new Answers();
 
     @Column(nullable = false)
     private boolean deleted = false;
@@ -43,20 +48,23 @@ public class Question extends BaseEntity {
         return this;
     }
 
-    public DeleteHistory deleteBy(User user) throws CannotDeleteException {
+    public List<DeleteHistory> deleteBy(User user) throws CannotDeleteException {
         if (!this.isOwner(user)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
+        List<DeleteHistory> deleteHistories = answers.deleteBy(user);
         this.deleted = true;
-        return new DeleteHistory(ContentType.QUESTION, id, user);
-    }
 
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, user));
+        return deleteHistories;
+    }
 
     private boolean isOwner(User writer) {
         return this.writer.equals(writer);
     }
 
     public void addAnswer(Answer answer) {
+        this.answers.add(answer);
         answer.toQuestion(this);
     }
 

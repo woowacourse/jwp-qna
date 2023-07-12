@@ -1,14 +1,21 @@
 package qna.domain;
 
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Embeddable
 public class Answers {
 
-    private final List<Answer> answers;
+    @OneToMany(mappedBy = "question")
+    private final List<Answer> answers = new ArrayList<>();
 
-    public Answers(List<Answer> answers) {
-        this.answers = answers;
+    protected Answers() {
+    }
+
+    public void add(Answer answer) {
+        answers.add(answer);
     }
 
     public List<DeleteHistory> deleteBy(User user){
