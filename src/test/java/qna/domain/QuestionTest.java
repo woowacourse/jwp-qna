@@ -13,11 +13,11 @@ public class QuestionTest {
     @Test
     void isOwner_true() {
         // given
-        User d2 = new User("D2", "1234", "박정훈", "test1@test.com");
-        Question d2Question = new Question("title1", "contents1").writeBy(d2);
+        User owner = new User("D2", "1234", "박정훈", "test1@test.com");
+        Question ownerQuestion = new Question("title1", "contents1").writeBy(owner);
 
         // when
-        boolean isOwner = d2Question.isOwner(d2);
+        boolean isOwner = ownerQuestion.isOwner(owner);
 
         // then
         assertThat(isOwner).isTrue();
@@ -27,12 +27,12 @@ public class QuestionTest {
     @Test
     void isOwner_false() {
         // given
-        User d2 = new User("D2", "1234", "박정훈", "test1@test.com");
-        User ethan = new User("ethan", "1234", "김석호", "test@test.com");
-        Question d2Question = new Question("title1", "contents1").writeBy(d2);
+        User owner = new User(1L, "D2", "1234", "박정훈", "test1@test.com");
+        User notOwner = new User(2L, "ethan", "1234", "김석호", "test@test.com");
+        Question ownerQuestion = new Question("title1", "contents1").writeBy(owner);
 
         // when
-        boolean isOwner = d2Question.isOwner(ethan);
+        boolean isOwner = ownerQuestion.isOwner(notOwner);
 
         // then
         assertThat(isOwner).isFalse();
@@ -43,18 +43,18 @@ public class QuestionTest {
     void addAnswer() {
         // given
         User questionWriter = new User("D2", "1234", "박정훈", "test1@test.com");
-        Question question = new Question("title1", "contents1").writeBy(questionWriter);
+        Question expected = new Question("title1", "contents1").writeBy(questionWriter);
 
         User answerWriter = new User("ethan", "1234", "김석호", "test@test.com");
-        Answer answer = new Answer(answerWriter, question, "내용");
+        Answer answer = new Answer(answerWriter, expected, "내용");
 
-        question.addAnswer(answer);
-        Question answerQuestion = answer.getQuestion();
+        expected.addAnswer(answer);
+        Question actual = answer.getQuestion();
 
         // when, then
-        assertThat(question)
+        assertThat(actual)
                 .usingRecursiveComparison()
                 .ignoringExpectedNullFields()
-                .isEqualTo(answerQuestion);
+                .isEqualTo(expected);
     }
 }
