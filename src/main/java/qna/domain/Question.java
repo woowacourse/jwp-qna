@@ -1,6 +1,6 @@
 package qna.domain;
 
-import qna.CannotDeleteException;
+import qna.exception.CannotDeleteException;
 
 import javax.persistence.*;
 
