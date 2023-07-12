@@ -1,9 +1,13 @@
 package qna.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import qna.UnAuthorizedException;
@@ -15,15 +19,23 @@ public class User extends BaseEntity {
 
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
+
     @Column(nullable = false, length = 20)
     private String password;
+
     @Column(nullable = false, length = 20)
     private String name;
+
     @Column(length = 50)
     private String email;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "writer")
+    private List<Answer> answers = new ArrayList<>();
+
     @Column(nullable = false)
     @CreatedDate
     private LocalDateTime createdAt;
+
     @LastModifiedDate
     private LocalDateTime updatedAt;
 

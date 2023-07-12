@@ -4,24 +4,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.TestConstructor;
-import org.springframework.test.context.TestConstructor.AutowireMode;
 
-@DataJpaTest
-@TestConstructor(autowireMode = AutowireMode.ALL)
-class AnswerRepositoryTest {
+
+class AnswerRepositoryTest extends RepositoryTest {
 
     private final AnswerRepository answerRepository;
+    private final QuestionRepository questionRepository;
 
-    public AnswerRepositoryTest(final AnswerRepository answerRepository) {
+    public AnswerRepositoryTest(final AnswerRepository answerRepository, final QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;
+        this.questionRepository = questionRepository;
     }
 
     @Test
     void findByQuestionIdAndDeletedFalse() {
-        Answer answer = new Answer(1L, 1L, "answer");
-        answerRepository.save(answer);
+        final Question question = new Question("제목", "내용");
+        final Answer answer = new Answer("answer");
+        question.addAnswer(answer);
+        questionRepository.save(question);
+
         List<Answer> answers = answerRepository.findByQuestionIdAndDeletedFalse(1L);
 
         assertThat(answers).isNotEmpty();
@@ -29,7 +30,7 @@ class AnswerRepositoryTest {
 
     @Test
     void findByIdAndDeletedFalse() {
-        Answer answer = new Answer(1L, 1L, "answer");
+        Answer answer = new Answer("answer");
         Answer savedAnswer = answerRepository.save(answer);
         Answer findAnswer = answerRepository.findByIdAndDeletedFalse(savedAnswer.getId()).get();
 

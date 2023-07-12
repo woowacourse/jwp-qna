@@ -3,13 +3,8 @@ package qna.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.TestConstructor;
-import org.springframework.test.context.TestConstructor.AutowireMode;
 
-@DataJpaTest
-@TestConstructor(autowireMode = AutowireMode.ALL)
-class UserRepositoryTest {
+class UserRepositoryTest extends RepositoryTest {
 
     private final UserRepository userRepository;
 
