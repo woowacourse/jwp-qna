@@ -4,18 +4,18 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import qna.exception.CannotDeleteException;
-import qna.fixture.Fixture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static qna.fixture.Fixture.A1;
+import static qna.fixture.Fixture.SANJIGI;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-public class AnswerTest {
+class AnswerTest {
 
     @Test
-    void deleteBy_답변자인_경우() {
+    void 답변자는_답변을_삭제할_수_있다() {
         // given
         final User writer = A1.getWriter();
 
@@ -27,9 +27,9 @@ public class AnswerTest {
     }
 
     @Test
-    void deleteBy_질문자가_아닌_경우() {
+    void 답변자가_아닌_사람이_답변을_삭제할_경우_예외가_발생한다() {
         // given
-        final User writer = UserTest.SANJIGI;
+        final User writer = SANJIGI;
 
         // expect
         assertThatThrownBy(() -> A1.deleteBy(writer))

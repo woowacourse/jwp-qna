@@ -14,6 +14,6 @@ public class Answers {
     public List<DeleteHistory> deleteBy(User user){
         return answers.stream()
                 .map(answer -> answer.deleteBy(user))
-                .collect(Collectors.toUnmodifiableList());
+                .collect(Collectors.toList());
     }
 }
