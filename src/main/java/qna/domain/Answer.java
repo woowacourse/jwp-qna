@@ -81,8 +81,4 @@ public class Answer extends BaseEntity {
     public boolean isDeleted() {
         return deleted;
     }
-
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
 }
