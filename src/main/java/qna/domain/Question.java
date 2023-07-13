@@ -31,26 +31,10 @@ public class Question extends BaseEntity {
     protected Question() {
     }
 
-    public Question(String title, String contents) {
-        this(null, title, contents);
-    }
-
-    public Question(Long id, String title, String contents) {
-        this.id = id;
-        this.title = title;
-        this.contents = contents;
-    }
-
-    public Question(String title, String contents, User writer, boolean deleted) {
+    public Question(String title, String contents, User writer) {
         this.title = title;
         this.contents = contents;
         this.writer = writer;
-        this.deleted = deleted;
-    }
-
-    public Question writeBy(User writer) {
-        this.writer = writer;
-        return this;
     }
 
     public boolean isOwner(User writer) {

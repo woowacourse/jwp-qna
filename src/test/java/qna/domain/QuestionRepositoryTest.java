@@ -22,7 +22,7 @@ class QuestionRepositoryTest {
         User user = userRepository.save(new User("userId", "password", "name", "email@naver.com"));
 
         // when
-        Question actual = questionRepository.save(new Question("title", "content", user, false));
+        Question actual = questionRepository.save(new Question("title", "content", user));
 
         // then
         assertThat(actual.getId()).isNotNull();
@@ -32,7 +32,7 @@ class QuestionRepositoryTest {
     void 질문을_조회한다() {
         // given
         User user = userRepository.save(new User("userId", "password", "name", "email@naver.com"));
-        Question actual = questionRepository.save(new Question("title", "content", user, false));
+        Question actual = questionRepository.save(new Question("title", "content", user));
 
         // when
         Question expected = questionRepository.findById(actual.getId()).get();

@@ -22,7 +22,7 @@ class AnswerRepositoryTest {
     void 답변을_저장한다() {
         // given
         User user = userRepository.save(new User("userId", "password", "name", "email@naver.com"));
-        Question question = questionRepository.save(new Question("title", "content"));
+        Question question = questionRepository.save(new Question("title", "content", user));
 
         // when
         Answer actual = answerRepository.save(
@@ -36,7 +36,7 @@ class AnswerRepositoryTest {
     void 답변을_조회한다() {
         // given
         User user = userRepository.save(new User("userId", "password", "name", "email@naver.com"));
-        Question question = questionRepository.save(new Question("title", "content"));
+        Question question = questionRepository.save(new Question("title", "content", user));
         Answer actual = answerRepository.save(new Answer(user, question, "content"));
 
         // when
