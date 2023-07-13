@@ -6,9 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -22,7 +25,9 @@ public class DeleteHistory {
     @Enumerated(value = EnumType.STRING)
     private ContentType contentType;
     private Long contentId;
-    private Long deletedById;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_delete_history_to_user"))
+    private User deletedBy;
     @CreatedDate
     private LocalDateTime createDate;
 
@@ -32,12 +37,12 @@ public class DeleteHistory {
     public DeleteHistory(
             final ContentType contentType,
             final Long contentId,
-            final Long deletedById,
+            final User deletedBy,
             final LocalDateTime createDate
     ) {
         this.contentType = contentType;
         this.contentId = contentId;
-        this.deletedById = deletedById;
+        this.deletedBy = deletedBy;
         this.createDate = createDate;
     }
 
@@ -53,12 +58,12 @@ public class DeleteHistory {
         return Objects.equals(id, that.id) &&
                 contentType == that.contentType &&
                 Objects.equals(contentId, that.contentId) &&
-                Objects.equals(deletedById, that.deletedById);
+                Objects.equals(deletedBy, that.deletedBy);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, contentType, contentId, deletedById);
+        return Objects.hash(id, contentType, contentId, deletedBy);
     }
 
     @Override
@@ -67,7 +72,7 @@ public class DeleteHistory {
                 "id=" + id +
                 ", contentType=" + contentType +
                 ", contentId=" + contentId +
-                ", deletedById=" + deletedById +
+                ", deletedBy=" + deletedBy +
                 ", createDate=" + createDate +
                 '}';
     }

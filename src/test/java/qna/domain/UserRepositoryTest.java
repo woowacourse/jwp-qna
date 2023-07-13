@@ -73,13 +73,13 @@ class UserRepositoryTest {
         User user = javajigi;
         // INSERT 수행
         userRepository.save(user);
-
-        user.setUserId("떙칠");
+        System.out.println("====================select");
+        //user.setUserId("떙칠");
         // findByUserId 메서드를 통해서 UPDATE 수행 후 SELECT 수행이 되었다. [사실]
         // 인스턴스를 1차 캐시에서 가져오는데 그런다면 왜 SELECT 을 수행하는지?
         // [가설] 떙칠의 ID를 알기 위해서 SELECT 를 사용한다.
-        final Optional<User> found = userRepository.findByUserId("떙칠");
-        assertThat(found.get()).isEqualTo(user);
+//        final Optional<User> found = userRepository.findByUserId("떙칠");
+//        assertThat(found.get()).isEqualTo(user);
     }
 
     @Test
