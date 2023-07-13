@@ -1,7 +1,6 @@
 package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static qna.domain.UserTest.JAVAJIGI;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ class UserRepositoryTest {
     @Test
     void 유저를_저장한다() {
         // when
-        User actual = userRepository.save(JAVAJIGI);
+        User actual = userRepository.save(new User("userId", "password", "name", "email@naver.com"));
 
         // then
         assertThat(actual.getId()).isNotNull();
@@ -28,7 +27,7 @@ class UserRepositoryTest {
     @Test
     void 유저를_조회한다() {
         // given
-        User actual = userRepository.save(JAVAJIGI);
+        User actual = userRepository.save(new User("userId", "password", "name", "email@naver.com"));
 
         // when
         User expected = userRepository.findByUserId(actual.getUserId()).get();
