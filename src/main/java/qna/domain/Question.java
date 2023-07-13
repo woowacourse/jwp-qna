@@ -54,7 +54,7 @@ public class Question extends BaseEntity {
         List<DeleteHistory> deleteHistories = answers.deleteBy(user);
         this.deleted = true;
 
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, user));
+        deleteHistories.add(DeleteHistory.ofQuestion(id, user));
         return deleteHistories;
     }
 
