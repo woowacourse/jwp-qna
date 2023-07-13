@@ -63,15 +63,4 @@ public class DeleteHistory extends BaseEntity {
     public int hashCode() {
         return Objects.hash(id, contentType, contentId, deletedBy);
     }
-
-    @Override
-    public String toString() {
-        return "DeleteHistory{" +
-                "id=" + id +
-                ", contentId=" + contentId +
-                ", contentType=" + contentType +
-                ", createDate=" + createdAt +
-                ", deletedById=" + deletedBy +
-                '}';
-    }
 }

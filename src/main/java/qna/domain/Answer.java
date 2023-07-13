@@ -20,7 +20,7 @@ public class Answer extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    protected Long id;
+    private Long id;
 
     @Lob
     private String contents;
@@ -108,18 +108,5 @@ public class Answer extends BaseEntity {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
-    }
-
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "id=" + id +
-                ", contents='" + contents + '\'' +
-                ", createdAt=" + createdAt +
-                ", deleted=" + deleted +
-                ", questionId=" + question +
-                ", updatedAt=" + updatedAt +
-                ", writerId=" + writer +
-                '}';
     }
 }

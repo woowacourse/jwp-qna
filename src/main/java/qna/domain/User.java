@@ -133,17 +133,4 @@ public class User extends BaseEntity {
             return true;
         }
     }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", createdAt=" + createdAt +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", updatedAt=" + updatedAt +
-                ", userId='" + userId + '\'' +
-                '}';
-    }
 }

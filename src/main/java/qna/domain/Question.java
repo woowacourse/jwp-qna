@@ -106,17 +106,4 @@ public class Question extends BaseEntity {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
-
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", contents='" + contents + '\'' +
-                ", createdAt=" + createdAt +
-                ", deleted=" + deleted +
-                ", title='" + title + '\'' +
-                ", updatedAt=" + updatedAt +
-                ", writerId=" + writer +
-                '}';
-    }
 }
