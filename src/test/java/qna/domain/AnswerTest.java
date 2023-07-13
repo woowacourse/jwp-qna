@@ -1,5 +1,7 @@
 package qna.domain;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestConstructor;
@@ -17,9 +19,26 @@ public class AnswerTest {
     public static final Answer A2 = new Answer(UserTest.SANJIGI, QuestionTest.Q1, "Answers Contents2");
 
     AnswerRepository answers;
+    QuestionRepository questions;
+    UserRepository users;
 
-    AnswerTest(AnswerRepository answers) {
+    AnswerTest(AnswerRepository answers, QuestionRepository questions, UserRepository users) {
         this.answers = answers;
+        this.questions = questions;
+        this.users = users;
+    }
+
+    @BeforeEach
+    void setup() {
+        UserTest.JAVAJIGI.setId(null);
+        UserTest.SANJIGI.setId(null);
+        QuestionTest.Q1.setId(null);
+        QuestionTest.Q2.setId(null);
+
+        users.save(UserTest.JAVAJIGI);
+        users.save(UserTest.SANJIGI);
+        questions.save(QuestionTest.Q1);
+        questions.save(QuestionTest.Q2);
     }
 
     @Test
