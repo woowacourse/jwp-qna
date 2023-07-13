@@ -2,7 +2,6 @@ package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -25,7 +24,7 @@ class DeleteHistoryRepositoryTest {
 
         // when
         DeleteHistory actual = deleteHistoryRepository.save(
-                new DeleteHistory(ContentType.QUESTION, 1L, user, LocalDateTime.now()));
+                new DeleteHistory(ContentType.QUESTION, 1L, user));
 
         // then
         assertThat(actual.getId()).isNotNull();
@@ -36,7 +35,7 @@ class DeleteHistoryRepositoryTest {
         // given
         User user = userRepository.save(new User("userId", "password", "name", "email@naver.com"));
         DeleteHistory actual = deleteHistoryRepository.save(
-                new DeleteHistory(ContentType.QUESTION, 1L, user, LocalDateTime.now()));
+                new DeleteHistory(ContentType.QUESTION, 1L, user));
 
         // when
         DeleteHistory expected = deleteHistoryRepository.findById(actual.getId()).get();

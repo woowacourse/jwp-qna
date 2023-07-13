@@ -29,18 +29,16 @@ public class DeleteHistory {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createDate;
+    private LocalDateTime createDate = LocalDateTime.now();
 
     protected DeleteHistory() {
     }
 
-    public DeleteHistory(ContentType contentType, Long contentId, User deleter, LocalDateTime createDate) {
+    public DeleteHistory(ContentType contentType, Long contentId, User deleter) {
         this.contentType = contentType;
         this.contentId = contentId;
         this.deleter = deleter;
-        this.createDate = createDate;
     }
-
 
     public Long getId() {
         return id;
@@ -53,7 +51,6 @@ public class DeleteHistory {
     public Long getContentId() {
         return contentId;
     }
-
 
     public User getDeleter() {
         return deleter;
