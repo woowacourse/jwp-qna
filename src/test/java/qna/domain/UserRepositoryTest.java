@@ -1,10 +1,14 @@
 package qna.domain;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserRepositoryTest extends RepositoryTest {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void 저장시에_createdAt이_생성된다() {

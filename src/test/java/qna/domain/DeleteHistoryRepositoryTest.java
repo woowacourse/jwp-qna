@@ -1,18 +1,25 @@
 package qna.domain;
 
-import org.junit.jupiter.api.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class DeleteHistoryRepositoryTest extends RepositoryTest {
 
+    @Autowired
+    private DeleteHistoryRepository deleteHistoryRepository;
+
     @Test
     void deleteHistory를_저장한다() {
-        final User savedUser = userRepository.save(UserTest.JAVAJIGI);
+        final User user = UserFixture.fixture();
+        
+        em.persist(user);
+
         DeleteHistory deleteHistory = new DeleteHistory(
                 ContentType.ANSWER,
                 1L,
-                savedUser
+                user
         );
         deleteHistoryRepository.save(deleteHistory);
 
