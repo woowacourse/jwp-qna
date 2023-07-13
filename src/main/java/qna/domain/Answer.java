@@ -109,4 +109,21 @@ public class Answer extends BaseEntity {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Answer answer = (Answer) o;
+        return id.equals(answer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

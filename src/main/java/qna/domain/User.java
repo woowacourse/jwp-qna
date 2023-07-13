@@ -127,6 +127,23 @@ public class User extends BaseEntity {
         return createdAt;
     }
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final User user = (User) o;
+        return id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
     private static class GuestUser extends User {
         @Override
         public boolean isGuestUser() {
