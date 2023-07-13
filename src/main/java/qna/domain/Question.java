@@ -48,7 +48,7 @@ public class Question extends BaseEntity {
     }
 
     public List<DeleteHistory> deleteBy(User user) {
-        if (!this.isOwner(user)) {
+        if (this.isNotOwner(user)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
 
@@ -59,8 +59,8 @@ public class Question extends BaseEntity {
         return deleteHistories;
     }
 
-    private boolean isOwner(User writer) {
-        return this.writer.equals(writer);
+    private boolean isNotOwner(User writer) {
+        return !this.writer.equals(writer);
     }
 
     public void addAnswer(Answer answer) {
