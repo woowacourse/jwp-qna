@@ -1,7 +1,5 @@
 package qna.domain;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Question extends BaseEntity {
@@ -32,9 +29,6 @@ public class Question extends BaseEntity {
     private User writer;
 
     private boolean deleted = false;
-
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answers = new ArrayList<>();
 
     protected Question() {
     }
