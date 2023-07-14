@@ -1,5 +1,8 @@
 package qna.domain;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import qna.exception.CannotDeleteException;
 
 @Entity
 public class Question extends BaseEntity {
@@ -30,6 +35,9 @@ public class Question extends BaseEntity {
 
     private boolean deleted = false;
 
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers = new ArrayList<>();
+
     protected Question() {
     }
 
@@ -43,6 +51,41 @@ public class Question extends BaseEntity {
         this.contents = contents;
     }
 
+    public List<DeleteHistory> deleteBy(User user) {
+        validateQuestionWriter(user);
+        validateAnswerWriter(user);
+
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        deleteHistories.add(delete());
+        for (Answer answer : answers) {
+            deleteHistories.add(answer.delete());
+        }
+
+        return deleteHistories;
+    }
+
+    private void validateQuestionWriter(User user) {
+        if (!isOwner(user)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+    }
+
+    private void validateAnswerWriter(User user) {
+        if (hasDifferentWriterInAnswer(user)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
+    }
+
+    private boolean hasDifferentWriterInAnswer(User user) {
+        return answers.stream()
+                .anyMatch(answer -> !answer.isOwner(user));
+    }
+
+    private DeleteHistory delete() {
+        this.deleted = true;
+        return new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now());
+    }
+
     public Question writeBy(User writer) {
         this.writer = writer;
         return this;
@@ -53,11 +96,8 @@ public class Question extends BaseEntity {
     }
 
     public void addAnswer(Answer answer) {
+        answers.add(answer);
         answer.toQuestion(this);
-    }
-
-    public void changeDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 
     public Long getId() {

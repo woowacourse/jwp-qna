@@ -1,5 +1,6 @@
 package qna.domain;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -65,8 +66,9 @@ public class Answer extends BaseEntity {
         this.question = question;
     }
 
-    public void changeDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public DeleteHistory delete() {
+        this.deleted = true;
+        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
     }
 
     public Long getId() {

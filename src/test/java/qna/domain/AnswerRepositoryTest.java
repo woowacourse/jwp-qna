@@ -42,7 +42,7 @@ class AnswerRepositoryTest {
         // given
         answerRepository.save(new Answer(user1, question1, "Answers Contents1"));
         Answer answer = answerRepository.save(new Answer(user1, question1, "Answers Contents2"));
-        answer.changeDeleted(true);
+        answer.delete();
 
         Answer diffrentQuestionIdAnswer = new Answer(user1, question2, "Answers Contents3");
         answerRepository.save(diffrentQuestionIdAnswer);

@@ -40,7 +40,7 @@ public class AnswerTest {
         Answer answer = new Answer(JAVAJIGI, Q1, "안녕하세요");
 
         // when
-        answer.changeDeleted(true);
+        answer.delete();
 
         // then
         assertThat(answer.isDeleted()).isTrue();

@@ -33,7 +33,7 @@ class QuestionRepositoryTest {
     void 삭제되지_않은_질문을_조회한다() {
         // given
         Question question = questionRepository.save(new Question("title1", "content1").writeBy(user));
-        question.changeDeleted(true);
+        question.deleteBy(user);
         questionRepository.save(new Question("title2", "content2").writeBy(user));
 
         // when
