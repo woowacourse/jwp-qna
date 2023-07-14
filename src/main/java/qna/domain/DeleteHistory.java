@@ -1,5 +1,6 @@
 package qna.domain;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Entity;
