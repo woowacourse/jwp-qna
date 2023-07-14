@@ -11,36 +11,48 @@ import org.springframework.test.context.TestConstructor;
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @DataJpaTest
 class AnswerRepositoryTest {
+
+    private final UserRepository userRepository;
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
-    private AnswerTest answerTest;
-    private QuestionTest questionTest;
+    private User javajigi;
+    private User sanjigi;
+    private Question question1;
+    private Question question2;
 
-    public AnswerRepositoryTest(final AnswerRepository answerRepository, final QuestionRepository questionRepository) {
+    public AnswerRepositoryTest(final UserRepository userRepository, final AnswerRepository answerRepository,
+                                final QuestionRepository questionRepository) {
+        this.userRepository = userRepository;
         this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
-        this.questionTest = new QuestionTest();
-        this.answerTest = new AnswerTest(questionTest);
     }
 
     @BeforeEach
     void setUp() {
-        questionRepository.save(questionTest.Q1);
-        questionRepository.save(questionTest.Q2);
+        this.javajigi = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        this.sanjigi = new User("sanjigi", "password", "name", "sanjigi@slipp.net");
+        userRepository.save(javajigi);
+        userRepository.save(sanjigi);
+        this.question1 = questionRepository.save(new Question("title1", "contents1").writeBy(javajigi));
+        this.question2 = questionRepository.save(new Question("title2", "contents2").writeBy(sanjigi));
     }
 
     @Test
     void findByQuestionIdAndDeletedFalse() {
-        answerRepository.save(answerTest.makeAnswer1());
-        answerRepository.save(answerTest.makeAnswer2());
+        final Answer answer1 = new Answer(javajigi, question1, "Answers Contents1");
+        final Answer answer2 = new Answer(sanjigi, question1, "Answers Contents2");
 
-        final List<Answer> 찾은거 = answerRepository.findByQuestionIdAndDeletedFalse(answerTest.makeAnswer1().getQuestion().getId());
+        answerRepository.save(answer1);
+        answerRepository.save(answer2);
+
+        final List<Answer> 찾은거 = answerRepository.findByQuestionIdAndDeletedFalse(answer1.getQuestion().getId());
         assertThat(찾은거).hasSize(2);
     }
 
     @Test
     void findByIdAndDeletedFalse() {
-        final Answer answer = answerTest.makeAnswer1();
+        final Answer answer = new Answer(javajigi, question1, "Answers Contents1");
+
         answerRepository.save(answer);
         assertThat(
                 answerRepository.findByIdAndDeletedFalse(answer.getId())
