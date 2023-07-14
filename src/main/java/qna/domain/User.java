@@ -16,12 +16,16 @@ public class User extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(length = 50)
     private String email;
+
     @Column(nullable = false, length = 20)
     private String name;
+
     @Column(nullable = false, length = 20)
     private String password;
+
     @Column(unique = true, nullable = false, length = 20)
     private String userId;
 

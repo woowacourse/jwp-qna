@@ -27,6 +27,7 @@ import qna.domain.UserTest;
 
 @ExtendWith(MockitoExtension.class)
 class QnaServiceTest {
+
     @Mock
     private QuestionRepository questionRepository;
 
@@ -40,7 +41,9 @@ class QnaServiceTest {
     private QnaService qnaService;
 
     private Question question;
+
     private Answer answer;
+
     private QuestionTest questionTest;
 
     @BeforeEach

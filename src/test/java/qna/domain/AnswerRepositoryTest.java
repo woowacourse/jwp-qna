@@ -13,11 +13,17 @@ import org.springframework.test.context.TestConstructor;
 class AnswerRepositoryTest {
 
     private final UserRepository userRepository;
+
     private final AnswerRepository answerRepository;
+
     private final QuestionRepository questionRepository;
+
     private User javajigi;
+
     private User sanjigi;
+
     private Question question1;
+
     private Question question2;
 
     public AnswerRepositoryTest(final UserRepository userRepository, final AnswerRepository answerRepository,

@@ -1,6 +1,7 @@
 package qna.domain;
 
 public class AnswerTest {
+
     private final QuestionTest questionTest;
 
     public AnswerTest(final QuestionTest questionTest) {

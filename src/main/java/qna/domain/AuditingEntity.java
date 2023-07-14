@@ -15,6 +15,7 @@ public abstract class AuditingEntity {
     @Column(nullable = false, updatable = false)
     @CreatedDate
     private LocalDateTime createdAt;
+
     @LastModifiedDate
     private LocalDateTime updatedAt;
 }
