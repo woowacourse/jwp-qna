@@ -23,11 +23,15 @@ public class DeleteHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long contentId;
+
     @Enumerated(value = EnumType.STRING)
     private ContentType contentType;
+
     @CreatedDate
-    private LocalDateTime createDate = LocalDateTime.now();
+    private LocalDateTime createDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_delete_history_to_user"))
     private User deletedBy;
@@ -35,11 +39,14 @@ public class DeleteHistory {
     protected DeleteHistory() {
     }
 
-    public DeleteHistory(ContentType contentType, Long contentId, User deletedBy, LocalDateTime createDate) {
+    public DeleteHistory(ContentType contentType, Long contentId, User deletedBy) {
         this.contentType = contentType;
         this.contentId = contentId;
         this.deletedBy = deletedBy;
-        this.createDate = createDate;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override
