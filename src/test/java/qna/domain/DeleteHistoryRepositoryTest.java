@@ -12,8 +12,8 @@ class DeleteHistoryRepositoryTest extends RepositoryTest {
 
     @Test
     void deleteHistory를_저장한다() {
-        final User user = UserFixture.fixture();
-        
+        final User user = Fixture.userFixtureJavajigi();
+
         em.persist(user);
 
         DeleteHistory deleteHistory = new DeleteHistory(

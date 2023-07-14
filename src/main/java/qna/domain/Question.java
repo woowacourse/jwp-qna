@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
@@ -110,12 +111,8 @@ public class Question extends BaseEntity {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         final Question question = (Question) o;
         return id.equals(question.id);
     }

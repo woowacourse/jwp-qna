@@ -12,7 +12,7 @@ class QuestionRepositoryTest extends RepositoryTest {
 
     @Test
     void Question을_저장한다() {
-        final User user = UserFixture.fixture();
+        final User user = Fixture.userFixtureJavajigi();
 
         final Question question = questionRepository.save(new Question("질문입니다", "질문이에요", user));
         Question found = questionRepository.findById(question.getId()).get();
