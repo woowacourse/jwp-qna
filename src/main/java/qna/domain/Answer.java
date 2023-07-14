@@ -13,6 +13,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import org.springframework.data.annotation.LastModifiedDate;
+import qna.CannotDeleteException;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
@@ -69,6 +70,16 @@ public class Answer extends BaseEntity {
 
     public void toQuestion(Question question) {
         this.question = question;
+    }
+
+    public void deleteBy(final User user) {
+        if (deleted) {
+            return;
+        }
+        if (!isOwner(user)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
+        deleted = true;
     }
 
     public Long getId() {

@@ -1,6 +1,7 @@
 package qna.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import org.springframework.data.annotation.LastModifiedDate;
+import qna.CannotDeleteException;
 
 @Entity
 public class Question extends BaseEntity {
@@ -67,6 +69,21 @@ public class Question extends BaseEntity {
 
     public void addAnswer(Answer answer) {
         answer.toQuestion(this);
+    }
+
+    public void deleteBy(User user, List<Answer> answers) {
+        if (deleted) {
+            return;
+        }
+        validateAuthor(user);
+        answers.forEach(answer -> answer.deleteBy(user));
+        deleted = true;
+    }
+
+    private void validateAuthor(User user) {
+        if (!isOwner(user)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
     }
 
     public Long getId() {
