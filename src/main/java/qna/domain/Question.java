@@ -41,6 +41,10 @@ public class Question extends BaseEntity {
         return this.writer.equals(writer);
     }
 
+    public void delete() {
+        this.deleted = true;
+    }
+
     public Long getId() {
         return id;
     }
@@ -59,9 +63,5 @@ public class Question extends BaseEntity {
 
     public boolean isDeleted() {
         return deleted;
-    }
-
-    public void delete() {
-        this.deleted = true;
     }
 }
