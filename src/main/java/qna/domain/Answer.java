@@ -1,6 +1,7 @@
 package qna.domain;
 
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -30,7 +31,7 @@ public class Answer extends BaseEntity {
     private Question question;
 
     @Lob
-    @Nullable
+    @Column(nullable = false)
     private String contents;
 
     private boolean deleted = false;

@@ -32,8 +32,7 @@ public class DeleteHistory {
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_delete_history_to_user"))
     private User deletedBy;
 
-    @NotNull
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     private LocalDateTime createDate;
 
     protected DeleteHistory() {

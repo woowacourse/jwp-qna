@@ -20,12 +20,11 @@ public class Question extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String title;
 
     @Lob
-    @NotNull
+    @Column(nullable = false)
     private String contents;
 
     @ManyToOne(fetch = FetchType.LAZY)
