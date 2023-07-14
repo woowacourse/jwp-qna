@@ -1,10 +1,10 @@
 package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static qna.fixtures.UserFixture.JAVAJIGI;
 import static qna.fixtures.UserFixture.SANJIGI;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -56,7 +56,7 @@ public class QuestionTest {
         question.writeBy(JAVAJIGI);
 
         // expect
-        Assertions.assertThatThrownBy(() -> question.deleteBy(SANJIGI))
+        assertThatThrownBy(() -> question.deleteBy(SANJIGI))
                 .isInstanceOf(CannotDeleteException.class)
                 .hasMessage("질문을 삭제할 권한이 없습니다.");
     }
@@ -70,7 +70,7 @@ public class QuestionTest {
         question.addAnswer(answer);
 
         // expect
-        Assertions.assertThatThrownBy(() -> question.deleteBy(JAVAJIGI))
+        assertThatThrownBy(() -> question.deleteBy(JAVAJIGI))
                 .isInstanceOf(CannotDeleteException.class)
                 .hasMessage("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
     }
