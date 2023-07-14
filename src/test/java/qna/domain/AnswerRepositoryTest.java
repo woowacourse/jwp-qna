@@ -34,7 +34,7 @@ class AnswerRepositoryTest {
         answerRepository.save(answerTest.makeAnswer1());
         answerRepository.save(answerTest.makeAnswer2());
 
-        final List<Answer> 찾은거 = answerRepository.findByQuestionIdAndDeletedFalse(answerTest.makeAnswer1().getQuestionId());
+        final List<Answer> 찾은거 = answerRepository.findByQuestionIdAndDeletedFalse(answerTest.makeAnswer1().getQuestion().getId());
         assertThat(찾은거).hasSize(2);
     }
 
