@@ -5,23 +5,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
-import qna.config.JpaAuditingConfig;
 
 
 @DataJpaTest
-@Import(JpaAuditingConfig.class)
 class DeleteHistoryRepositoryTest {
 
-    private DeleteHistory HISTORY = new DeleteHistory(ContentType.QUESTION, 1L, 1L);
 
     @Autowired
     private DeleteHistoryRepository deleteHistoryRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
     void 삭제이력을_저장한다() {
+        // given
+        User user = userRepository.save(new User("userId", "password", "name", "email@naver.com"));
+
         // when
-        DeleteHistory actual = deleteHistoryRepository.save(HISTORY);
+        DeleteHistory actual = deleteHistoryRepository.save(
+                new DeleteHistory(ContentType.QUESTION, 1L, user));
 
         // then
         assertThat(actual.getId()).isNotNull();
@@ -30,7 +33,9 @@ class DeleteHistoryRepositoryTest {
     @Test
     void 삭제이력을_조회한다() {
         // given
-        DeleteHistory actual = deleteHistoryRepository.save(HISTORY);
+        User user = userRepository.save(new User("userId", "password", "name", "email@naver.com"));
+        DeleteHistory actual = deleteHistoryRepository.save(
+                new DeleteHistory(ContentType.QUESTION, 1L, user));
 
         // when
         DeleteHistory expected = deleteHistoryRepository.findById(actual.getId()).get();
