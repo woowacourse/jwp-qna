@@ -1,6 +1,5 @@
 package qna.domain;
 
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -64,15 +63,6 @@ public class User extends BaseEntity {
 
     public boolean matchPassword(String targetPassword) {
         return this.password.equals(targetPassword);
-    }
-
-    public boolean equalsNameAndEmail(User target) {
-        if (Objects.isNull(target)) {
-            return false;
-        }
-
-        return name.equals(target.name) &&
-                email.equals(target.email);
     }
 
     public boolean isGuestUser() {
