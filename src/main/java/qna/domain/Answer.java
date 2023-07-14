@@ -77,7 +77,6 @@ public class Answer extends BaseEntity {
         return question;
     }
 
-    @Nullable
     public String getContents() {
         return contents;
     }

@@ -73,7 +73,6 @@ public class User extends BaseEntity {
         if (Objects.isNull(target)) {
             return false;
         }
-
         return name.equals(target.name) &&
                 email.equals(target.email);
     }
