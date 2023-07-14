@@ -1,6 +1,9 @@
 package qna.domain;
 
-import java.util.Objects;
+import org.springframework.lang.Nullable;
+import qna.NotFoundException;
+import qna.UnAuthorizedException;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,9 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import org.springframework.lang.Nullable;
-import qna.NotFoundException;
-import qna.UnAuthorizedException;
+import java.util.Objects;
 
 @Entity
 public class Answer extends BaseEntity {
@@ -44,16 +45,13 @@ public class Answer extends BaseEntity {
     }
 
     public Answer(Long id, User writer, Question question, String contents) {
-        this.id = id;
-
         if (Objects.isNull(writer)) {
             throw new UnAuthorizedException();
         }
-
         if (Objects.isNull(question)) {
             throw new NotFoundException();
         }
-
+        this.id = id;
         this.writer = writer;
         this.question = question;
         this.contents = contents;
@@ -112,11 +110,11 @@ public class Answer extends BaseEntity {
     @Override
     public String toString() {
         return "Answer{" +
-            "id=" + id +
-            ", writer=" + writer +
-            ", question=" + question +
-            ", contents='" + contents + '\'' +
-            ", deleted=" + deleted +
-            '}';
+                "id=" + id +
+                ", writer=" + writer +
+                ", question=" + question +
+                ", contents='" + contents + '\'' +
+                ", deleted=" + deleted +
+                '}';
     }
 }

@@ -2,10 +2,9 @@ package qna.domain;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @MappedSuperclass
 public abstract class BaseEntity {

@@ -1,7 +1,5 @@
 package qna.domain;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,7 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
-import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class DeleteHistory {
@@ -90,11 +89,11 @@ public class DeleteHistory {
     @Override
     public String toString() {
         return "DeleteHistory{" +
-            "id=" + id +
-            ", contentType=" + contentType +
-            ", contentId=" + contentId +
-            ", deletedBy=" + deletedBy +
-            ", createDate=" + createDate +
-            '}';
+                "id=" + id +
+                ", contentType=" + contentType +
+                ", contentId=" + contentId +
+                ", deletedBy=" + deletedBy +
+                ", createDate=" + createDate +
+                '}';
     }
 }
