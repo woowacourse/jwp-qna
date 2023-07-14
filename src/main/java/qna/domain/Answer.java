@@ -11,7 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+
 import org.springframework.data.annotation.LastModifiedDate;
+import qna.CannotDeleteException;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
@@ -20,7 +22,7 @@ public class Answer extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    protected Long id;
+    private Long id;
 
     @Lob
     private String contents;
@@ -70,6 +72,16 @@ public class Answer extends BaseEntity {
         this.question = question;
     }
 
+    public void deleteBy(final User user) {
+        if (deleted) {
+            return;
+        }
+        if (!isOwner(user)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
+        deleted = true;
+    }
+
     public Long getId() {
         return id;
     }
@@ -111,15 +123,15 @@ public class Answer extends BaseEntity {
     }
 
     @Override
-    public String toString() {
-        return "Answer{" +
-                "id=" + id +
-                ", contents='" + contents + '\'' +
-                ", createdAt=" + createdAt +
-                ", deleted=" + deleted +
-                ", questionId=" + question +
-                ", updatedAt=" + updatedAt +
-                ", writerId=" + writer +
-                '}';
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Answer answer = (Answer) o;
+        return id.equals(answer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

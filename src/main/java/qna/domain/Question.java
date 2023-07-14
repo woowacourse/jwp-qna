@@ -1,6 +1,8 @@
 package qna.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,7 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+
 import org.springframework.data.annotation.LastModifiedDate;
+import qna.CannotDeleteException;
 
 @Entity
 public class Question extends BaseEntity {
@@ -67,6 +71,21 @@ public class Question extends BaseEntity {
         answer.toQuestion(this);
     }
 
+    public void deleteBy(User user, List<Answer> answers) {
+        if (deleted) {
+            return;
+        }
+        validateAuthor(user);
+        answers.forEach(answer -> answer.deleteBy(user));
+        deleted = true;
+    }
+
+    private void validateAuthor(User user) {
+        if (!isOwner(user)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+    }
+
     public Long getId() {
         return id;
     }
@@ -108,15 +127,15 @@ public class Question extends BaseEntity {
     }
 
     @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", contents='" + contents + '\'' +
-                ", createdAt=" + createdAt +
-                ", deleted=" + deleted +
-                ", title='" + title + '\'' +
-                ", updatedAt=" + updatedAt +
-                ", writerId=" + writer +
-                '}';
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Question question = (Question) o;
+        return id.equals(question.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

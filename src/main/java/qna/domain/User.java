@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import org.springframework.data.annotation.LastModifiedDate;
 import qna.UnAuthorizedException;
 
@@ -127,23 +128,23 @@ public class User extends BaseEntity {
         return createdAt;
     }
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final User user = (User) o;
+        return userId.equals(user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
+    }
+
     private static class GuestUser extends User {
         @Override
         public boolean isGuestUser() {
             return true;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", createdAt=" + createdAt +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", updatedAt=" + updatedAt +
-                ", userId='" + userId + '\'' +
-                '}';
     }
 }
