@@ -1,9 +1,9 @@
 package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static qna.domain.AnswerFixture.A1;
 
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -17,10 +17,25 @@ import org.springframework.test.context.TestConstructor.AutowireMode;
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 class AnswerRepositoryTest {
 
+    private final UserRepository userRepository;
+    private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private Answer ANSWER;
 
-    public AnswerRepositoryTest(final AnswerRepository answerRepository) {
+    public AnswerRepositoryTest(final UserRepository userRepository,
+                                final QuestionRepository questionRepository,
+                                final AnswerRepository answerRepository) {
+        this.userRepository = userRepository;
+        this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
+    }
+
+    @BeforeEach
+    void setUp() {
+        final User questionWriter = userRepository.save(UserFixture.JAVAJIGI);
+        final User answerWriter = userRepository.save(UserFixture.SANJIGI);
+        final Question question = questionRepository.save(new Question("title1", "contents1").writeBy(questionWriter));
+        ANSWER = new Answer(answerWriter, question, "Answers Contents1");
     }
 
     @DisplayName("답변을 저장한다.")
@@ -28,7 +43,7 @@ class AnswerRepositoryTest {
     void save() {
         // given
         // when
-        final Answer saved = answerRepository.save(A1);
+        final Answer saved = answerRepository.save(ANSWER);
 
         // then
         assertThat(answerRepository.findById(saved.getId()).get())
@@ -40,10 +55,10 @@ class AnswerRepositoryTest {
     @Test
     void findByQuestionIdAndDeletedFalse() {
         // given
-        final Answer saved = answerRepository.save(A1);
+        final Answer saved = answerRepository.save(ANSWER);
 
         // when
-        final List<Answer> actual = answerRepository.findByQuestionIdAndDeletedFalse(saved.getQuestionId());
+        final List<Answer> actual = answerRepository.findByQuestionIdAndDeletedFalse(saved.getQuestion().getId());
 
         // then
         assertThat(actual)
@@ -54,7 +69,7 @@ class AnswerRepositoryTest {
     @Test
     void findByIdAndDeletedFalse() {
         // given
-        final Answer saved = answerRepository.save(A1);
+        final Answer saved = answerRepository.save(ANSWER);
 
         // when
         final Answer actual = answerRepository.findByIdAndDeletedFalse(saved.getId()).get();
@@ -70,7 +85,7 @@ class AnswerRepositoryTest {
     @Test
     void updateDeleted() {
         // given
-        final Answer saved = answerRepository.save(A1);
+        final Answer saved = answerRepository.save(ANSWER);
 
         // when
         saved.setDeleted(true);
@@ -85,13 +100,13 @@ class AnswerRepositoryTest {
     @Test
     void identity() {
         // given
-        final Answer saved = answerRepository.save(A1);
+        final Answer saved = answerRepository.save(ANSWER);
         final Answer actual = answerRepository.findById(saved.getId()).get();
         final Answer actual2 = answerRepository.findByIdAndDeletedFalse(saved.getId()).get();
 
         // when
         // then
-        assertThat(saved == actual).isTrue();
-        assertThat(actual == actual2).isTrue();
+        assertThat(saved).isSameAs(actual);
+        assertThat(actual).isSameAs(actual2);
     }
 }
