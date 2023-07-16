@@ -1,6 +1,7 @@
 package qna.domain;
 
 import org.assertj.core.api.AssertionsForClassTypes;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -8,15 +9,34 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static qna.fixture.UserFixture.JAVAJIGI;
+import static qna.fixture.UserFixture.SANJIGI;
 
 @DataJpaTest
 public class QuestionTest {
 
-    public static final Question Q1 = new Question("title1", "contents1").writeBy(UserTest.JAVAJIGI);
-    public static final Question Q2 = new Question("title2", "contents2").writeBy(UserTest.SANJIGI);
-
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private AnswerRepository answerRepository;
+
+    private Question Q1;
+    private Question Q2;
+
+    private User user1;
+    private User user2;
+
+    @BeforeEach
+    void setUp() {
+        user1 = userRepository.save(JAVAJIGI);
+        Q1 = new Question("title1", "contents1", user1);
+        user2 = userRepository.save(SANJIGI);
+        Q2 = new Question("title2", "contents2", user2);
+    }
 
     @Test
     void 질문을_저장한다() {
@@ -49,4 +69,19 @@ public class QuestionTest {
         AssertionsForClassTypes.assertThat(savedQuestion).isEqualTo(findQuestion);
     }
 
+    @Test
+    void Answer_목록을_조회한다() {
+        // given, when
+        Question question = questionRepository.save(Q1);
+        Answer A1 = new Answer(user1, question, "Answers Contents1");
+        Answer A2 = new Answer(user2, question, "Answers Contents2");
+        Answer savedA1 = answerRepository.save(A1);
+        Answer savedA2 = answerRepository.save(A2);
+
+        question.addAnswer(savedA1);
+        question.addAnswer(savedA2);
+
+        // then
+        assertThat(question.getAnswers()).containsExactlyInAnyOrder(savedA1, savedA2);
+    }
 }

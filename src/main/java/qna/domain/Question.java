@@ -1,10 +1,11 @@
 package qna.domain;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-public class Question {
+public class Question extends BaseDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,17 +15,18 @@ public class Question {
     private String contents;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column(nullable = false)
     private boolean deleted = false;
 
     @Column(length = 100, nullable = false)
     private String title;
 
-    private LocalDateTime updatedAt;
+    @ManyToOne
+    @JoinColumn(name = "writer_id",
+            foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
 
-    private Long writerId;
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers = new ArrayList<>();
 
     protected Question() {
     }
@@ -39,17 +41,28 @@ public class Question {
         this.contents = contents;
     }
 
+    public Question(String contents, String title, User writer) {
+        this.contents = contents;
+        this.title = title;
+        this.writer = writer;
+    }
+
     public Question writeBy(User writer) {
-        this.writerId = writer.getId();
+        this.writer = writer;
         return this;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.equals(writer.getId());
     }
 
     public void addAnswer(Answer answer) {
-        answer.toQuestion(this);
+        answers.add(answer);
+        answer.setQuestion(this);
+    }
+
+    public List<Answer> getAnswers() {
+        return new ArrayList<>(answers);
     }
 
     public Long getId() {
@@ -60,28 +73,12 @@ public class Question {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getContents() {
         return contents;
     }
 
     public void setContents(String contents) {
         this.contents = contents;
-    }
-
-    public Long getWriterId() {
-        return writerId;
-    }
-
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
     }
 
     public boolean isDeleted() {
@@ -92,13 +89,29 @@ public class Question {
         this.deleted = deleted;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public User getWriter() {
+        return writer;
+    }
+
+    public void setWriter(User writer) {
+        this.writer = writer;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", writerId=" + writerId +
+                ", writer=" + writer +
                 ", deleted=" + deleted +
                 '}';
     }
