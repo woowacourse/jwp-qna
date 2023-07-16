@@ -1,17 +1,39 @@
 package qna.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+@Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Question {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 100, nullable = false)
     private String title;
+    @Lob
     private String contents;
     private Long writerId;
     private boolean deleted = false;
+    @Embedded
+    private TimeLog timeLog;
 
-    public Question(String title, String contents) {
+    protected Question() {
+    }
+
+    public Question(final String title, final String contents) {
         this(null, title, contents);
     }
 
-    public Question(Long id, String title, String contents) {
+    public Question(final Long id, final String title, final String contents) {
         this.id = id;
         this.title = title;
         this.contents = contents;
