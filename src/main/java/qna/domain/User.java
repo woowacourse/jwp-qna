@@ -1,29 +1,21 @@
 package qna.domain;
 
-import qna.UnAuthorizedException;
-
-import java.time.LocalDateTime;
 import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import qna.UnAuthorizedException;
 
 @Entity
-@Table(name = "user")
-public class User {
+public class User extends BaseEntity {
 
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(length = 50)
     private String email;
@@ -33,8 +25,6 @@ public class User {
 
     @Column(nullable = false, length = 20)
     private String password;
-
-    private LocalDateTime updatedAt;
 
     @Column(nullable = false, unique = true, length = 20)
     private String userId;
@@ -126,6 +116,25 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(getId(), user.getId()) && Objects.equals(getEmail(), user.getEmail())
+                && Objects.equals(getName(), user.getName()) && Objects.equals(getPassword(),
+                user.getPassword()) && Objects.equals(getUserId(), user.getUserId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getEmail(), getName(), getPassword(), getUserId());
     }
 
     @Override
