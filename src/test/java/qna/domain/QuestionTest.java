@@ -46,7 +46,7 @@ class QuestionTest {
         // given
         final User gugu = new User("gugu", "password", "구구", "gugu@gugu.com");
         final Question question = new Question("제목", "내용").writeBy(gugu);
-        question.addAnswer(new Answer(gugu, question, "레벨 4 강의는 제가 합니다"));
+        question.addAnswer(gugu, question, "레벨 4 강의는 제가 합니다");
 
         // when
         question.deleteBy(gugu);
@@ -60,7 +60,7 @@ class QuestionTest {
         // given
         final User gugu = new User("gugu", "password", "구구", "gugu@gugu.com");
         final Question question = new Question("제목", "내용").writeBy(gugu);
-        question.addAnswer(new Answer(JAVAJIGI, question, "여자친구는 2주에 한 번 만나세요"));
+        question.addAnswer(JAVAJIGI, question, "여자친구는 2주에 한 번 만나세요");
 
         // expect
         assertThatThrownBy(() -> question.deleteBy(gugu))

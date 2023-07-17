@@ -63,8 +63,10 @@ public class Question extends BaseEntity {
         return !this.writer.equals(writer);
     }
 
-    public void addAnswer(Answer answer) {
+    public Answer addAnswer(User user, Question question, String contents) {
+        Answer answer = new Answer(user, question, contents);
         this.answers.add(answer);
+        return answer;
     }
 
     public boolean isDeleted() {
