@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:ethan;MODE=MySql
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
