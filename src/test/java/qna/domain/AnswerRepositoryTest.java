@@ -1,53 +1,73 @@
 package qna.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestConstructor;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static qna.domain.AnswerTest.A1;
-import static qna.domain.AnswerTest.A2;
-
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @DataJpaTest
 class AnswerRepositoryTest {
+
+    private final UserRepository userRepository;
+
     private final AnswerRepository answerRepository;
+
     private final QuestionRepository questionRepository;
 
-    public AnswerRepositoryTest(AnswerRepository answerRepository, QuestionRepository questionRepository) {
+    private User javajigi;
+
+    private User sanjigi;
+
+    private Question question1;
+
+    private Question question2;
+
+    public AnswerRepositoryTest(final UserRepository userRepository, final AnswerRepository answerRepository,
+                                final QuestionRepository questionRepository) {
+        this.userRepository = userRepository;
         this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
     }
 
     @BeforeEach
     void setUp() {
-        questionRepository.save(QuestionTest.Q1);
-        questionRepository.save(QuestionTest.Q2);
+        this.javajigi = new User("javajigi", "password", "name", "javajigi@slipp.net");
+        this.sanjigi = new User("sanjigi", "password", "name", "sanjigi@slipp.net");
+        userRepository.save(javajigi);
+        userRepository.save(sanjigi);
+        this.question1 = questionRepository.save(new Question("title1", "contents1").writeBy(javajigi));
+        this.question2 = questionRepository.save(new Question("title2", "contents2").writeBy(sanjigi));
     }
 
     @Test
     void findByQuestionIdAndDeletedFalse() {
-        answerRepository.save(A1);
-        answerRepository.save(A2);
+        final Answer answer1 = new Answer(javajigi, question1, "Answers Contents1");
+        final Answer answer2 = new Answer(sanjigi, question1, "Answers Contents2");
 
-        final List<Answer> 찾은거 = answerRepository.findByQuestionIdAndDeletedFalse(A1.getQuestionId());
+        answerRepository.save(answer1);
+        answerRepository.save(answer2);
+
+        final List<Answer> 찾은거 = answerRepository.findByQuestionIdAndDeletedFalse(answer1.getQuestion().getId());
         assertThat(찾은거).hasSize(2);
     }
 
     @Test
     void findByIdAndDeletedFalse() {
-        answerRepository.save(A1);
+        final Answer answer = new Answer(javajigi, question1, "Answers Contents1");
+
+        answerRepository.save(answer);
         assertThat(
-                answerRepository.findByIdAndDeletedFalse(A1.getId())
+                answerRepository.findByIdAndDeletedFalse(answer.getId())
         ).isPresent();
 
-        A1.setDeleted(true);
+        answer.setDeleted(true);
 
         assertThat(
-                answerRepository.findByIdAndDeletedFalse(A1.getId())
+                answerRepository.findByIdAndDeletedFalse(answer.getId())
         ).isEmpty();
     }
 }

@@ -1,23 +1,28 @@
 package qna.domain;
 
-import qna.UnAuthorizedException;
-
-import javax.persistence.*;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import qna.UnAuthorizedException;
 
 @Entity
 public class User extends AuditingEntity {
+
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 50)
-    private String email;
+
     @Column(nullable = false, length = 20)
     private String name;
+
     @Column(nullable = false, length = 20)
     private String password;
+
     @Column(unique = true, nullable = false, length = 20)
     private String userId;
 
@@ -108,6 +113,23 @@ public class User extends AuditingEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override
