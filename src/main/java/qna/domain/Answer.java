@@ -1,14 +1,20 @@
 package qna.domain;
 
-import java.util.Objects;
+import org.springframework.lang.Nullable;
+import qna.NotFoundException;
+import qna.UnAuthorizedException;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import qna.NotFoundException;
-import qna.UnAuthorizedException;
+import javax.persistence.ManyToOne;
+import java.util.Objects;
 
 @Entity
 public class Answer extends BaseEntity {
@@ -16,11 +22,19 @@ public class Answer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long writerId;
-    private Long questionId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    private User writer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id", foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    private Question question;
+
     @Lob
     @Column(nullable = false)
     private String contents;
+
     private boolean deleted = false;
 
     protected Answer() {
@@ -31,39 +45,40 @@ public class Answer extends BaseEntity {
     }
 
     public Answer(Long id, User writer, Question question, String contents) {
-        this.id = id;
-
         if (Objects.isNull(writer)) {
             throw new UnAuthorizedException();
         }
-
         if (Objects.isNull(question)) {
             throw new NotFoundException();
         }
-
-        this.writerId = writer.getId();
-        this.questionId = question.getId();
+        this.id = id;
+        this.writer = writer;
+        this.question = question;
         this.contents = contents;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.equals(writer);
     }
 
     public void toQuestion(Question question) {
-        this.questionId = question.getId();
+        this.question = question;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public User getWriter() {
+        return writer;
     }
 
-    public Long getQuestionId() {
-        return questionId;
+    public Question getQuestion() {
+        return question;
+    }
+
+    public String getContents() {
+        return contents;
     }
 
     public boolean isDeleted() {
@@ -95,8 +110,8 @@ public class Answer extends BaseEntity {
     public String toString() {
         return "Answer{" +
                 "id=" + id +
-                ", writerId=" + writerId +
-                ", questionId=" + questionId +
+                ", writer=" + writer +
+                ", question=" + question +
                 ", contents='" + contents + '\'' +
                 ", deleted=" + deleted +
                 '}';

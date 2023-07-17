@@ -2,21 +2,21 @@ package qna.domain;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
 public abstract class BaseEntity {
 
-    @Column(updatable = false, nullable = false)
+    @NotNull
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @NotNull
     private LocalDateTime updatedAt;
 
-    @PrePersist
-    public void prePersist() {
+    public BaseEntity() {
         final LocalDateTime now = LocalDateTime.now();
         this.createdAt = now;
         this.updatedAt = now;
