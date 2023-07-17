@@ -3,15 +3,14 @@ package qna.repository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import qna.domain.User;
+import qna.repository.config.RepositoryTestConfig;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-class UserRepositoryTest {
+class UserRepositoryTest extends RepositoryTestConfig {
 
     @Autowired
     private UserRepository userRepository;
