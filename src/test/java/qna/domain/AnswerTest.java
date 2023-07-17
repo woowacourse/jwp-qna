@@ -4,10 +4,13 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import qna.exception.CannotDeleteException;
+import qna.exception.NotFoundException;
+import qna.exception.UnAuthorizedException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static qna.fixture.Fixture.*;
+import static qna.fixture.Fixture.JAVAJIGI;
+import static qna.fixture.Fixture.Q1;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -38,5 +41,25 @@ class AnswerTest {
         assertThatThrownBy(() -> answer.deleteBy(JAVAJIGI))
                 .isInstanceOf(CannotDeleteException.class)
                 .hasMessageContaining("답변을 삭제할 권한이 없습니다.");
+    }
+
+    @Test
+    void 답변_생성시_작성자가_없다면_예외가_발생한다() {
+        // given
+        final Question question = Q1;
+
+        // expect
+        assertThatThrownBy(() -> new Answer(null, question, "내용"))
+                .isInstanceOf(UnAuthorizedException.class);
+    }
+
+    @Test
+    void 답변_생성시_질문자가_없다면_예외가_발생한다() {
+        // given
+        final User user = JAVAJIGI;
+
+        // expect
+        assertThatThrownBy(() -> new Answer(user, null, "내용"))
+                .isInstanceOf(NotFoundException.class);
     }
 }
