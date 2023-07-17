@@ -5,7 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import qna.domain.*;
+import qna.domain.Answer;
+import qna.domain.DeleteHistory;
+import qna.domain.Question;
+import qna.domain.QuestionRepository;
 import qna.exception.CannotDeleteException;
 
 import java.util.Arrays;
@@ -22,9 +25,6 @@ import static qna.fixture.Fixture.*;
 class QnaServiceTest {
     @Mock
     private QuestionRepository questionRepository;
-
-    @Mock
-    private AnswerRepository answerRepository;
 
     @Mock
     private DeleteHistoryService deleteHistoryService;
