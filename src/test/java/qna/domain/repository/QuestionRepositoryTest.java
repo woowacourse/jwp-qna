@@ -23,7 +23,7 @@ class QuestionRepositoryTest extends RepositoryTest {
     void 삭제되지_않은_질문들을_찾을_수_있다() {
         // given
         final User user = new User("javajigi", "password", "name", "javajigi@slipp.net");
-        final Question question = new Question("question", "content").writeBy(user);
+        final Question question = new Question("question", user, "content");
         questionRepository.save(question);
 
         // when
@@ -37,7 +37,7 @@ class QuestionRepositoryTest extends RepositoryTest {
     void id로_질문을_찾을_수_있다() {
         // given
         final User user = new User("javajigi", "password", "name", "javajigi@slipp.net");
-        final Question expected = questionRepository.save(new Question("question", "content").writeBy(user));
+        final Question expected = questionRepository.save(new Question("question", user, "content"));
 
         // when
         final Optional<Question> actual = questionRepository.findByIdAndDeletedFalse(expected.getId());

@@ -20,7 +20,7 @@ class AnswerTest {
     void 답변자는_답변을_삭제할_수_있다() {
         // given
         final User gugu = new User("gugu", "password", "구구", "gugu@gugu.com");
-        final Question question = new Question("제목", "내용").writeBy(gugu);
+        final Question question = new Question("제목", gugu,"내용");
         final Answer answer = new Answer(gugu, question, "레벨 4 강의는 제가합니다");
 
         // when
@@ -34,7 +34,7 @@ class AnswerTest {
     void 답변자가_아닌_사람이_답변을_삭제할_경우_예외가_발생한다() {
         // given
         final User gugu = new User("gugu", "password", "구구", "gugu@gugu.com");
-        final Question question = new Question("제목", "내용").writeBy(gugu);
+        final Question question = new Question("제목", gugu, "내용");
         final Answer answer = new Answer(gugu, question, "답변내용");
 
         // expect

@@ -32,19 +32,15 @@ public class Question extends BaseEntity {
     protected Question() {
     }
 
-    public Question(String title, String contents) {
-        this(null, title, contents);
+    public Question(String title, User writer, String contents) {
+        this(null, title, writer, contents);
     }
 
-    public Question(Long id, String title, String contents) {
+    public Question(Long id, String title, User writer, String contents) {
         this.id = id;
         this.title = title;
-        this.contents = contents;
-    }
-
-    public Question writeBy(User writer) {
         this.writer = writer;
-        return this;
+        this.contents = contents;
     }
 
     public List<DeleteHistory> deleteBy(User user) {

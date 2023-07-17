@@ -24,7 +24,7 @@ class AnswerRepositoryTest extends RepositoryTest {
     void 질문_id로_답변들을_찾을_수_있다() {
         // given
         final User user = new User("javajigi", "password", "name", "javajigi@slipp.net");
-        final Question question = new Question("title", "content").writeBy(user);
+        final Question question = new Question("title", user, "content");
         final Answer answer = new Answer(user, question, "cascade를 통해 상태 변화를 타 Entity에 전이시킬 수 있어요");
         final Answer expected = answerRepository.save(answer);
 
@@ -39,7 +39,7 @@ class AnswerRepositoryTest extends RepositoryTest {
     void id로_답변을_찾을_수_있다() {
         // given
         final User user = new User("javajigi", "password", "name", "javajigi@slipp.net");
-        final Question question = new Question("title", "content").writeBy(user);
+        final Question question = new Question("title", user, "content");
         final Answer answer = new Answer(user, question, "cascade를 통해 상태 변화를 타 Entity에 전이시킬 수 있어요");
         final Answer expected = answerRepository.save(answer);
 

@@ -34,7 +34,7 @@ class QnaServiceTest {
 
     @Test
     public void delete_성공() {
-        Question question = new Question(1L, "title1", "contents1").writeBy(JAVAJIGI);
+        Question question = new Question(1L, "title1", JAVAJIGI,"contents1");
         Answer answer = question.addAnswer(JAVAJIGI, question, "Answers Contents1");
 
         when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
@@ -48,7 +48,7 @@ class QnaServiceTest {
 
     @Test
     public void delete_다른_사람이_쓴_글() {
-        Question question = new Question(1L, "title1", "contents1").writeBy(JAVAJIGI);
+        Question question = new Question(1L, "title1", JAVAJIGI, "contents1");
         question.addAnswer(JAVAJIGI, question, "Answers Contents1");
 
         when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
@@ -59,7 +59,7 @@ class QnaServiceTest {
 
     @Test
     public void delete_성공_질문자_답변자_같음() {
-        Question question = new Question(1L, "title1", "contents1").writeBy(JAVAJIGI);
+        Question question = new Question(1L, "title1", JAVAJIGI, "contents1");
         Answer answer = question.addAnswer(JAVAJIGI, question, "Answers Contents1");
 
         when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
@@ -73,7 +73,7 @@ class QnaServiceTest {
 
     @Test
     public void delete_답변_중_다른_사람이_쓴_글() {
-        Question question = new Question(1L, "title1", "contents1").writeBy(JAVAJIGI);
+        Question question = new Question(1L, "title1", JAVAJIGI,"contents1");
         question.addAnswer(SANJIGI, Q1, "Answers Contents1");
 
         when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
