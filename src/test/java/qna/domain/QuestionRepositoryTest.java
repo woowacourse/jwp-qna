@@ -27,8 +27,8 @@ class QuestionRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        question = questionRepository.save(new Question("title1", "content1").writeBy(user));
         user = userRepository.save(new User("changer", "password", "name", "changer@back.end"));
+        question = questionRepository.save(new Question("title1", "content1").writeBy(user));
     }
 
     @Test
