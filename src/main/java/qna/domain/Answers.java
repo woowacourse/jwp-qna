@@ -37,4 +37,11 @@ public class Answers {
     public List<Answer> getItems() {
         return items;
     }
+
+    @Override
+    public String toString() {
+        return "Answers{" +
+                "items=" + items +
+                '}';
+    }
 }
