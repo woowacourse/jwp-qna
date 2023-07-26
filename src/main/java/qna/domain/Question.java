@@ -52,6 +52,7 @@ public class Question extends BaseEntity {
     }
 
     public List<DeleteHistory> deleteBy(User user) {
+        validateDeletable();
         validateQuestionWriter(user);
         answers.isAllAnswerOwner(user);
 
@@ -59,6 +60,12 @@ public class Question extends BaseEntity {
         deleteHistories.add(delete());
         deleteHistories.addAll(answers.delete());
         return deleteHistories;
+    }
+
+    private void validateDeletable() {
+        if (deleted) {
+            throw new CannotDeleteException("이미 삭제된 질문입니다.");
+        }
     }
 
     private void validateQuestionWriter(User user) {

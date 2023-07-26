@@ -50,6 +50,19 @@ public class QuestionTest {
     }
 
     @Test
+    void 이미_삭제된_질문을_삭제할_경우_예외가_발생한다() {
+        // given
+        Question question = new Question("질문", "내용");
+        question.writeBy(JAVAJIGI);
+        question.deleteBy(JAVAJIGI);
+
+        // expect
+        assertThatThrownBy(() -> question.deleteBy(JAVAJIGI))
+                .isInstanceOf(CannotDeleteException.class)
+                .hasMessage("이미 삭제된 질문입니다.");
+    }
+
+    @Test
     void 질문의_작성자가_아니면_질문을_삭제할_수_없다() {
         // given
         Question question = new Question("질문", "내용");
