@@ -39,15 +39,17 @@ class AnswerRepositoryTest {
     @Test
     void 질문ID를_입력_받아_해당_질문ID의_삭제되지_않은_답변을_조회한다() {
         // given
-        answerRepository.save(new Answer(user, question1, "Answers Contents1"));
-        Answer answer = answerRepository.save(new Answer(user, question1, "Answers Contents2"));
-        answer.delete();
+        Answer answer1 = new Answer(user, question1, "Answers Contents1");
+        Answer answer2 = new Answer(user, question1, "Answers Contents2");
+        answerRepository.save(answer1);
+        answerRepository.save(answer2);
+        answer2.delete();
 
         // when
         List<Answer> results = answerRepository.findByQuestionIdAndDeletedFalse(question1.getId());
 
         // then
-        assertThat(results).hasSize(1);
+        assertThat(results.get(0).getContents()).isEqualTo("Answers Contents1");
     }
 
     @Test

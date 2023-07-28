@@ -37,6 +37,20 @@ public class QuestionTest {
     }
 
     @Test
+    void 질문에_답변을_추가한다() {
+        // given
+        Question question = new Question("질문", "내용");
+        question.writeBy(JAVAJIGI);
+
+        // when
+        question.addAnswer(new Answer(SANJIGI, question, "answer contents"));
+
+        // then
+        Answer answer = question.getAnswers().getItems().get(0);
+        assertThat(answer).isEqualTo(new Answer(SANJIGI, question, "answer contents"));
+    }
+
+    @Test
     void 작성자가_질문을_삭제한다() {
         // given
         Question question = new Question("질문", "내용");
