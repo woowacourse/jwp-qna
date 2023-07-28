@@ -52,9 +52,7 @@ public class Question extends BaseEntity {
     }
 
     public List<DeleteHistory> deleteBy(User user) {
-        validateDeletable();
-        validateQuestionWriter(user);
-        answers.isAllAnswerOwner(user);
+        validateDeletable(user);
 
         List<DeleteHistory> deleteHistories = new ArrayList<>();
         deleteHistories.add(delete());
@@ -62,7 +60,13 @@ public class Question extends BaseEntity {
         return deleteHistories;
     }
 
-    private void validateDeletable() {
+    private void validateDeletable(User user) {
+        validateDeleted();
+        validateQuestionWriter(user);
+        answers.validateDeletable(user);
+    }
+
+    private void validateDeleted() {
         if (deleted) {
             throw new CannotDeleteException("이미 삭제된 질문입니다.");
         }
