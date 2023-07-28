@@ -25,7 +25,7 @@ class AnswersTest {
         answers.add(new Answer(SANJIGI, Q1, "안녕2"));
 
         // expect
-        assertThatThrownBy(() -> answers.isAllAnswerOwner(JAVAJIGI))
+        assertThatThrownBy(() -> answers.validateDeletable(JAVAJIGI))
                 .isInstanceOf(CannotDeleteException.class)
                 .hasMessage("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
     }
@@ -37,7 +37,7 @@ class AnswersTest {
         answers.add(new Answer(JAVAJIGI, Q1, "안녕1"));
 
         // expect
-        assertThatNoException().isThrownBy(() -> answers.isAllAnswerOwner(JAVAJIGI));
+        assertThatNoException().isThrownBy(() -> answers.validateDeletable(JAVAJIGI));
     }
 
     @Test

@@ -23,13 +23,13 @@ public class Answers {
                 .collect(Collectors.toList());
     }
 
-    public void isAllAnswerOwner(User user) {
-        if (isSameWriterAsAnswer(user)) {
+    public void validateDeletable(User user) {
+        if (hasOtherWriters(user)) {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
     }
 
-    private boolean isSameWriterAsAnswer(User user) {
+    private boolean hasOtherWriters(User user) {
         return items.stream()
                 .anyMatch(answer -> !answer.isOwner(user));
     }
