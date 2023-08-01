@@ -1,5 +1,6 @@
 package qna.domain;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import qna.exception.CannotDeleteException;
 import qna.exception.NotFoundException;
 import qna.exception.UnAuthorizedException;
 
@@ -65,8 +67,16 @@ public class Answer extends BaseEntity {
         this.question = question;
     }
 
-    public void changeDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public DeleteHistory delete() {
+        validateDeletable();
+        this.deleted = true;
+        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
+    }
+
+    private void validateDeletable() {
+        if (deleted) {
+            throw new CannotDeleteException("이미 삭제된 답변입니다.");
+        }
     }
 
     public Long getId() {
@@ -90,12 +100,28 @@ public class Answer extends BaseEntity {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Answer answer = (Answer) o;
+        return Objects.equals(id, answer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
     public String toString() {
         return "Answer{" +
                 "id=" + id +
-                ", writer=" + writer.getName() +
-                ", questionId=" + question.getId() +
                 ", contents='" + contents + '\'' +
+                ", writer=" + writer +
                 ", deleted=" + deleted +
                 '}';
     }

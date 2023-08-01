@@ -23,17 +23,18 @@ class QuestionRepositoryTest {
     private UserRepository userRepository;
 
     User user;
+    Question question;
 
     @BeforeEach
     void setUp() {
         user = userRepository.save(new User("changer", "password", "name", "changer@back.end"));
+        question = questionRepository.save(new Question("title1", "content1").writeBy(user));
     }
 
     @Test
     void 삭제되지_않은_질문을_조회한다() {
         // given
-        Question question = questionRepository.save(new Question("title1", "content1").writeBy(user));
-        question.changeDeleted(true);
+        question.deleteBy(user);
         questionRepository.save(new Question("title2", "content2").writeBy(user));
 
         // when
@@ -45,9 +46,6 @@ class QuestionRepositoryTest {
 
     @Test
     void ID를_입력_받아_삭제되지_않은_질문을_조회한다() {
-        // given
-        Question question = questionRepository.save(new Question("title1", "content1").writeBy(user));
-
         // when
         Optional<Question> result = questionRepository.findByIdAndDeletedFalse(question.getId());
 

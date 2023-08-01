@@ -1,8 +1,11 @@
 package qna.domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -11,7 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import qna.exception.CannotDeleteException;
 
 @Entity
 public class Question extends BaseEntity {
@@ -32,8 +35,8 @@ public class Question extends BaseEntity {
 
     private boolean deleted = false;
 
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answers = new ArrayList<>();
+    @Embedded
+    private Answers answers = new Answers();
 
     protected Question() {
     }
@@ -48,6 +51,38 @@ public class Question extends BaseEntity {
         this.contents = contents;
     }
 
+    public List<DeleteHistory> deleteBy(User user) {
+        validateDeletable(user);
+
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        deleteHistories.add(delete());
+        deleteHistories.addAll(answers.delete());
+        return deleteHistories;
+    }
+
+    private void validateDeletable(User user) {
+        validateDeleted();
+        validateQuestionWriter(user);
+        answers.validateDeletable(user);
+    }
+
+    private void validateDeleted() {
+        if (deleted) {
+            throw new CannotDeleteException("이미 삭제된 질문입니다.");
+        }
+    }
+
+    private void validateQuestionWriter(User user) {
+        if (!isOwner(user)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+    }
+
+    private DeleteHistory delete() {
+        this.deleted = true;
+        return new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now());
+    }
+
     public Question writeBy(User writer) {
         this.writer = writer;
         return this;
@@ -58,11 +93,8 @@ public class Question extends BaseEntity {
     }
 
     public void addAnswer(Answer answer) {
+        answers.add(answer);
         answer.toQuestion(this);
-    }
-
-    public void changeDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 
     public Long getId() {
@@ -85,14 +117,36 @@ public class Question extends BaseEntity {
         return deleted;
     }
 
+    public Answers getAnswers() {
+        return answers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Question question = (Question) o;
+        return Objects.equals(id, question.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", writerId=" + writer.getId() +
+                ", writer=" + writer +
                 ", deleted=" + deleted +
+                ", answers=" + answers +
                 '}';
     }
 }

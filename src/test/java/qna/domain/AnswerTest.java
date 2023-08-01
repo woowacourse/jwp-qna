@@ -1,12 +1,14 @@
 package qna.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static qna.fixtures.QuestionFixture.Q1;
 import static qna.fixtures.UserFixture.JAVAJIGI;
 
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import qna.exception.CannotDeleteException;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -40,9 +42,21 @@ public class AnswerTest {
         Answer answer = new Answer(JAVAJIGI, Q1, "안녕하세요");
 
         // when
-        answer.changeDeleted(true);
+        answer.delete();
 
         // then
         assertThat(answer.isDeleted()).isTrue();
+    }
+
+    @Test
+    void 이미_삭제된_답변을_삭제할_경우_예외가_발생한다() {
+        // given
+        Answer answer = new Answer(JAVAJIGI, Q1, "안녕하세요");
+        answer.delete();
+
+        // expect
+        assertThatThrownBy(() -> answer.delete())
+                .isInstanceOf(CannotDeleteException.class)
+                .hasMessage("이미 삭제된 답변입니다.");
     }
 }
