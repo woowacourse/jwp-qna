@@ -18,7 +18,7 @@ public class Answer extends BaseEntity {
     @JoinColumn(name = "writer_id", nullable = false)
     private User writer;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
