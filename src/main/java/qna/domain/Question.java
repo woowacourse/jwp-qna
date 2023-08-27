@@ -19,12 +19,12 @@ public class Question extends BaseEntity {
     @Column(nullable = false)
     private String contents;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id", nullable = false)
     private User writer;
 
     @Embedded
-    private Answers answers = new Answers();
+    private final Answers answers = new Answers();
 
     @Column(nullable = false)
     private boolean deleted = false;
@@ -84,4 +84,5 @@ public class Question extends BaseEntity {
     public User getWriter() {
         return writer;
     }
+
 }

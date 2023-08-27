@@ -18,9 +18,10 @@ public class Answers {
         answers.add(answer);
     }
 
-    public List<DeleteHistory> deleteBy(User user){
+    public List<DeleteHistory> deleteBy(User user) {
         return answers.stream()
                 .map(answer -> answer.deleteBy(user))
                 .collect(Collectors.toList());
     }
+
 }

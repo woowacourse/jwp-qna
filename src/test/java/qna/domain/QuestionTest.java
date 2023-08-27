@@ -1,16 +1,13 @@
 package qna.domain;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import qna.exception.CannotDeleteException;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static qna.fixture.Fixture.*;
+import static qna.fixture.Fixture.JAVAJIGI;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -67,4 +64,5 @@ class QuestionTest {
                 .isInstanceOf(CannotDeleteException.class)
                 .hasMessageContaining("답변을 삭제할 권한이 없습니다");
     }
+
 }
