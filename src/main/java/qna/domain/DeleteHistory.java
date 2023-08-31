@@ -36,6 +36,14 @@ public class DeleteHistory extends BaseEntity {
         this.deletedBy = deletedBy;
     }
 
+    public static DeleteHistory ofAnswer(Long contentId, User deletedBy) {
+        return new DeleteHistory(ContentType.ANSWER, contentId, deletedBy);
+    }
+
+    public static DeleteHistory ofQuestion(Long contentId, User deletedBy) {
+        return new DeleteHistory(ContentType.QUESTION, contentId, deletedBy);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

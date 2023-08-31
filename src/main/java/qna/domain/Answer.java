@@ -1,8 +1,8 @@
 package qna.domain;
 
-import qna.CannotDeleteException;
-import qna.NotFoundException;
-import qna.UnAuthorizedException;
+import qna.exception.CannotDeleteException;
+import qna.exception.NotFoundException;
+import qna.exception.UnAuthorizedException;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -14,11 +14,11 @@ public class Answer extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id", nullable = false)
     private User writer;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
@@ -52,21 +52,20 @@ public class Answer extends BaseEntity {
         }
     }
 
-    public void deleteBy(User user) throws CannotDeleteException {
-        if (!this.isOwner(user)) {
+    public DeleteHistory deleteBy(User user) {
+        if (this.isNotOwner(user)) {
             throw new CannotDeleteException("답변을 삭제할 권한이 없습니다.");
         }
+
         this.deleted = true;
+
+        return DeleteHistory.ofAnswer(id, user);
     }
 
-    private boolean isOwner(User writer) {
-        return this.writer.equals(writer);
+    private boolean isNotOwner(User writer) {
+        return !this.writer.equals(writer);
     }
-
-    public void toQuestion(Question question) {
-        this.question = question;
-    }
-
+    
     public boolean isDeleted() {
         return deleted;
     }
